@@ -52,7 +52,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             return
         }
         // todo ok
-        respuesta.send(JSON.stringify(res[0]))
+        respuesta.send(JSON.stringify(res))
     }) // get /mediciones/:idUsuario
 
     // .......................................................
@@ -117,6 +117,25 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         }
         // todo ok
         respuesta.send(JSON.stringify(res[0]))
+    }) // get /usuario
+    
+    // .......................................................
+    // GET /distanciaYTiempoUsario/
+    // .......................................................
+    servidorExpress.get('/distanciaYTiempoUsuario', async function (peticion, respuesta) {
+
+        console.log(" * GET /distanciaYTiempoUsuario ")
+
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.buscarDistanciaYTiempoDeUsuarios()
+
+        if (res.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré usuarios")
+            return
+        }
+        // todo ok
+        respuesta.send(JSON.stringify(res))
     }) // get /usuario
 
     // .......................................................
