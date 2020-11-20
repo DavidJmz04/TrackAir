@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,10 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LogicaFake {
+public class LogicaFake{
 
+    public int id= -1;
     private static RequestQueue requestQueue;
-    //private String url = "http://192.168.1.131:8080"; //Ip Zona Wifi telefono móvil -- SI SE CAMBIA AQUI, en el network_secutiry_config.xml tambien
     private Context context;
 
     private String url = "http://igmagi.upv.edu.es"; //Ip Zona Wifi telefono móvil -- SI SE CAMBIA AQUI, en el network_secutiry_config.xml tambien
@@ -302,16 +303,14 @@ public class LogicaFake {
                     if (response.getBoolean("existe")) {
 
                         Activity ActivityContext = (Activity) context;
-                        SharedPreferences sharedPref = ActivityContext.getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putInt("id", response.getInt("id"));
-                        editor.commit();
-                        Toast.makeText(context,"Te has logueado", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(context,MainActivity.class);
+                        id= response.getInt("id");
+                        Toast.makeText(context, "Te has logueado", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(context, MainActivity.class);
                         ((Activity) context).startActivity(intent);
                         ((Activity) context).finish();
-                    }
-                    else Toast.makeText(context,"Te has equivocado, vuelve a intentarlo", Toast.LENGTH_LONG).show();
+
+                    } else
+                        Toast.makeText(context, "Te has equivocado, vuelve a intentarlo", Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -326,7 +325,7 @@ public class LogicaFake {
     }
 
     public void obtenerMedicion(final Context context) { //Obtener Medicion de la base de datos (GET)
-       // Empezamos la cola
+        // Empezamos la cola
         requestQueue.start();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url + "/mediciones", null, new Response.Listener<JSONArray>() {
@@ -369,10 +368,7 @@ public class LogicaFake {
         }
 
         );
-        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
-                20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(20000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonArrayRequest);
     }
 
@@ -400,6 +396,8 @@ public class LogicaFake {
         requestQueue.add(jsonArrayRequest);
     }
 
+    public final UltimaPeticion ultimaPeticion = new UltimaPeticion();
+
     // ...............................................................................
     // obtenerRecompensas() <--
     // <--
@@ -410,12 +408,13 @@ public class LogicaFake {
         // Empezamos la cola
         requestQueue.start();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url + "/recompensas", null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url + "/mediciones", null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d("Response", response.toString());
                 //TODO Devolver esto
-
+                ultimaPeticion.peticion = response.toString();
+                ultimaPeticion.hayPeticion = true;
             }
         }, new Response.ErrorListener() {
             @Override
@@ -423,8 +422,22 @@ public class LogicaFake {
                 Log.d("Error.Response", error.toString());
             }
         }
-
         );
         requestQueue.add(jsonArrayRequest);
     }
+    public static class UltimaPeticion {
+        public String peticion;
+        public Boolean hayPeticion = false;
+
+        public String getPeticion() {
+            return peticion;
+        }
+
+        public Boolean getFlag(){
+            return hayPeticion;
+        }
+    }
+
+
 }
+

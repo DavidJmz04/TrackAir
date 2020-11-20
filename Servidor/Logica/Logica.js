@@ -60,11 +60,11 @@ module.exports = class Logica {
     // insertarUsuario() -->
     // ...............................................................................
     insertarUsuario(datos) {
-        var textoSQL = "insert into usuarios (nombre_usuario, contrasenya, correo, puntuacion, telefono, id_nodo) values(?, ?, ?, ?, ?, ?);";
+        var textoSQL = "insert into usuarios (nombre_usuario, contrasenya, correo, puntuacion, telefono, id_nodo) values(?, ?, ?, ?, ?);";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(
-                textoSQL, [datos.nombreUsuario, datos.contrasenya, datos.correo, datos.puntuacion, datos.telefono, datos.idNodo],
+                textoSQL, [datos.nombreUsuario, datos.contrasenya, datos.correo, datos.telefono, datos.idNodo],
                 function (err) {
                     err ? rechazar(err) : resolver();
                 }
@@ -92,7 +92,7 @@ module.exports = class Logica {
     // ................................................................................................................................................
     //datos:{nombreUsuario:Texto, contrasenya=Texto}
     // -->
-    // buscarUsuarioConId() <--
+    // buscarUsuarioConNombreYContrasenya() <--
     // <--
     // {id:Z, nombreUsuario:Texto, contrasenya:Texto, correo:Texto, puntuacion:Z, telefono=Texto, idNodo=Texto}
     // ................................................................................................................................................
@@ -128,7 +128,7 @@ module.exports = class Logica {
     // ................................................................................................................................................
     // buscarDistanciaYTiempoDeUsuarios() <--
     // <--
-    // Lista {id:Z, nombreUsuario:Texto, correo:Texto, telefono=Texto, idNodo=Texto, distancia=Z, tiempo= Z}
+    // Lista {id:Z, nombreUsuario:Texto, correo:Texto, telefono=Texto, idNodo=Texto, distancia=R, tiempo= R}
     // ................................................................................................................................................
     async buscarDistanciaYTiempoDeUsuarios() {
 
@@ -144,36 +144,26 @@ module.exports = class Logica {
             //Obtengo las medidas de cada usuario
             var medidas = await this.buscarMedicionesDeUsuario(usuarios[i].id)
 
-            //Obtenemos el nº de dias y el contador que te dice en que dia estas (para compararlo con el resto de dias)
-            var nDias = 1
-            var diaCont = new Date(medidas[0].momento)
-
             for (var j = 1; j < medidas.length; j++) {
 
-                var dia = new Date(medidas[j].momento)
+                //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
+                var dist = this.obtenerDistancia(parseFloat(medidas[j - 1].ubicacion.split(",")[0]), parseFloat(medidas[j - 1].ubicacion.split(",")[1]), parseFloat(medidas[j].ubicacion.split(",")[0]), parseFloat(medidas[j].ubicacion.split(",")[1]))
 
-                //Si estamos en el mismo dia calculamos la distancia y el tiempo
-                if (dia.getDate == diaCont.getDate && dia.getDay == diaCont.getDay && dia.getFullYear == diaCont.getFullYear) {
+                //Medida anterior del mismo dia
+                var diaAnterior = new Date(medidas[j - 1].momento)
+                var t = (dia.getTime() - diaAnterior.getTime()) / 1000
+                
+                if (t < 900 + 300 /*Tiempo que tarda en enviar el beacon + Error de enviado*/ && dist < 10000 /*Distancia para comprobar que no ha empezado a medir desde otro lugar lejano el mismo día*/ ) {
 
-                    //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
-                    var dist += this.obtenerDistancia(parseFloat(medidas[j - 1].ubicacion.split(",")[0]), parseFloat(medidas[j - 1].ubicacion.split(",")[1]), parseFloat(medidas[j].ubicacion.split(",")[0]), parseFloat(medidas[j].ubicacion.split(",")[1]))
-                    
-                    if(dist < 10000 /*Distancia para comprobar que no ha empezado a medir desde otro lugar lejano el mismo día*/) distancia += dist
-
-                    //Medida anterior del mismo dia
-                    var diaAnterior = new Date(medidas[j - 1].momento)
-                    
-                    var t= (dia.getTime() - diaAnterior.getTime()) / 1000
-                    if(t < 900 + 300 /*Tiempo que tarda en enviar el beacon + Error de enviado*/) tiempo += 
-
-                //Si no es el mismo dia añadimos un dia al nº de dias y establecemos un nuevo contador
-                } else {
-
-                    nDias++
-                    diaCont = dia
+                    tiempo += t
+                    distancia += dist
                 }
             }
-            
+
+            var primerDia = new Date(medidas[0].momento)
+            var ultimoDia = new Date();
+            var nDias = (ultimoDia.getTime() - primerDia.getTime()) / 86400000
+
             res.push({
                 id: usuarios[0].id,
                 nombreUsuario: usuarios[0].nombre_usuario,
@@ -184,12 +174,10 @@ module.exports = class Logica {
                 tiempo: tiempo / nDias
             })
 
-            //Reseteamos la distancia y el tiempo de ese usuario
+            //Reseteamos la distancia y el tiempo ya que cambiamos de usuario
             tiempo = 0
             distancia = 0
         }
-        
-        //Sortearlo para poner primero los mas relevantes
         
         return res
     }
@@ -221,10 +209,10 @@ module.exports = class Logica {
     // editarUsuario() -->
     // ................................................................................................................................................
     editarUsuario(datos) {
-        var textoSQL = "update usuarios set nombre_usuario= ?, contrasenya= ?, correo= ?, puntuacion=?, telefono=?, id_nodo=? where id=  ?;";
+        var textoSQL = "update usuarios set nombre_usuario= ?, contrasenya= ?, correo= ?, puntuacion=?, telefono=?, id_nodo=?, puntos_canjeables=? where id=  ?;";
 
         return new Promise((resolver, rechazar) => {
-            this.laConexion.query(textoSQL, [datos.nombreUsuario, datos.contrasenya, datos.correo, datos.puntuacion, datos.telefono, datos.idNodo, datos.id],
+            this.laConexion.query(textoSQL, [datos.nombreUsuario, datos.contrasenya, datos.correo, datos.puntuacion, datos.telefono, datos.idNodo, datos.puntosCanjeables, datos.id],
                 function (err) {
                     err ? rechazar(err) : resolver();
                 }
@@ -242,9 +230,7 @@ module.exports = class Logica {
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [datos.valor, datos.momento, datos.ubicacion, datos.tipoMedicion],
                 function (err) {
-                    if (!err) {
-                        resolver();
-                    } else rechazar(err);
+                    err ? rechazar(err) : resolver();
                 }
             );
         }).then(() => {
@@ -343,6 +329,32 @@ module.exports = class Logica {
                 err ? rechazar(err) : resolver(res);
             });
         });
+    }
+
+    // ................................................................................................................................................
+    //id:Z
+    // -->
+    // buscarCodigoRecompensaConId() <--
+    // <--
+    // {id_recompensa:Z, codigo:Texto}
+    // ................................................................................................................................................
+    buscarCodigoRecompensaConId(id) {
+        var textoSQL = "select * from codigosrecompensas where id_recompensa= ? limit 1;"
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, id, (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        }).then((result) => {
+
+            var textoSQL2 = "delete from codigosrecompensas where codigo= ? limit 1;"
+            return new Promise((resolver, rechazar) => {
+                this.laConexion.query(textoSQL2, result[0].codigo,
+                    function (err) {
+                        err ? rechazar(err) : resolver(result);
+                    }
+                )
+            })
+        })
     }
 
     // ................................................................................................................................................
