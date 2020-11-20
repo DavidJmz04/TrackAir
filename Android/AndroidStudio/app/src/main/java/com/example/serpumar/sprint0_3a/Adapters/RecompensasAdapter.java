@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a.adapters;
+package com.example.serpumar.sprint0_3a.Adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

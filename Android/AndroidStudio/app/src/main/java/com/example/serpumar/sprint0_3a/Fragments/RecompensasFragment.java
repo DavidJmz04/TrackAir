@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.serpumar.sprint0_3a.ClasesPojo.RecompensasPojo;
 import com.example.serpumar.sprint0_3a.R;
-import com.example.serpumar.sprint0_3a.adapters.RecompensasAdapter;
+import com.example.serpumar.sprint0_3a.Adapters.RecompensasAdapter;
 
 import java.util.ArrayList;
 
