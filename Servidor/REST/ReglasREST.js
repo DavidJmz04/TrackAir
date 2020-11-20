@@ -210,6 +210,27 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         respuesta.send(JSON.stringify(res))
     }) // get /recompensas
 
+    // .......................................................
+    // GET /codigoRecompensa/
+    // .......................................................
+    servidorExpress.get('/codigoRecompensa/:idRecompensa', async function (peticion, respuesta) {
+
+        console.log(" * GET /codigoRecompensa/:idRecompensa ")
+        
+        // averiguo el id
+        var id = peticion.params.idRecompensa
+
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.buscarCodigoRecompensaConId(id)
+        
+        if (res.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré recompensas")
+            return
+        }
+        // todo ok
+        respuesta.send(JSON.stringify(res[0]))
+    }) // get /codigoRecompensa
 
     // .......................................................
     // GET /mediciones oficiales off line

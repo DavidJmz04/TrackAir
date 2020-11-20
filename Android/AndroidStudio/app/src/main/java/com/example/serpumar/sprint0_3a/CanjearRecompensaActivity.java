@@ -1,25 +1,17 @@
 package com.example.serpumar.sprint0_3a;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class LoginActivity extends Activity {
+public class CanjearRecompensaActivity extends Activity {
 
-    public static String getNombre() {
-        return nombreUser;
-    }
-
-    private EditText nombre;
-    private EditText contrasenya;
-    private static String nombreUser;
+    EditText nombre, contrasenya;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -33,7 +25,7 @@ public class LoginActivity extends Activity {
         iniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                //login();
             }
         });
 
@@ -57,7 +49,7 @@ public class LoginActivity extends Activity {
 
         getWindow().setAttributes(params);
     }
-
+/*
     private void login() {
 
         nombreUser = nombre.getText().toString();
@@ -66,4 +58,5 @@ public class LoginActivity extends Activity {
         LogicaFake logicaFake= new LogicaFake(this);
         logicaFake.login(nombreUser,contrasenyaUser);
     }
+*/
 }
