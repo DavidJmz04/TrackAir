@@ -156,7 +156,7 @@ module.exports = class Logica {
                 if (dia.getDate == diaCont.getDate && dia.getDay == diaCont.getDay && dia.getFullYear == diaCont.getFullYear) {
 
                     //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
-                    var dist += this.obtenerDistancia(parseFloat(medidas[j - 1].ubicacion.split(",")[0]), parseFloat(medidas[j - 1].ubicacion.split(",")[1]), parseFloat(medidas[j].ubicacion.split(",")[0]), parseFloat(medidas[j].ubicacion.split(",")[1]))
+                    var dist = this.obtenerDistancia(parseFloat(medidas[j - 1].ubicacion.split(",")[0]), parseFloat(medidas[j - 1].ubicacion.split(",")[1]), parseFloat(medidas[j].ubicacion.split(",")[0]), parseFloat(medidas[j].ubicacion.split(",")[1]))
                     
                     if(dist < 10000 /*Distancia para comprobar que no ha empezado a medir desde otro lugar lejano el mismo día*/) distancia += dist
 
@@ -164,7 +164,7 @@ module.exports = class Logica {
                     var diaAnterior = new Date(medidas[j - 1].momento)
                     
                     var t= (dia.getTime() - diaAnterior.getTime()) / 1000
-                    if(t < 900 + 300 /*Tiempo que tarda en enviar el beacon + Error de enviado*/) tiempo += 
+                    //if(t < 900 + 300 /*Tiempo que tarda en enviar el beacon + Error de enviado*/) //tiempo += 
 
                 //Si no es el mismo dia añadimos un dia al nº de dias y establecemos un nuevo contador
                 } else {

@@ -32,6 +32,8 @@ import java.util.Map;
 
 public class LogicaFake {
 
+    public int id_prueba = -1;
+
     private static RequestQueue requestQueue;
     //private String url = "http://192.168.1.131:8080"; //Ip Zona Wifi telefono móvil -- SI SE CAMBIA AQUI, en el network_secutiry_config.xml tambien
     private Context context;
