@@ -2,8 +2,9 @@
 // ReglasREST.js
 // .....................................................................
 
+    const utilidades = require("../Logica/Utilidades.js");
 module.exports.cargar = function (servidorExpress, laLogica) {
-
+    var utilidad = new utilidades();
     var csv = require('../Datos/MedicionesOficiales.json'); // your json file path
     // .......................................................
     // GET /prueba
@@ -30,8 +31,9 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             respuesta.status(404).send("No encontré la medicion")
             return
         }
+        var json = utilidad.procesarCalidadAireAJSON(res);
         // todo ok
-        respuesta.send(JSON.stringify(res))
+        respuesta.send(json)
     }) // get /mediciones
 
     // .......................................................
@@ -195,10 +197,8 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     servidorExpress.get('/medicionesOficialesCSV',
         async function (peticion, respuesta) {
-            
                 // Do something with your data
-                respuesta.send(csv);
-
+                respuesta.send(utilidades.convertirAJSONpropio(csv));
         }) // get /mediciones
     
     // .......................................................
@@ -218,8 +218,8 @@ module.exports.cargar = function (servidorExpress, laLogica) {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': "*"
                     // 'Content-Type': 'application/x-www-form-urlencoded',
-                }, 
-                body: JSON.stringify({"idEstacion":5}) // body data type must match "Content-Type" header
+                },
+				body: JSON.stringify({"idEstacion":5}) // body data type must match "Content-Type" header
             };
 
             // Petición HTTP
@@ -233,7 +233,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
                         return
                     }
                     // todo ok
-                    respuesta.send(data)
+                    respuesta.send(data.valor)
                                     
                 });
         }) // get /mediciones

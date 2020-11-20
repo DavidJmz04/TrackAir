@@ -274,4 +274,5 @@ module.exports = class Logica {
       });
     });
   } // ()
+
 }; // class
