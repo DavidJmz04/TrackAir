@@ -238,7 +238,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     servidorExpress.get('/medicionesOficialesCSV',
         async function (peticion, respuesta) {
                 // Do something with your data
-                respuesta.send(utilidades.convertirAJSONpropio(csv));
+                respuesta.send(utilidad.convertirAJSONpropio(csv));
         }) // get /mediciones
     
     // .......................................................
