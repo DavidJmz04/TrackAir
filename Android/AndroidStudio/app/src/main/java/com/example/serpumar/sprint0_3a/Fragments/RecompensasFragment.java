@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.serpumar.sprint0_3a.ClasesPojo.RecompensasPojo;
-import com.example.serpumar.sprint0_3a.LogicaFake;
+import com.example.serpumar.sprint0_3a.Logica;
 import com.example.serpumar.sprint0_3a.R;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class RecompensasFragment extends Fragment {
 
     RecyclerView recyclerRecompensas;
     ArrayList<RecompensasPojo> listaRecompensas;
-    LogicaFake logicaFake;
+    Logica logicaFake;
 
     public RecompensasFragment() {
         // Required empty public constructor
@@ -31,7 +31,7 @@ public class RecompensasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recompensas, container, false);
-        logicaFake = new LogicaFake(this.getContext());
+        logicaFake = new Logica(this.getContext());
 
         listaRecompensas = new ArrayList<>();
         recyclerRecompensas = view.findViewById(R.id.recyclerId);

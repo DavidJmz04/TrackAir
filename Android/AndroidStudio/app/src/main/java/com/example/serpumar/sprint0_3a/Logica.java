@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LogicaFake{
+public class Logica {
 
 
     public int id= -1;
@@ -41,7 +41,7 @@ public class LogicaFake{
 
     private String url = "http://igmagi.upv.edu.es"; //Ip Zona Wifi telefono móvil -- SI SE CAMBIA AQUI, en el network_secutiry_config.xml tambien
 
-    public LogicaFake(Context context) {
+    public Logica(Context context) {
         //Iniciamos la cola
         requestQueue = Volley.newRequestQueue(context);
         this.context = context;
@@ -427,6 +427,7 @@ public class LogicaFake{
         );
         requestQueue.add(jsonArrayRequest);
     }
+
     public static class UltimaPeticion {
         public String peticion;
         public Boolean hayPeticion = false;
@@ -439,7 +440,6 @@ public class LogicaFake{
             return hayPeticion;
         }
     }
-
 
 }
 

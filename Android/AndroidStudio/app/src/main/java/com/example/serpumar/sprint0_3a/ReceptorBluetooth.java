@@ -1,7 +1,6 @@
 package com.example.serpumar.sprint0_3a;
 
 import android.app.Activity;
-import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
@@ -11,14 +10,12 @@ import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.serpumar.sprint0_3a.ClasesPojo.Medicion;
 import com.example.serpumar.sprint0_3a.ClasesPojo.Ubicacion;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,7 +23,7 @@ import java.util.UUID;
 
 public class ReceptorBluetooth {
 
-    LogicaFake lf;
+    Logica lf;
 
     private BluetoothAdapter.LeScanCallback callbackLeScan = null;
 
@@ -42,7 +39,7 @@ public class ReceptorBluetooth {
 
     public void setContext(Context context) {
         this.context = context;
-        lf= new LogicaFake(context);
+        lf= new Logica(context);
     }
 
     private Medicion ultimaMedicion = null;

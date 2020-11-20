@@ -1,12 +1,10 @@
 package com.example.serpumar.sprint0_3a;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,7 +61,7 @@ public class LoginActivity extends Activity {
         nombreUser = nombre.getText().toString();
         String contrasenyaUser = Utilidades.sha256(contrasenya.getText().toString());
 
-        LogicaFake logicaFake= new LogicaFake(this);
+        Logica logicaFake= new Logica(this);
         logicaFake.login(nombreUser,contrasenyaUser);
     }
 }
