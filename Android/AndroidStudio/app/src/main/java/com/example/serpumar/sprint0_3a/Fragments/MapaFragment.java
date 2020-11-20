@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Debug;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.serpumar.sprint0_3a.GPS;
 import com.example.serpumar.sprint0_3a.Logica;
+import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 import com.example.serpumar.sprint0_3a.ReceptorBluetooth;
 import com.example.serpumar.sprint0_3a.Utilidades;
@@ -21,7 +23,7 @@ import com.example.serpumar.sprint0_3a.Utilidades;
 
 public class MapaFragment extends Fragment {
 
-    private static String ETIQUETA_LOG = ">>>>";
+    private static String ETIQUETA_LOG = "MapaFragment";
     private ReceptorBluetooth receptorBluetooth = new ReceptorBluetooth();
 
     private GPS gps = new GPS();
@@ -67,7 +69,12 @@ public class MapaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(ETIQUETA_LOG, " boton obtenerMediciones" );
-                lf.obtenerMedicion(getContext());
+                NetworkManager.getInstance().getRequest("/mediciones", new NetworkManager.ControladorRespuestas<String>() {
+                    @Override
+                    public void getResult(String object) {
+                        Log.d("MapaFragment",object);
+                    }
+                });
             }
         });
 
@@ -76,7 +83,13 @@ public class MapaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(ETIQUETA_LOG, " boton obtenerMedicionesOficiales" );
-                lf.obtenerMedicionesOficialesAPI(getContext());
+                //lf.obtenerMedicionesOficialesAPI(getContext());
+                NetworkManager.getInstance().getRequest("/medicionesOficiales", new NetworkManager.ControladorRespuestas<String>() {
+                    @Override
+                    public void getResult(String object) {
+                        Log.d("MapaFragment",object);
+                    }
+                });
             }
         });
 
@@ -85,7 +98,13 @@ public class MapaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(ETIQUETA_LOG, " boton obtenerMedicionesOficialesLOCAL" );
-                lf.obtenerMedicionesOficialesLOCAL(getContext());
+                //lf.obtenerMedicionesOficialesLOCAL(getContext());
+                NetworkManager.getInstance().getRequest("/medicionesOficialesCSV", new NetworkManager.ControladorRespuestas<String>() {
+                    @Override
+                    public void getResult(String object) {
+                        Log.d("MapaFragment",object);
+                    }
+                });
             }
         });
 
