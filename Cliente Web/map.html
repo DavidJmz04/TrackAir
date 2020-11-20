@@ -15,8 +15,18 @@
     />
 
     <link rel="stylesheet" href="./styles/map.css" />
+    <link rel="stylesheet" href="./styles/loader.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
   <body>
+    <div id="loader-wrapper">
+      <div id="loader"></div>
+    
+      <div class="loader-section section-left"></div>
+      <div class="loader-section section-right"></div>
+    
+    </div>
+    <div class="content">
     <div class="mapa"></div>
     <div class="modal">
       <div class="tarjeta-login">
@@ -62,7 +72,7 @@
     </div>
     <div class="top-opciones">
       <div class="menu">
-        <a href="" class="icono" onclick="">
+        <a href="/mediciones.html" class="icono" onclick="">
           <i class="fa fa-bars"></i>
         </a>
       </div>
@@ -74,7 +84,7 @@
         <i class="fas fa-user icono-usuario"></i>
       </div>
     </div>
-
+    </div>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"
       integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A=="
@@ -85,5 +95,6 @@
     <script src="./scripts/logica.js"></script>
     <script src="./scripts/modalLogin.js"></script>
     <script src="./scripts/login.js"></script>
+    <script src="./scripts/loader.js"></script>
   </body>
 </html>

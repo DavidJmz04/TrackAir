@@ -13,8 +13,13 @@ import android.widget.EditText;
 
 public class LoginActivity extends Activity {
 
+    public static String getNombre() {
+        return nombreUser;
+    }
+
     private EditText nombre;
     private EditText contrasenya;
+    private static String nombreUser;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -55,10 +60,11 @@ public class LoginActivity extends Activity {
 
     private void login() {
 
-        String nombreUser = nombre.getText().toString();
+        nombreUser = nombre.getText().toString();
         String contrasenyaUser = Utilidades.sha256(contrasenya.getText().toString());
 
         LogicaFake logicaFake= new LogicaFake(this);
         logicaFake.login(nombreUser,contrasenyaUser);
+
     }
 }

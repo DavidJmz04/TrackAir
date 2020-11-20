@@ -49,13 +49,17 @@ public class PerfilFragment extends Fragment {
         TextView nombre = (TextView) v.findViewById(R.id.nombre_perfil);
         TextView email = (TextView) v.findViewById(R.id.email_perfil);
 
-        // Inflate the layout for this fragment
-        if(sesionIniciada) {
+        LogicaFake logicaFake= new LogicaFake(this.getContext());
 
-            LogicaFake logicaFake= new LogicaFake(this.getContext());
+        Log.d("id prueba", logicaFake.id_prueba + "" );
+        // Inflate the layout for this fragment
+        if(logicaFake.id_prueba > -1/*sesionIniciada*/) {
+
             iniciarSesion.setVisibility(View.INVISIBLE);
             nombre.setVisibility(View.VISIBLE);
             email.setVisibility(View.VISIBLE);
+
+            nombre.setText(LoginActivity.getNombre());
 
 
         } else {
