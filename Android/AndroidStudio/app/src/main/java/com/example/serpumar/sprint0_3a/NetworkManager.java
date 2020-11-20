@@ -1,6 +1,5 @@
 package com.example.serpumar.sprint0_3a;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,8 +12,8 @@ import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
+
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 
@@ -47,6 +46,25 @@ public class NetworkManager {
         return instance;
     }
 
+    public void getRequest(String request, final ControladorRespuestas<String> listener) {
+        // Empezamos la cola
+        requestQueue.start();
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url + request, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d("Response", response.toString());
+                listener.getResult(response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error.Response", error.toString());
+            }
+        });
+
+        requestQueue.add(jsonArrayRequest);
+    }
 
     public void postRequest(JSONObject jsonParametros, String stringRequest, final ControladorRespuestas controladorRespuestas) {
 
@@ -77,15 +95,6 @@ public class NetworkManager {
             public void onResponse(JSONObject response) {
                 Log.d("Response", "Guardado en base de datos");
                 controladorRespuestas.getResult(response);
-    public void getRequest(String request, final ControladorRespuestas<String> listener){
-        // Empezamos la cola
-        requestQueue.start();
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url + request, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Log.d("Response", response.toString());
-                listener.getResult(response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -97,8 +106,9 @@ public class NetworkManager {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public interface ControladorRespuestas<T>
-    {
+    public interface ControladorRespuestas<T> {
         void getResult(T object);
     }
 }
+
+
