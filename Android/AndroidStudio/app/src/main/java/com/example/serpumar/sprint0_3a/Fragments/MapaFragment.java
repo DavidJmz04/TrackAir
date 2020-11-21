@@ -68,11 +68,13 @@ public class MapaFragment extends Fragment {
         obtenerMediciones.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(),"HOLA",Toast.LENGTH_LONG).show();
                 Log.d(ETIQUETA_LOG, " boton obtenerMediciones" );
                 NetworkManager.getInstance().getRequest("/mediciones", new NetworkManager.ControladorRespuestas<String>() {
                     @Override
                     public void getResult(String object) {
                         Log.d("MapaFragment",object);
+                        Toast.makeText(getContext(),"a- " + object,Toast.LENGTH_LONG).show();
                     }
                 });
             }
