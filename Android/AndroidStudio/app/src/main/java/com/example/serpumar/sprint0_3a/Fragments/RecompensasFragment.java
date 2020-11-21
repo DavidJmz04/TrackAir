@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.serpumar.sprint0_3a.ClasesPojo.RecompensasPojo;
 import com.example.serpumar.sprint0_3a.Logica;
+import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 
 import java.util.ArrayList;
@@ -61,8 +62,13 @@ public class RecompensasFragment extends Fragment {
     private void llenarLista() {
 
         //Obtener recompensas y añadirlas a la lista
-        logicaFake.obtenerRecompensas();
+        NetworkManager.getInstance(this.getContext()).getRequest("/recompensas", new NetworkManager.ControladorRespuestas<String>() {
+            @Override
+            public void getResult(String object) {
 
+                Log.d("fffff", object);
+            }
+        });
 
         listaRecompensas.add(new RecompensasPojo("Hamgurguesa","Hamburguesa en la cadena de comida McKing", R.drawable.ic_baseline_stars_24, 231));
         listaRecompensas.add(new RecompensasPojo("Entrada de Cine","Entrada de los cines ABD", R.drawable.ic_baseline_stars_24, 232));
