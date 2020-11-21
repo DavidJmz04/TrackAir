@@ -90,33 +90,33 @@ public class MapaFragment_filtros extends Fragment {
             listDataHeader = new ArrayList<FiltrosMapaPojo>();
             listDataChild = new HashMap<>();
             // Adding child data
-            listDataHeader.add(new FiltrosMapaPojo("Gases", "All sizes"));
-            listDataHeader.add(new FiltrosMapaPojo("Item Color", "Select"));
-            listDataHeader.add(new FiltrosMapaPojo("Sort", "Select"));
+            listDataHeader.add(new FiltrosMapaPojo("Gases", "Todos los gases"));
+            listDataHeader.add(new FiltrosMapaPojo("Datos", "Seleccionar que datos ver"));
+            listDataHeader.add(new FiltrosMapaPojo("Color", "Color de los datos"));
 
 
 // Adding child data
-            List<String> bySize = new ArrayList<>();
-            bySize.add("O3");
-            bySize.add("SO2");
-            bySize.add("CO");
+            List<String> gases = new ArrayList<>();
+            gases.add("O3");
+            gases.add("SO2");
+            gases.add("CO");
 
 
-            List<String> color = new ArrayList<>();
-            color.add("Black");
-            color.add("Red");
-            color.add("White");
-            color.add("Green");
-            color.add("Blue");
+            List<String> datos = new ArrayList<>();
+            datos.add("Mis datos");
+            datos.add("Demás usuarios");
+            datos.add("Mis datos y demás usuarios");
 
-            List<String> sort = new ArrayList<>();
-            sort.add("Cost ($): highest first");
-            sort.add("Cost ($): lowest first");
+            List<String> colorDeMisDatos = new ArrayList<>();
+            colorDeMisDatos.add("Azul");
+            colorDeMisDatos.add("Rojo");
+            colorDeMisDatos.add("Verde");
+            colorDeMisDatos.add("Amarillo");
 
 
-            listDataChild.put(listDataHeader.get(0).getTitle(), bySize); // Header, Child data
-            listDataChild.put(listDataHeader.get(1).getTitle(), color);
-            listDataChild.put(listDataHeader.get(2).getTitle(), sort);
+            listDataChild.put(listDataHeader.get(0).getTitle(), gases); // Header, Child data
+            listDataChild.put(listDataHeader.get(1).getTitle(), datos);
+            listDataChild.put(listDataHeader.get(2).getTitle(), colorDeMisDatos);
 
             listAdapter = new FiltrosMapaAdapter(mContext, listDataHeader, listDataChild);
             expandablelistviewFilter.setAdapter(listAdapter);

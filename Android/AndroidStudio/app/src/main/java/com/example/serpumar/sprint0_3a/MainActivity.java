@@ -5,7 +5,10 @@ package com.example.serpumar.sprint0_3a;
 
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -61,6 +64,29 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.acciones_mainactivity, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.accion_info:
+                abrirActivityInfo();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void abrirActivityInfo() {
+        Intent intent = new Intent(this, InfoActivity.class);
+        startActivity(intent);
+    }
 
 } // class
 // --------------------------------------------------------------
