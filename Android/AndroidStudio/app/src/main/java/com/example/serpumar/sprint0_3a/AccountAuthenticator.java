@@ -3,6 +3,7 @@ package com.example.serpumar.sprint0_3a;
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.app.Service;
 import android.content.Context;
@@ -50,5 +51,13 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator{
         public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
             return null;
         }
+
+    @Override
+    public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
+        Bundle bundle = new Bundle();
+        boolean allowed = true;
+        bundle.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, allowed);
+        return bundle;
+    }
 }
 
