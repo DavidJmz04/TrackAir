@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class ReceptorBluetooth {
 
-    Logica lf;
+    LogicaFake lf;
 
     private BluetoothAdapter.LeScanCallback callbackLeScan = null;
 
@@ -39,7 +39,7 @@ public class ReceptorBluetooth {
 
     public void setContext(Context context) {
         this.context = context;
-        lf= new Logica(context);
+        lf= new LogicaFake(context);
     }
 
     private Medicion ultimaMedicion = null;

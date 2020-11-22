@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.Debug;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.serpumar.sprint0_3a.GPS;
-import com.example.serpumar.sprint0_3a.Logica;
+import com.example.serpumar.sprint0_3a.LogicaFake;
 import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 import com.example.serpumar.sprint0_3a.ReceptorBluetooth;
@@ -27,7 +26,7 @@ public class MapaFragment extends Fragment {
     private ReceptorBluetooth receptorBluetooth = new ReceptorBluetooth();
 
     private GPS gps = new GPS();
-    public Logica lf;
+    public LogicaFake lf;
 
     public MapaFragment() {
         // Required empty public constructor
@@ -41,7 +40,7 @@ public class MapaFragment extends Fragment {
 
         receptorBluetooth.setContext(getContext());
 
-        lf = new Logica(this.getContext());
+        lf = new LogicaFake(this.getContext());
 
         Button obtenerLectura = (Button) view.findViewById(R.id.botonObtenerLectura);
         obtenerLectura.setOnClickListener(new View.OnClickListener() {

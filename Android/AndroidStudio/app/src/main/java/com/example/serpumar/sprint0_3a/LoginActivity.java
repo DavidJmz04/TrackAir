@@ -61,7 +61,7 @@ public class LoginActivity extends Activity {
         nombreUser = nombre.getText().toString();
         String contrasenyaUser = Utilidades.sha256(contrasenya.getText().toString());
 
-        Logica logicaFake= new Logica(this);
+        LogicaFake logicaFake= new LogicaFake(this);
         logicaFake.login(nombreUser,contrasenyaUser);
     }
 }

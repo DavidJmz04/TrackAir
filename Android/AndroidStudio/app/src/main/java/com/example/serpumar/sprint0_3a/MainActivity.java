@@ -5,8 +5,11 @@ package com.example.serpumar.sprint0_3a;
 
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new MapaFragment()).commit();
 
-        NetworkManager.getInstance(this);
+        AccountManager accountManager = AccountManager.get(this);
     } // onCreate()
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = new BottomNavigationView.OnNavigationItemSelectedListener() {
