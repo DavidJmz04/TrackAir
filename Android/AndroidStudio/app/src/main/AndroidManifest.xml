@@ -46,6 +46,8 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/account_authenticator"/>
         </service>
+        <activity android:name=".InfoActivity" android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

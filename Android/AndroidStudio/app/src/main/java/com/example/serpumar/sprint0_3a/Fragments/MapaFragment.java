@@ -3,6 +3,9 @@ package com.example.serpumar.sprint0_3a.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,17 +31,20 @@ public class MapaFragment extends Fragment {
     private GPS gps = new GPS();
     public LogicaFake lf;
 
-    public MapaFragment() {
-        // Required empty public constructor
-    }
+    private FragmentActivity myContext;
+
+    FragmentTransaction transaction;
+    Fragment fragment;
+
+    public MapaFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_map, container, false);
+        final View view = inflater.inflate(R.layout.fragment_map_, container, false);
 
-        receptorBluetooth.setContext(getContext());
+        /*receptorBluetooth.setContext(getContext());
 
         lf = new LogicaFake(this.getContext());
 
@@ -144,9 +150,29 @@ public class MapaFragment extends Fragment {
                 Log.d(ETIQUETA_LOG, " boton detener avisador" );
                 receptorBluetooth.detenerAvisador();
             }
+        }); */
+
+        fragment = new MapaFragment_filtros();
+
+        Button  abrirFiltro = (Button) view.findViewById(R.id.botonMapa);
+        abrirFiltro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment();
+
+            }
         });
 
         return view;
 
+    }
+
+    private void showFragment() {
+        transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        if (!fragment.isAdded()) {
+            transaction.add(R.id.frame, fragment, "filter");
+        }
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

@@ -3,4 +3,12 @@
     <color name="colorPrimary">#16CAAF</color>
     <color name="colorPrimaryDark">#19C796</color>
     <color name="colorAccent">#50D8B1</color>
+    <color name="theme_bg">#f5f6f8</color>
+    <color name="black_80">#80000000</color>
+    <color name="white">#ffffff</color>
+    <color name="greyish_brown_two">#4a4a4a</color>
+    <color name="blue_text_color">#0070d2</color>
+    <color name="water_blue">#0071e9</color>
+    <color name="nav_text">#545454</color>
+    <color name="greyish_brown_two_80">#cc4a4a4a</color>
 </resources>
