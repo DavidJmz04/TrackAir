@@ -11,17 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.serpumar.sprint0_3a.ClasesPojo.RecompensasPojo;
+import com.example.serpumar.sprint0_3a.ClasesPojo.Recompensa;
 import com.example.serpumar.sprint0_3a.Logica;
 import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
+import com.example.serpumar.sprint0_3a.adapters.RecompensasAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class RecompensasFragment extends Fragment {
 
     RecyclerView recyclerRecompensas;
-    ArrayList<RecompensasPojo> listaRecompensas;
+    ArrayList<Recompensa> listaRecompensas;
     Logica logicaFake;
 
     public RecompensasFragment() {
@@ -38,23 +43,7 @@ public class RecompensasFragment extends Fragment {
         recyclerRecompensas = view.findViewById(R.id.recyclerId);
         recyclerRecompensas.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        Thread t = new Thread(){
-            @Override
-            public void run() {
-                for(;;){
-                    if (logicaFake.ultimaPeticion.getFlag()) {
-                        Log.d("PENE", "hAY MEDICION - " + logicaFake.ultimaPeticion.getPeticion());
-                        return;
-                    }
-                }
-            }
-        };
-        t.start();
-
         llenarLista();
-
-        //RecompensasAdapter adapter = new RecompensasAdapter(listaRecompensas);
-        //recyclerRecompensas.setAdapter(adapter);
 
         return view;
     }
@@ -62,17 +51,23 @@ public class RecompensasFragment extends Fragment {
     private void llenarLista() {
 
         //Obtener recompensas y añadirlas a la lista
-        NetworkManager.getInstance(this.getContext()).getRequest("/recompensas", new NetworkManager.ControladorRespuestas<String>() {
+        NetworkManager.getInstance().getRequest("/recompensas", new NetworkManager.ControladorRespuestas<String>() {
             @Override
             public void getResult(String object) {
+                try {
+                    JSONArray jsonArray= new JSONArray(object);
+                    for(int i=0; i<jsonArray.length(); i++){
 
-                Log.d("fffff", object);
+                        JSONObject recompensa= jsonArray.getJSONObject(i);
+                        listaRecompensas.add(new Recompensa(recompensa.getInt("id"),recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"),R.drawable.ic_baseline_stars_24));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                RecompensasAdapter adapter = new RecompensasAdapter(listaRecompensas, getContext());
+                recyclerRecompensas.setAdapter(adapter);
             }
         });
-
-        listaRecompensas.add(new RecompensasPojo("Hamgurguesa","Hamburguesa en la cadena de comida McKing", R.drawable.ic_baseline_stars_24, 231));
-        listaRecompensas.add(new RecompensasPojo("Entrada de Cine","Entrada de los cines ABD", R.drawable.ic_baseline_stars_24, 232));
-        listaRecompensas.add(new RecompensasPojo("Entrada de Cine","Entrada de los cines ABD", R.drawable.ic_baseline_stars_24, 233));
-        listaRecompensas.add(new RecompensasPojo("Entrada de Cine","Entrada de los cines ABD", R.drawable.ic_baseline_stars_24, 234));
     }
 }

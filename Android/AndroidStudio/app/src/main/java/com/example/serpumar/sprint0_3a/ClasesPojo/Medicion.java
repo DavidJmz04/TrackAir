@@ -2,7 +2,6 @@ package com.example.serpumar.sprint0_3a.ClasesPojo;
 
 public class Medicion {
 
-
     private int medicion;
     private Ubicacion ubicacion;
     private String date;
