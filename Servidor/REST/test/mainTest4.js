@@ -10,14 +10,14 @@ const IP_PUERTO = "http://localhost:8080"
 
 describe("Test 4: Todos los put", function () {
 
-    it("obtener idUsuario", function (hecho){
-        
+    it("obtener idUsuario", function (hecho) {
+
         var datosUsuario = {
 
             nombreUsuario: "admin",
             contrasenya: "ContraseñaHasheada",
         }
-        
+
         request.post({
 
                 url: IP_PUERTO + "/login",
@@ -34,7 +34,7 @@ describe("Test 4: Todos los put", function () {
 
                 idUsuario = JSON.parse(carga).id
                 hecho()
-            
+
             } // callback
         ) // .post        
     })
@@ -44,10 +44,13 @@ describe("Test 4: Todos los put", function () {
         var datosPersona = {
 
             id: idUsuario,
-            nombreUsuario: "admin",
+            nombreUsuario: "David",
             contrasenya: "ContraseñaHasheada",
             correo: "micorreo@gmail.com",
-            puntuacion: 400
+            puntuacion: 0,
+            telefono: "123456789",
+            idNodo: "1",
+            puntosCanjeables: 0
         }
 
         request.put({
@@ -66,7 +69,7 @@ describe("Test 4: Todos los put", function () {
 
                 assert.equal(err, null, "¿ha habido un error?")
                 assert.equal(respuesta.statusCode, 200, "¿El código no es 200 (OK)")
-                assert.equal(carga, "Se ha actualizado correctamente el usuario:admin", "¿La carga no es esa?")
+                assert.equal(carga, "Se ha actualizado correctamente el usuario:David", "¿La carga no es esa?")
                 hecho()
             } // callback
         ) // .delete

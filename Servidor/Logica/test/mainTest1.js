@@ -16,7 +16,7 @@ describe("Test 1: Usuario", function () {
 
     it("conectar a la base de datos", function (hecho) {
 
-        laLogica = new Logica("p3a", function (err) {
+        laLogica = new Logica("proyecto3a", function (err) {
 
             if (err) {
 
@@ -38,7 +38,8 @@ describe("Test 1: Usuario", function () {
             nombreUsuario: "admin",
             contrasenya: "ContraseñaHasheada",
             correo: "micorreo@gmail.com",
-            puntuacion: 200
+            telefono: "123456789",
+            idNodo: "1"
         })
 
         var res = await laLogica.buscarUsuarioConNombreYContrasenya({
@@ -52,7 +53,9 @@ describe("Test 1: Usuario", function () {
         assert.equal(res[0].nombre_usuario.toString(), "admin", "¿no es ese nombre?")
         assert.equal(res[0].contrasenya.toString(), "ContraseñaHasheada", "¿no es esa contraseña?")
         assert.equal(res[0].correo.toString(), "micorreo@gmail.com", "¿no es ese correo?")
-        assert.equal(res[0].puntuacion.toString(), "200", "¿no es esa puntuación?")
+        assert.equal(res[0].telefono, "123456789", "¿no es ese telefono?")
+        assert.equal(res[0].id_nodo, "1", "¿no es ese id?")
+
     }) // it
 
     it("puedo editar un usuario", async function () {
@@ -63,7 +66,10 @@ describe("Test 1: Usuario", function () {
             nombreUsuario: "David",
             contrasenya: "ContraseñaHasheada",
             correo: "micorreo@gmail.com",
-            puntuacion: 200
+            puntuacion: 0,
+            telefono: "123456789",
+            idNodo: "1",
+            puntosCanjeables: 0
         })
 
         var res = await laLogica.buscarUsuarioConId(idUsuario)
