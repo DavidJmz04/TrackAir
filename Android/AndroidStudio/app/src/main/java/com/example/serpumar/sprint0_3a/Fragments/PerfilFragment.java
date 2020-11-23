@@ -2,10 +2,7 @@
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -24,22 +21,17 @@ import com.example.serpumar.sprint0_3a.MainActivity;
 import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 
-import java.io.IOException;
+public class PerfilFragment extends Fragment {
 
-    public class PerfilFragment extends Fragment {
-
-        //TODO: Optimizar el login con la cuenta de usuario e implementar la conexión a la base de datos para verificar las cuentas
-        //FIXME: ACCOUNT[] accounts no me pinta be, solucionar i posar guapet; Els callbacks de la vista també junt als components del XML en Java. AccountManager controla tot lo referent a les cuentes de usuari. Ara esta implementat en FAKE, pero s'ha de realitzar com deu mana.
-
-    public PerfilFragment() { }
-
-    //Esta per pulir i optimitzar
-    Account[] accounts;
-    String CLASS_NAME = "PerfilFragment";
-
+    public PerfilFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        //TODO si esta logeado, se cargan los datos, pero si no Boton login
+
         View v = inflater.inflate(R.layout.fragment_perfil, container, false);
 
         final Intent i = new Intent(getActivity(), MainActivity.class);
@@ -52,26 +44,30 @@ import java.io.IOException;
 
         final AccountManager accountManager = AccountManager.get(getContext());
 
-        // FIXME: Arreglar esta part sobretot, fa pudor tot, per visible e invisible de tantes coses, probablement centrar tots els components de l'usuari not logged en un layout i l'usuari logged en altre i sols mostrar/ocultar el que pertoque.
         // Inflate the layout for this fragment
-        if ((accounts = accountManager.getAccounts()).length>0) {
+        if (accountManager.getAccounts().length>0) {
+
             iniciarSesion.setVisibility(View.VISIBLE);
             iniciarSesion.setText("Cerrar sesion");
             nombre.setVisibility(View.VISIBLE);
             email.setVisibility(View.INVISIBLE);
+
             nombre.setText(accountManager.getAccounts()[0].name);
+            Toast.makeText(getContext(), accountManager.getAccounts().length + " - a", Toast.LENGTH_LONG).show();
             iniciarSesion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i(CLASS_NAME, "Click");
-                    accountManager.removeAccountExplicitly(accounts[0]);
-                    startActivity(i);
+                    Account[] accounts = AccountManager.get(getContext()).getAccounts();
+                    for (Account account1 : accounts) {
+                        accountManager.removeAccount(account1,getActivity(),null,null);
+                    }
+                    Toast.makeText(getContext(), accountManager.getAccounts().length + " - a", Toast.LENGTH_LONG).show();
                 }
             });
         } else {
             iniciarSesion.setVisibility(View.VISIBLE);
             iniciarSesion.setText("Iniciar sesion");
-            nombre.setVisibility(View.VISIBLE);
+            nombre.setVisibility(View.INVISIBLE);
             email.setVisibility(View.INVISIBLE);
             nombre.setText("No hay cuenta!");
 
@@ -90,6 +86,8 @@ import java.io.IOException;
                     for (Account account1 : accounts) {
                         Toast.makeText(getContext(), "Name: " + account1.name+" Type: " + account1.type,Toast.LENGTH_SHORT).show();
                     }
+
+                    NetworkManager.getInstance(getContext());
                     startActivity(i);
                 }
             });
