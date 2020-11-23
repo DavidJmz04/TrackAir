@@ -6,16 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.serpumar.sprint0_3a.Adapters.RecompensasAdapter;
 import com.example.serpumar.sprint0_3a.ClasesPojo.Recompensa;
-import com.example.serpumar.sprint0_3a.Logica;
 import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
-import com.example.serpumar.sprint0_3a.adapters.RecompensasAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +25,6 @@ public class RecompensasFragment extends Fragment {
 
     RecyclerView recyclerRecompensas;
     ArrayList<Recompensa> listaRecompensas;
-    Logica logicaFake;
 
     public RecompensasFragment() {
         // Required empty public constructor
@@ -37,7 +34,6 @@ public class RecompensasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recompensas, container, false);
-        logicaFake = new LogicaFake(this.getContext());
 
         listaRecompensas = new ArrayList<>();
         recyclerRecompensas = view.findViewById(R.id.recyclerId);

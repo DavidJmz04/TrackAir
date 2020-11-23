@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.serpumar.sprint0_3a.ClasesPojo.Usuario;
+import com.example.serpumar.sprint0_3a.Mail;
 import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 import com.example.serpumar.sprint0_3a.ClasesPojo.Recompensa;
@@ -69,7 +70,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
 
                     if(usuario.getPuntosCanjeables() >= listaRecompensas.get(position).getCoste()){
 
-                        canjearCodigo(position, button);
+                        canjearCodigo(position,usuario.getCorreo(), button);
                         usuario.setPuntosCanjeables(usuario.getPuntosCanjeables() - listaRecompensas.get(position).getCoste());
                         editarUsuario(usuario);
                     }
@@ -80,7 +81,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
         });
     }
 
-    private void canjearCodigo(int position, final Button button){
+    private void canjearCodigo(final int position, final String correo, final Button button){
 
         NetworkManager.getInstance().getRequest("/codigoRecompensa/" + listaRecompensas.get(position).getId(), new NetworkManager.ControladorRespuestas<String>() {
             @Override
@@ -91,6 +92,9 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
                     String codigo= jsonArray.getJSONObject(0).getString("codigo");
                     button.setText(codigo);
                     button.setEnabled(false);
+
+                    Mail sm = new Mail(context, correo, listaRecompensas.get(position).getTitulo(), "Su codigo de la recompensa canjeada es: " + codigo);
+                    sm.execute();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
