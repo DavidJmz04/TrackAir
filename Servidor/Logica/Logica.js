@@ -60,7 +60,7 @@ module.exports = class Logica {
     // insertarUsuario() -->
     // ...............................................................................
     insertarUsuario(datos) {
-        var textoSQL = "insert into usuarios (nombre_usuario, contrasenya, correo, puntuacion, telefono, id_nodo) values(?, ?, ?, ?, ?);";
+        var textoSQL = "insert into usuarios (nombre_usuario, contrasenya, correo, telefono, id_nodo) values(?, ?, ?, ?, ?);";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(
@@ -145,11 +145,12 @@ module.exports = class Logica {
             var medidas = await this.buscarMedicionesDeUsuario(usuarios[i].id)
 
             for (var j = 1; j < medidas.length; j++) {
-
+                
                 //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
                 var dist = this.obtenerDistancia(parseFloat(medidas[j - 1].ubicacion.split(",")[0]), parseFloat(medidas[j - 1].ubicacion.split(",")[1]), parseFloat(medidas[j].ubicacion.split(",")[0]), parseFloat(medidas[j].ubicacion.split(",")[1]))
 
-                //Medida anterior del mismo dia
+                //Medida actual y anterior
+                var dia = new Date(medidas[j].momento)
                 var diaAnterior = new Date(medidas[j - 1].momento)
                 var t = (dia.getTime() - diaAnterior.getTime()) / 1000
                 
@@ -162,7 +163,7 @@ module.exports = class Logica {
 
             var primerDia = new Date(medidas[0].momento)
             var ultimoDia = new Date();
-            var nDias = (ultimoDia.getTime() - primerDia.getTime()) / 86400000
+            var nDias = Math.ceil((ultimoDia.getTime() - primerDia.getTime()) / 86400000)
 
             res.push({
                 id: usuarios[0].id,

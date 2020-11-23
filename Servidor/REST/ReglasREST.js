@@ -2,7 +2,7 @@
 // ReglasREST.js
 // .....................................................................
 
-    const utilidades = require("../Logica/Utilidades.js");
+const utilidades = require("../Logica/Utilidades.js");
 module.exports.cargar = function (servidorExpress, laLogica) {
     var utilidad = new utilidades();
     var csv = require('../Datos/MedicionesOficiales.json'); // your json file path
@@ -120,7 +120,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // todo ok
         respuesta.send(JSON.stringify(res[0]))
     }) // get /usuario
-    
+
     // .......................................................
     // GET /distanciaYTiempoUsario/
     // .......................................................
@@ -161,7 +161,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
 
         respuesta.send(JSON.stringify(res[0]))
     }) // post /usuario   
-    
+
     // .......................................................
     // PUT /editarUsuario
     // .......................................................
@@ -170,11 +170,11 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         console.log(" * PUT /editarUsuario ")
 
         var datos = JSON.parse(peticion.body)
-        var res= await laLogica.editarUsuario(datos)
+        var res = await laLogica.editarUsuario(datos)
 
         respuesta.send("Se ha actualizado correctamente el usuario:" + datos.nombreUsuario);
     }) // put /editarUsuario   
-    
+
     // .......................................................
     // POST /login/
     // .......................................................
@@ -187,10 +187,15 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         var usuario = await laLogica.buscarUsuarioConNombreYContrasenya(datos)
 
         //Si existe el usuario devolvemos true
-        if (usuario.length == 1) respuesta.send(JSON.stringify({existe: true, id: usuario[0].id}))
-        else respuesta.send(JSON.stringify({existe: false}))
+        if (usuario.length == 1) respuesta.send(JSON.stringify({
+            existe: true,
+            id: usuario[0].id
+        }))
+        else respuesta.send(JSON.stringify({
+            existe: false
+        }))
     }) // post /login
-    
+
     // .......................................................
     // GET /recompensas/
     // .......................................................
@@ -216,13 +221,13 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     servidorExpress.get('/codigoRecompensa/:idRecompensa', async function (peticion, respuesta) {
 
         console.log(" * GET /codigoRecompensa/:idRecompensa ")
-        
+
         // averiguo el id
         var id = peticion.params.idRecompensa
 
         // llamo a la función adecuada de la lógica
         var res = await laLogica.buscarCodigoRecompensaConId(id)
-        
+
         if (res.length == 0) {
             // 404: not found
             respuesta.status(404).send("No encontré recompensas")
@@ -235,46 +240,46 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     // GET /mediciones oficiales off line
     // .......................................................
-    servidorExpress.get('/medicionesOficialesCSV',
-        async function (peticion, respuesta) {
-                // Do something with your data
-                respuesta.send(utilidad.convertirAJSONpropio(csv));
-        }) // get /mediciones
-    
+    servidorExpress.get('/medicionesOficialesCSV', async function (peticion, respuesta) {
+        // Do something with your data
+        respuesta.send(utilidad.convertirAJSONpropio(csv));
+    }) // get /mediciones
+
     // .......................................................
     // GET /mediciones oficiales en línea
     // .......................................................
-    servidorExpress.get('/medicionesOficiales',
-        async function (peticion, respuesta) {
-            const fetch = require("node-fetch");
-            console.log(" * GET /mediciones oficiales")
+    servidorExpress.get('/medicionesOficiales', async function (peticion, respuesta) {
+        const fetch = require("node-fetch");
+        console.log(" * GET /mediciones oficiales")
 
-            const options = {
-                method: "POST",
-                mode: 'cors',
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': "*"
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-				body: JSON.stringify({"idEstacion":5}) // body data type must match "Content-Type" header
-            };
+        const options = {
+            method: "POST",
+            mode: 'cors',
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': "*"
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+                "idEstacion": 5
+            }) // body data type must match "Content-Type" header
+        };
 
-            // Petición HTTP
-            fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerTablaPestanyaDatosOnline", options)
-                .then(response => response.text())
-                .then(data => {
-        
-                    if (data.length == 0) {
-                        // 404: not found
-                        respuesta.status(404).send("{}")
-                        return
-                    }
-                    // todo ok
-                    respuesta.send(data.valor)
-                                    
-                });
-        }) // get /mediciones
+        // Petición HTTP
+        fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerTablaPestanyaDatosOnline", options)
+            .then(response => response.text())
+            .then(data => {
+
+                if (data.length == 0) {
+                    // 404: not found
+                    respuesta.status(404).send("{}")
+                    return
+                }
+                // todo ok
+                respuesta.send(data.valor)
+
+            });
+    }) // get /mediciones
 } // cargar()
