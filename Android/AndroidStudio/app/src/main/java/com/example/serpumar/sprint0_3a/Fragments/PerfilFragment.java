@@ -2,10 +2,7 @@
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -39,6 +36,9 @@ import java.io.IOException;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        //TODO si esta logeado, se cargan los datos, pero si no Boton login
+
         View v = inflater.inflate(R.layout.fragment_perfil, container, false);
 
         ConstraintLayout perfilLayout = v.findViewById(R.id.Perfil);

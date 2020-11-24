@@ -19,7 +19,7 @@
     "request": "*"
   },
   "devDependencies": {
-    "mocha": "^8.2.0"
+    "mocha": "^8.2.1"
   },
   "main": "ReglasREST.js",
   "author": "David Jimenez Garcia"
