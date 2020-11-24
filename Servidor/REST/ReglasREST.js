@@ -183,6 +183,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         console.log(" * POST /login ")
 
         var datos = JSON.parse(peticion.body)
+        console.log(datos)
         // llamo a la función adecuada de la lógica
         var usuario = await laLogica.buscarUsuarioConNombreYContrasenya(datos)
 
@@ -263,18 +264,54 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             };
 
             // Petición HTTP
-            fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerTablaPestanyaDatosOnline", options)
+            fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerEstacionById", options)
+            .then(response => response.text())
+            .then(data => {
+    
+                if (data.length == 0) {
+                    // 404: not found
+                    respuesta.status(404).send("{}")
+                    return
+                }
+                // todo ok
+                fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerTablaPestanyaDatosOnline", options)
                 .then(response => response.text())
                 .then(data => {
-        
                     if (data.length == 0) {
                         // 404: not found
                         respuesta.status(404).send("{}")
                         return
                     }
                     // todo ok
-                    respuesta.send(data.valor)
+                    respuesta.send(utilidad.convertirTiempoRealAJSONpropio((JSON.parse(data))['listMagnitudesMediasHorarias']))
                                     
                 });
+                                
+            });
+            
         }) // get /mediciones
+
+    // .......................................................
+    // GET /calidadAire/:idUsuario
+    // .......................................................
+    servidorExpress.get('/calidadAire/:idUsuario', async function (peticion, respuesta) {
+
+        console.log(" * GET /calidadAire/:idUsuario ")
+
+        // averiguo el id
+        var id = peticion.params.idUsuario
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.buscarMedicionesDeUsuarioDeHoy(id)
+        //Si el array esta vacío
+        if (res.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré mediciones")
+            return
+        }
+        res = await utilidad.procesarCalidadAireAJSON(res)
+        // todo ok
+        respuesta.send(res)
+    }) // get /mediciones/:idUsuario
+
+
 } // cargar()

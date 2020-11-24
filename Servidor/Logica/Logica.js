@@ -98,7 +98,7 @@ module.exports = class Logica {
     // ................................................................................................................................................
     buscarUsuarioConNombreYContrasenya(datos) {
         var textoSQL = "select * from usuarios where nombre_usuario= ? and contrasenya= ?";
-
+        
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [datos.nombreUsuario, datos.contrasenya],
                 (err, res) => {
@@ -355,6 +355,24 @@ module.exports = class Logica {
                 )
             })
         })
+    }
+    
+    // ................................................................................................................................................
+    //id:Z
+    // -->
+    // buscarMedicionesDeUsuario() <--
+    // <--
+    // Lista {valor:Real, momento:Datetime, ubicacion:Texto, tipoMedicion:Texto}
+    // ................................................................................................................................................
+    async buscarMedicionesDeUsuarioDeHoy(idUsuario) {
+        var textoSQL =
+            "select m.* from medicionesdeusuarios mu, mediciones m where m.ubicacion = mu.ubicacion_medicion AND mu.momento_medicion = m.momento AND mu.id_usuario = ? AND DATE(m.momento)=CURRENT_DATE";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [idUsuario], (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        });
     }
 
     // ................................................................................................................................................
