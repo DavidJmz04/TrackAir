@@ -3,7 +3,9 @@
 // .....................................................................
 
 const utilidades = require("../Logica/Utilidades.js");
+
 module.exports.cargar = function (servidorExpress, laLogica) {
+    
     var utilidad = new utilidades();
     var csv = require('../Datos/MedicionesOficiales.json'); // your json file path
     // .......................................................
@@ -173,7 +175,26 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         var res = await laLogica.editarUsuario(datos)
 
         respuesta.send("Se ha actualizado correctamente el usuario:" + datos.nombreUsuario);
-    }) // put /editarUsuario   
+    }) // put /editarUsuario 
+    
+    // .......................................................
+    // PUT /puntuacionUsuario
+    // .......................................................
+    servidorExpress.put('/puntuacionUsuario', async function (peticion, respuesta) {
+
+        console.log(" * POST /puntuacionUsuario ")
+
+        var datos = JSON.parse(peticion.body)
+        // averiguo el id
+        var id = datos.idUsuario
+
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.obtenerPuntuacion(id)
+
+        await laLogica.editarPuntuacionUsuario({puntuacion: res, id: id})
+
+        respuesta.send("Se han actualizado los datos de puntuacion");
+    }) // put /puntuacionUsuario
 
     // .......................................................
     // POST /login/
