@@ -14,7 +14,7 @@ public class Usuario {
     public Usuario(int id, String nombre, String contrasenya, String correo, int puntuacion, int puntosCanjeables, String telefono, String idNodo){
         this.id= id;
         this.nombre= nombre;
-        this.nombre= contrasenya;
+        this.contrasenya= contrasenya;
         this.correo= correo;
         this.puntuacion= puntuacion;
         this.puntosCanjeables= puntosCanjeables;
