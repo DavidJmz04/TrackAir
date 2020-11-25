@@ -93,6 +93,23 @@ module.exports = class Logica {
     }
 
     // ................................................................................................................................................
+    // buscarUsuariosOrdenadosPorPuntuación() <--
+    // <--
+    // {id:Z, nombreUsuario:Texto, contrasenya:Texto, correo:Texto, puntuacion:Z, telefono=Texto, idNodo=Texto}
+    // ................................................................................................................................................
+    buscarUsuariosOrdenadosPorPuntuación() {
+        var textoSQL = "select * from usuarios order by puntuacion desc";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL,
+                (err, res) => {
+                    err ? rechazar(err) : resolver(res);
+                }
+            );
+        });
+    }
+
+    // ................................................................................................................................................
     //datos:{nombreUsuario:Texto, contrasenya=Texto}
     // -->
     // buscarUsuarioConNombreYContrasenya() <--

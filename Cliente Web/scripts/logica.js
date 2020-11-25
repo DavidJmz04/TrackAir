@@ -105,6 +105,25 @@ async insertarMedicionesPlaceholder(){
     return data;
   }
 
+  //TEST PARA PDF
+  async obtenerPDF(){
+    let recurso = "prueba";
+    /*
+    let res = await axios.get(`${servidor}:3000/${recurso}`, {
+            method: 'GET',
+            
+        })
+        .then(response => { 
+             //response.data.pipe(fs.createWriteStream("data.pdf"));
+        })
+        .catch(error => {
+            console.log(error)
+        });
+        */
+
+       window.location.href = `${servidor}:3000/${recurso}`;
+       //window.open(`${servidor}:3000/${recurso}`);
+  }
   //Destruye la cookie que se había creado para el inicio de sesión
   logout() {
     document.cookie = "id= ; expires= Thu, 01 Jan 1970 00:00:00 GMT";
