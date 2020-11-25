@@ -54,6 +54,7 @@ public class RecompensasFragment extends Fragment {
                     JSONArray jsonArray= new JSONArray(object);
                     for(int i=0; i<jsonArray.length(); i++){
 
+                        //TODO Hacer un switch de imagenes
                         JSONObject recompensa= jsonArray.getJSONObject(i);
                         listaRecompensas.add(new Recompensa(recompensa.getInt("id"),recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"),R.drawable.ic_baseline_stars_24));
                     }
