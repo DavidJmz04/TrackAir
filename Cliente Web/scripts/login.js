@@ -37,6 +37,7 @@ form.addEventListener("submit", (e) => {
       inputContrasenya.value = "";
       inputUsuario.value = "";
       modal.style.display = "none";
+      window.location.href = "./perfil.html";
 
       //SI NO ESTÁ LOGUEADO
     } else {
