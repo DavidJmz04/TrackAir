@@ -204,6 +204,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         console.log(" * POST /login ")
 
         var datos = JSON.parse(peticion.body)
+        console.log(datos)
         // llamo a la función adecuada de la lógica
         var usuario = await laLogica.buscarUsuarioConNombreYContrasenya(datos)
 
@@ -269,38 +270,73 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     // GET /mediciones oficiales en línea
     // .......................................................
-    servidorExpress.get('/medicionesOficiales', async function (peticion, respuesta) {
-        const fetch = require("node-fetch");
-        console.log(" * GET /mediciones oficiales")
+    servidorExpress.get('/medicionesOficiales',
+        async function (peticion, respuesta) {
+            const fetch = require("node-fetch");
+            console.log(" * GET /mediciones oficiales")
 
-        const options = {
-            method: "POST",
-            mode: 'cors',
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*"
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({
-                "idEstacion": 5
-            }) // body data type must match "Content-Type" header
-        };
+            const options = {
+                method: "POST",
+                mode: 'cors',
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': "*"
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+				body: JSON.stringify({"idEstacion":5}) // body data type must match "Content-Type" header
+            };
 
-        // Petición HTTP
-        fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerTablaPestanyaDatosOnline", options)
+            // Petición HTTP
+            fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerEstacionById", options)
             .then(response => response.text())
             .then(data => {
-
+    
                 if (data.length == 0) {
                     // 404: not found
                     respuesta.status(404).send("{}")
                     return
                 }
                 // todo ok
-                respuesta.send(data.valor)
-
+                fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerTablaPestanyaDatosOnline", options)
+                .then(response => response.text())
+                .then(data => {
+                    if (data.length == 0) {
+                        // 404: not found
+                        respuesta.status(404).send("{}")
+                        return
+                    }
+                    // todo ok
+                    respuesta.send(utilidad.convertirTiempoRealAJSONpropio((JSON.parse(data))['listMagnitudesMediasHorarias']))
+                                    
+                });
+                                
             });
-    }) // get /mediciones
+            
+        }) // get /mediciones
+
+    // .......................................................
+    // GET /calidadAire/:idUsuario
+    // .......................................................
+    servidorExpress.get('/calidadAire/:idUsuario', async function (peticion, respuesta) {
+
+        console.log(" * GET /calidadAire/:idUsuario ")
+
+        // averiguo el id
+        var id = peticion.params.idUsuario
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.buscarMedicionesDeUsuarioDeHoy(id)
+        //Si el array esta vacío
+        if (res.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré mediciones")
+            return
+        }
+        res = await utilidad.procesarCalidadAireAJSON(res)
+        // todo ok
+        respuesta.send(res)
+    }) // get /mediciones/:idUsuario
+
+
 } // cargar()
