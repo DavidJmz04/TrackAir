@@ -4,10 +4,8 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,8 +15,6 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import static java.security.AccessController.getContext;
 
 public class LoginActivity extends Activity {
 
@@ -71,11 +67,11 @@ public class LoginActivity extends Activity {
 
     private void login() {
         nombreUser = nombre.getText().toString();
-        String contrasenyaUser = Utilidades.sha256(contrasenya.getText().toString());
+        final String contrasenyaUser = Utilidades.sha256(contrasenya.getText().toString());
         try {
-            JSONObject user = new JSONObject("{\"nombreUsuario\":"+nombreUser+",\"contrasenya\":"+contrasenyaUser+"}");
+            JSONObject userPOST = new JSONObject("{\"nombreUsuario\":"+nombreUser+",\"contrasenya\":"+contrasenyaUser+"}");
             NetworkManager networkManager = NetworkManager.getInstance(this);
-            networkManager.postRequest(user, "/login", new NetworkManager.ControladorRespuestas() {
+            networkManager.postRequest(userPOST, "/login", new NetworkManager.ControladorRespuestas() {
                 @Override
                 public void getResult(Object object) {
                     try {
@@ -83,7 +79,7 @@ public class LoginActivity extends Activity {
                         if (user.getBoolean("existe")){
                             Account account = new Account(nombreUser,"com.example.serpumar.sprint0_3a");
                             Bundle userData = new Bundle();
-                            userData.putInt("id", Integer.parseInt(user.get("id").toString()));
+                            userData.putString("id", user.get("id").toString());
                             boolean success = accountManager.addAccountExplicitly(account,contrasenyaUser, userData);
                             if(success){
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));

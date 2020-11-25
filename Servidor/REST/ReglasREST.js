@@ -99,7 +99,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             return
         }
         // todo ok
-        respuesta.send(JSON.stringify(res[0]))
+        respuesta.send(JSON.stringify(res))
     }) // get /tipoMedicion/:idMedicion
 
     // .......................................................
@@ -120,7 +120,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             return
         }
         // todo ok
-        respuesta.send(JSON.stringify(res[0]))
+        respuesta.send(JSON.stringify(res))
     }) // get /usuario
 
     // .......................................................
@@ -256,7 +256,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             return
         }
         // todo ok
-        respuesta.send(JSON.stringify(res[0]))
+        respuesta.send(JSON.stringify(res))
     }) // get /codigoRecompensa
 
     // .......................................................

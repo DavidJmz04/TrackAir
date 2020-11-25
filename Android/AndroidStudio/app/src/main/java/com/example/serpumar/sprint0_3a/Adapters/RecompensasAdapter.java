@@ -1,6 +1,8 @@
 package com.example.serpumar.sprint0_3a.Adapters;
 
+import android.accounts.AccountManager;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.Integer.parseInt;
 
 public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.RecompensasViewHolder> {
 
@@ -57,16 +61,22 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
 
     private void obtenerPuntos(final int position, final Button button){
 
-        int idUsuario= 35;//TODO Cambiar
+        AccountManager accountManager= AccountManager.get(context);
+        int idUsuario= parseInt(accountManager.getUserData(accountManager.getAccounts()[0],"id"));
+
         NetworkManager.getInstance().getRequest("/usuario/" + idUsuario, new NetworkManager.ControladorRespuestas<String>() {
             @Override
             public void getResult(String object) {
 
+                Log.d("ffffff", "entra");
                 try {
+
                     JSONArray jsonArray= new JSONArray(object);
 
                     JSONObject usuarioJSON= jsonArray.getJSONObject(0);
                     Usuario usuario= new Usuario(usuarioJSON.getInt("id"),usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"),usuarioJSON.getString("correo"),usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"),usuarioJSON.getString("telefono"),usuarioJSON.getString("id_nodo"));
+
+                    Log.e("fffffff",  "dsfsd" + usuario.getContrasenya());
 
                     if(usuario.getPuntosCanjeables() >= listaRecompensas.get(position).getCoste()){
 
