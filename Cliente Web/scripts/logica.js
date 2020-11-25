@@ -43,7 +43,6 @@ class Logica {
   async login(usuario, contrasenya) {
     //console.log("LOGIN pass: " + CryptoJS.SHA256(contrasenya).toString());
     let recurso = "login";
-
     try {
       let res = await axios.post(`${servidor}:${puerto}/${recurso}`, {
         nombreUsuario: usuario,
@@ -78,6 +77,7 @@ class Logica {
 
   //TEST PARA PDF
   async obtenerPDF(){
+    let recurso = "informe/ranking";
     /*
     let res = await axios.get(`${servidor}:3000/${recurso}`, {
             method: 'GET',
@@ -91,6 +91,7 @@ class Logica {
         });
         */
 
+       window.location.href = `${servidor}:${puerto}/${recurso}`;
        //window.open(`${servidor}:3000/${recurso}`);
   }
   //Destruye la cookie que se había creado para el inicio de sesión
