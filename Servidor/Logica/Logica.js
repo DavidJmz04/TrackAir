@@ -3,11 +3,14 @@
 // ................................................................................................................................................
 
 const mysql = require("mysql");
+const Utilidades = require("./Utilidades.js");
+var utilidades = new Utilidades();
 
 // ................................................................................................................................................
 // ................................................................................................................................................
 
 module.exports = class Logica {
+
     // ................................................................................................................................................
     // nombreBD: Texto
     // -->
@@ -60,7 +63,7 @@ module.exports = class Logica {
     // insertarUsuario() -->
     // ...............................................................................
     insertarUsuario(datos) {
-        var textoSQL = "insert into usuarios (nombre_usuario, contrasenya, correo, puntuacion, telefono, id_nodo) values(?, ?, ?, ?, ?);";
+        var textoSQL = "insert into usuarios (nombre_usuario, contrasenya, correo, telefono, id_nodo) values(?, ?, ?, ?, ?);";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(
@@ -98,7 +101,7 @@ module.exports = class Logica {
     // ................................................................................................................................................
     buscarUsuarioConNombreYContrasenya(datos) {
         var textoSQL = "select * from usuarios where nombre_usuario= ? and contrasenya= ?";
-
+        
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [datos.nombreUsuario, datos.contrasenya],
                 (err, res) => {
@@ -141,66 +144,70 @@ module.exports = class Logica {
 
         for (var i = 0; i < usuarios.length; i++) {
 
-            //Obtengo las medidas de cada usuario
-            var medidas = await this.buscarMedicionesDeUsuario(usuarios[i].id)
+            //Obtengo la distancia, el tiempo y la primera medida del usuario
+            var objDistanciaTiempo = await this.buscarDistanciaYTiempoDeUsuario(usuarios[i].id)
 
-            for (var j = 1; j < medidas.length; j++) {
-
-                //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
-                var dist = this.obtenerDistancia(parseFloat(medidas[j - 1].ubicacion.split(",")[0]), parseFloat(medidas[j - 1].ubicacion.split(",")[1]), parseFloat(medidas[j].ubicacion.split(",")[0]), parseFloat(medidas[j].ubicacion.split(",")[1]))
-
-                //Medida anterior del mismo dia
-                var diaAnterior = new Date(medidas[j - 1].momento)
-                var t = (dia.getTime() - diaAnterior.getTime()) / 1000
-                
-                if (t < 900 + 300 /*Tiempo que tarda en enviar el beacon + Error de enviado*/ && dist < 10000 /*Distancia para comprobar que no ha empezado a medir desde otro lugar lejano el mismo día*/ ) {
-
-                    tiempo += t
-                    distancia += dist
-                }
-            }
-
-            var primerDia = new Date(medidas[0].momento)
+            var primerDia = new Date(objDistanciaTiempo.momentoPrimeraMedida)
             var ultimoDia = new Date();
-            var nDias = (ultimoDia.getTime() - primerDia.getTime()) / 86400000
 
+            //Nº de dias que han pasado desde que recibe el nodo hasta el día de hoy
+            var nDias = Math.ceil((ultimoDia.getTime() - primerDia.getTime()) / 86400000)
+
+            //Añadimos al usuario
             res.push({
-                id: usuarios[0].id,
-                nombreUsuario: usuarios[0].nombre_usuario,
-                correo: usuarios[0].correo,
-                telefono: usuarios[0].telefono,
-                idNodo: usuarios[0].id_nodo,
-                distancia: distancia / nDias,
-                tiempo: tiempo / nDias
+                id: usuarios[i].id,
+                nombreUsuario: usuarios[i].nombre_usuario,
+                correo: usuarios[i].correo,
+                telefono: usuarios[i].telefono,
+                idNodo: usuarios[i].id_nodo,
+                distancia: Math.round(objDistanciaTiempo.distancia / nDias),
+                tiempo: Math.round(objDistanciaTiempo.tiempo / nDias)
             })
-
-            //Reseteamos la distancia y el tiempo ya que cambiamos de usuario
-            tiempo = 0
-            distancia = 0
         }
-        
+
         return res
     }
 
     // ................................................................................................................................................
-    // <R>, <R>, <R>, <R>
-    // -->
-    // obtenerDistancia() <--
+    // id:Z -->
+    // buscarDistanciaYTiempoDeUsuario() <--
     // <--
-    // <R>
+    // {distancia=R, tiempo= R, momento=DateTime}
     // ................................................................................................................................................
-    //Empleamos la formula Haversvine
-    obtenerDistancia(lat1, lon1, lat2, lon2) {
+    async buscarDistanciaYTiempoDeUsuario(idUsuario) {
 
-        var R = 6371000
+        var res
+        var distancia = 0 //En m
+        var tiempo = 0 //En s
 
-        var dLat = (lat2 - lat1) * Math.PI / 180;
-        var dLon = (lon2 - lon1) * Math.PI / 180;
+        var medidas = await this.buscarMedicionesDeUsuario(idUsuario)
 
-        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        for (var i = 1; i < medidas.length; i++) {
 
-        return R * c;
+            //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
+            var dist = utilidades.obtenerDistancia(parseFloat(medidas[i - 1].ubicacion.split(",")[0]), parseFloat(medidas[i - 1].ubicacion.split(",")[1]), parseFloat(medidas[i].ubicacion.split(",")[0]), parseFloat(medidas[i].ubicacion.split(",")[1]))
+
+            //Medida actual y anterior
+            var dia = new Date(medidas[i].momento)
+            var diaAnterior = new Date(medidas[i - 1].momento)
+
+            var t = (dia.getTime() - diaAnterior.getTime()) / 1000
+
+            if (t < 900 + 300 /*Tiempo que tarda en enviar el beacon + Error de enviado*/ && dist < 10000 /*Distancia para comprobar que no ha empezado a medir desde otro lugar lejano el mismo día*/ ) {
+
+                tiempo += t
+                distancia += dist
+            }
+
+        }
+
+        res = {
+            tiempo: tiempo,
+            distancia: distancia,
+            momentoPrimeraMedida: medidas[0].momento
+        }
+
+        return res
     }
 
     // ................................................................................................................................................
@@ -213,6 +220,23 @@ module.exports = class Logica {
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [datos.nombreUsuario, datos.contrasenya, datos.correo, datos.puntuacion, datos.telefono, datos.idNodo, datos.puntosCanjeables, datos.id],
+                function (err) {
+                    err ? rechazar(err) : resolver();
+                }
+            );
+        });
+    }
+
+    // ................................................................................................................................................
+    // datos:{puntuacion=Texto, id=Z}
+    // -->
+    // editarPuntuacionUsuario() -->
+    // ................................................................................................................................................
+    editarPuntuacionUsuario(datos) {
+        var textoSQL = "update usuarios set puntuacion= puntuacion + ?, puntos_canjeables= puntos_canjeables + ? where id=  ?;";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [datos.puntuacion, datos.puntuacion, datos.id],
                 function (err) {
                     err ? rechazar(err) : resolver();
                 }
@@ -317,6 +341,19 @@ module.exports = class Logica {
     }
 
     // ................................................................................................................................................
+    // id:Z 
+    //-->
+    // obtenerPuntuacion() <--
+    // <--
+    // Z
+    // ................................................................................................................................................
+    async obtenerPuntuacion(idUsuario) {
+
+        var distyTiempo = await this.buscarDistanciaYTiempoDeUsuario(idUsuario)
+        return Math.ceil(distyTiempo.distancia / 100)
+    }
+
+    // ................................................................................................................................................
     // buscarRecompensas() <--
     // <--
     // Lista {id:Texto, titulo:Texto, descripcion:Texto, coste:Z}
@@ -355,6 +392,24 @@ module.exports = class Logica {
                 )
             })
         })
+    }
+    
+    // ................................................................................................................................................
+    //id:Z
+    // -->
+    // buscarMedicionesDeUsuario() <--
+    // <--
+    // Lista {valor:Real, momento:Datetime, ubicacion:Texto, tipoMedicion:Texto}
+    // ................................................................................................................................................
+    async buscarMedicionesDeUsuarioDeHoy(idUsuario) {
+        var textoSQL =
+            "select m.* from medicionesdeusuarios mu, mediciones m where m.ubicacion = mu.ubicacion_medicion AND mu.momento_medicion = m.momento AND mu.id_usuario = ? AND DATE(m.momento)=CURRENT_DATE";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [idUsuario], (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        });
     }
 
     // ................................................................................................................................................

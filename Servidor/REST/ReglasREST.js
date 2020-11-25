@@ -2,8 +2,10 @@
 // ReglasREST.js
 // .....................................................................
 
-    const utilidades = require("../Logica/Utilidades.js");
+const utilidades = require("../Logica/Utilidades.js");
+
 module.exports.cargar = function (servidorExpress, laLogica) {
+    
     var utilidad = new utilidades();
     var csv = require('../Datos/MedicionesOficiales.json'); // your json file path
     // .......................................................
@@ -120,7 +122,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // todo ok
         respuesta.send(JSON.stringify(res[0]))
     }) // get /usuario
-    
+
     // .......................................................
     // GET /distanciaYTiempoUsario/
     // .......................................................
@@ -161,7 +163,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
 
         respuesta.send(JSON.stringify(res[0]))
     }) // post /usuario   
-    
+
     // .......................................................
     // PUT /editarUsuario
     // .......................................................
@@ -170,11 +172,30 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         console.log(" * PUT /editarUsuario ")
 
         var datos = JSON.parse(peticion.body)
-        var res= await laLogica.editarUsuario(datos)
+        var res = await laLogica.editarUsuario(datos)
 
         respuesta.send("Se ha actualizado correctamente el usuario:" + datos.nombreUsuario);
-    }) // put /editarUsuario   
+    }) // put /editarUsuario 
     
+    // .......................................................
+    // PUT /puntuacionUsuario
+    // .......................................................
+    servidorExpress.put('/puntuacionUsuario', async function (peticion, respuesta) {
+
+        console.log(" * POST /puntuacionUsuario ")
+
+        var datos = JSON.parse(peticion.body)
+        // averiguo el id
+        var id = datos.idUsuario
+
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.obtenerPuntuacion(id)
+
+        await laLogica.editarPuntuacionUsuario({puntuacion: res, id: id})
+
+        respuesta.send("Se han actualizado los datos de puntuacion");
+    }) // put /puntuacionUsuario
+
     // .......................................................
     // POST /login/
     // .......................................................
@@ -183,14 +204,20 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         console.log(" * POST /login ")
 
         var datos = JSON.parse(peticion.body)
+        console.log(datos)
         // llamo a la función adecuada de la lógica
         var usuario = await laLogica.buscarUsuarioConNombreYContrasenya(datos)
 
         //Si existe el usuario devolvemos true
-        if (usuario.length == 1) respuesta.send(JSON.stringify({existe: true, id: usuario[0].id}))
-        else respuesta.send(JSON.stringify({existe: false}))
+        if (usuario.length == 1) respuesta.send(JSON.stringify({
+            existe: true,
+            id: usuario[0].id
+        }))
+        else respuesta.send(JSON.stringify({
+            existe: false
+        }))
     }) // post /login
-    
+
     // .......................................................
     // GET /recompensas/
     // .......................................................
@@ -216,13 +243,13 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     servidorExpress.get('/codigoRecompensa/:idRecompensa', async function (peticion, respuesta) {
 
         console.log(" * GET /codigoRecompensa/:idRecompensa ")
-        
+
         // averiguo el id
         var id = peticion.params.idRecompensa
 
         // llamo a la función adecuada de la lógica
         var res = await laLogica.buscarCodigoRecompensaConId(id)
-        
+
         if (res.length == 0) {
             // 404: not found
             respuesta.status(404).send("No encontré recompensas")
@@ -235,12 +262,11 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     // GET /mediciones oficiales off line
     // .......................................................
-    servidorExpress.get('/medicionesOficialesCSV',
-        async function (peticion, respuesta) {
-                // Do something with your data
-                respuesta.send(utilidad.convertirAJSONpropio(csv));
-        }) // get /mediciones
-    
+    servidorExpress.get('/medicionesOficialesCSV', async function (peticion, respuesta) {
+        // Do something with your data
+        respuesta.send(utilidad.convertirAJSONpropio(csv));
+    }) // get /mediciones
+
     // .......................................................
     // GET /mediciones oficiales en línea
     // .......................................................
@@ -263,18 +289,54 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             };
 
             // Petición HTTP
-            fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerTablaPestanyaDatosOnline", options)
+            fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerEstacionById", options)
+            .then(response => response.text())
+            .then(data => {
+    
+                if (data.length == 0) {
+                    // 404: not found
+                    respuesta.status(404).send("{}")
+                    return
+                }
+                // todo ok
+                fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerTablaPestanyaDatosOnline", options)
                 .then(response => response.text())
                 .then(data => {
-        
                     if (data.length == 0) {
                         // 404: not found
                         respuesta.status(404).send("{}")
                         return
                     }
                     // todo ok
-                    respuesta.send(data.valor)
+                    respuesta.send(utilidad.convertirTiempoRealAJSONpropio((JSON.parse(data))['listMagnitudesMediasHorarias']))
                                     
                 });
+                                
+            });
+            
         }) // get /mediciones
+
+    // .......................................................
+    // GET /calidadAire/:idUsuario
+    // .......................................................
+    servidorExpress.get('/calidadAire/:idUsuario', async function (peticion, respuesta) {
+
+        console.log(" * GET /calidadAire/:idUsuario ")
+
+        // averiguo el id
+        var id = peticion.params.idUsuario
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.buscarMedicionesDeUsuarioDeHoy(id)
+        //Si el array esta vacío
+        if (res.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré mediciones")
+            return
+        }
+        res = await utilidad.procesarCalidadAireAJSON(res)
+        // todo ok
+        respuesta.send(res)
+    }) // get /mediciones/:idUsuario
+
+
 } // cargar()
