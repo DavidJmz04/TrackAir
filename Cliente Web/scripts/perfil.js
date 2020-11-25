@@ -4,6 +4,7 @@ let reputacion = document.querySelector(".reputacion");
 let correo = document.querySelector(".correo");
 let telefono = document.querySelector(".telefono");
 let cerrarSesion = document.querySelector(".item-cerrar");
+let ranking = document.querySelector(".item-ranking");
 
 const laLogica = new Logica();
 let user;
@@ -54,3 +55,7 @@ cerrarSesion.addEventListener("click", () => {
     laLogica.logout(), (window.location.href = "./../");
   }
 });
+
+ranking.addEventListener("click", ()=>{
+  laLogica.obtenerPDF();
+})
