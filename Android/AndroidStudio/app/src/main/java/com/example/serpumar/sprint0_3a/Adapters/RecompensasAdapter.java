@@ -1,12 +1,15 @@
 package com.example.serpumar.sprint0_3a.Adapters;
 
+import android.accounts.AccountManager;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
+
 public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.RecompensasViewHolder> {
 
     ArrayList<Recompensa> listaRecompensas;
@@ -35,8 +40,8 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
     }
 
     @Override
-    public  RecompensasViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list,null, false);
+    public RecompensasViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, null, false);
         return new RecompensasViewHolder(view);
     }
 
@@ -55,25 +60,31 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
         });
     }
 
-    private void obtenerPuntos(final int position, final Button button){
+    private void obtenerPuntos(final int position, final Button button) {
 
-        int idUsuario= 35;//TODO Cambiar
+        AccountManager accountManager = AccountManager.get(context);
+        int idUsuario = parseInt(accountManager.getUserData(accountManager.getAccounts()[0], "id"));
+
         NetworkManager.getInstance().getRequest("/usuario/" + idUsuario, new NetworkManager.ControladorRespuestas<String>() {
             @Override
             public void getResult(String object) {
 
                 try {
-                    JSONArray jsonArray= new JSONArray(object);
 
-                    JSONObject usuarioJSON= jsonArray.getJSONObject(0);
-                    Usuario usuario= new Usuario(usuarioJSON.getInt("id"),usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"),usuarioJSON.getString("correo"),usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"),usuarioJSON.getString("telefono"),usuarioJSON.getString("id_nodo"));
+                    JSONArray jsonArray = new JSONArray(object);
+                    JSONObject usuarioJSON = jsonArray.getJSONObject(0);
 
-                    if(usuario.getPuntosCanjeables() >= listaRecompensas.get(position).getCoste()){
+                    Usuario usuario = new Usuario(usuarioJSON.getInt("id"), usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"), usuarioJSON.getString("correo"), usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"), usuarioJSON.getString("telefono"), usuarioJSON.getString("id_nodo"));
 
-                        canjearCodigo(position,usuario.getCorreo(), button);
+                    if (usuario.getPuntosCanjeables() >= listaRecompensas.get(position).getCoste()) {
+
+                        canjearCodigo(position, usuario.getCorreo(), button);
                         usuario.setPuntosCanjeables(usuario.getPuntosCanjeables() - listaRecompensas.get(position).getCoste());
+
                         editarUsuario(usuario);
-                    }
+
+                    } else Toast.makeText(context, "No tienes suficientes puntos", Toast.LENGTH_LONG).show();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -81,15 +92,15 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
         });
     }
 
-    private void canjearCodigo(final int position, final String correo, final Button button){
+    private void canjearCodigo(final int position, final String correo, final Button button) {
 
         NetworkManager.getInstance().getRequest("/codigoRecompensa/" + listaRecompensas.get(position).getId(), new NetworkManager.ControladorRespuestas<String>() {
             @Override
             public void getResult(String object) {
 
                 try {
-                    JSONArray jsonArray= new JSONArray(object);
-                    String codigo= jsonArray.getJSONObject(0).getString("codigo");
+                    JSONArray jsonArray = new JSONArray(object);
+                    String codigo = jsonArray.getJSONObject(0).getString("codigo");
                     button.setText(codigo);
                     button.setEnabled(false);
 
@@ -97,26 +108,31 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
                     sm.execute();
 
                 } catch (JSONException e) {
+
+                    Toast.makeText(context, "En este momento no disponemos de códigos", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
         });
     }
 
-    private void editarUsuario(Usuario usuario){
+    private void editarUsuario(Usuario usuario) {
 
         Map<String, String> parametros = new HashMap<>();
+        parametros.put("id", String.valueOf(usuario.getId()));
         parametros.put("nombreUsuario", usuario.getNombre());
         parametros.put("contrasenya", usuario.getContrasenya());
         parametros.put("correo", usuario.getCorreo());
         parametros.put("puntuacion", String.valueOf(usuario.getPuntuacion()));
         parametros.put("telefono", usuario.getTelefono());
         parametros.put("idNodo", usuario.getIdNodo());
-        parametros.put("puntosCanjables", String.valueOf(usuario.getPuntosCanjeables()));
+        parametros.put("puntosCanjeables", String.valueOf(usuario.getPuntosCanjeables()));
 
         JSONObject jsonParametros = new JSONObject(parametros);
+        Log.d("fffff", jsonParametros.toString());
 
-        NetworkManager.getInstance().putRequest(jsonParametros,"/editarUsuario/" + usuario.getId(), new NetworkManager.ControladorRespuestas<JSONObject>() {
+
+        NetworkManager.getInstance().putRequest(jsonParametros, "/editarUsuario", new NetworkManager.ControladorRespuestas<JSONObject>() {
             @Override
             public void getResult(JSONObject object) {
 
@@ -129,7 +145,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
         return listaRecompensas.size();
     }
 
-    public class  RecompensasViewHolder extends RecyclerView.ViewHolder {
+    public class RecompensasViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtRecompensa;
         TextView txtInfo;

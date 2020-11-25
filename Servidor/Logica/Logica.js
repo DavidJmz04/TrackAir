@@ -178,6 +178,7 @@ module.exports = class Logica {
 
         var res
         var distancia = 0 //En m
+        var dist = 0;
         var tiempo = 0 //En s
 
         var medidas = await this.buscarMedicionesDeUsuario(idUsuario)
@@ -185,7 +186,7 @@ module.exports = class Logica {
         for (var i = 1; i < medidas.length; i++) {
 
             //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
-            var dist = utilidades.obtenerDistancia(parseFloat(medidas[i - 1].ubicacion.split(",")[0]), parseFloat(medidas[i - 1].ubicacion.split(",")[1]), parseFloat(medidas[i].ubicacion.split(",")[0]), parseFloat(medidas[i].ubicacion.split(",")[1]))
+            dist = utilidades.obtenerDistancia(parseFloat(medidas[i - 1].ubicacion.split(",")[0]), parseFloat(medidas[i - 1].ubicacion.split(",")[1]), parseFloat(medidas[i].ubicacion.split(",")[0]), parseFloat(medidas[i].ubicacion.split(",")[1]))
 
             //Medida actual y anterior
             var dia = new Date(medidas[i].momento)
@@ -204,6 +205,7 @@ module.exports = class Logica {
         res = {
             tiempo: tiempo,
             distancia: distancia,
+            ultimaDistancia: dist,
             momentoPrimeraMedida: medidas[0].momento
         }
 
@@ -350,7 +352,7 @@ module.exports = class Logica {
     async obtenerPuntuacion(idUsuario) {
 
         var distyTiempo = await this.buscarDistanciaYTiempoDeUsuario(idUsuario)
-        return Math.ceil(distyTiempo.distancia / 100)
+        return Math.ceil(distyTiempo.ultimaDistancia / 100)
     }
 
     // ................................................................................................................................................
