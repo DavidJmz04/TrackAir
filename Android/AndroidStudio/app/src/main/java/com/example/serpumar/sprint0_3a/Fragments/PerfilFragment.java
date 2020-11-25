@@ -86,8 +86,6 @@ public class PerfilFragment extends Fragment {
                     for (Account account1 : accounts) {
                         Toast.makeText(getContext(), "Name: " + account1.name+" Type: " + account1.type,Toast.LENGTH_SHORT).show();
                     }
-
-                    NetworkManager.getInstance(getContext());
                     startActivity(i);
                 }
             });
