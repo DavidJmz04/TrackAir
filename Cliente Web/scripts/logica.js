@@ -3,18 +3,47 @@
 // ------ 21-10-2020
 // -------------------------------------
 
+//const servidor = "https://igmagi.upv.edu.es";
 const servidor = "http://localhost";
-const puerto = 8080;
+const puerto = ":8080";
 class Logica {
   constructor() {}
 
   contadorTest = 0;
+
+ async recuperarMedicionesTiempoReal() {
+    let recurso = "medicionesOficiales";
+    let res = await axios.get(`${servidor}${puerto}/${recurso}`);
+
+    let data = res.data;
+    console.log(data);
+    return data;
+  }
+
+async insertarMedicionesPlaceholder(){
+    let recurso = "medicionesOficialesCSV";
+    let res = await axios.get(`${servidor}${puerto}/${recurso}`);
+
+    let data = res.data;
+    console.log(data);
+    return data;
+}
+
   //Llama al servidor para recuperar las mediciones de la base de datos
   // Devuelve un objeto con los datos.
   // recuperarMediciones() : {valor, ubicacion, momento}
   async recuperarMediciones() {
     let recurso = "mediciones";
-    let res = await axios.get(`${servidor}:${puerto}/${recurso}`);
+    let res = await axios.get(`${servidor}${puerto}/${recurso}`);
+
+    let data = res.data;
+    console.log(data);
+    return data;
+  }
+
+  async recuperarCalidadAire(id){
+    let recurso = "calidadAire/"+id
+    let res = await axios.get(`${servidor}${puerto}/${recurso}`);
 
     let data = res.data;
     console.log(data);
@@ -27,7 +56,7 @@ class Logica {
     let recurso = "mediciones";
 
     this.contadorTest++;
-    let res = await axios.post(`${servidor}:${puerto}/${recurso}`, {
+    let res = await axios.post(`${servidor}${puerto}/${recurso}`, {
       valor: this.contadorTest,
       ubicacion: { lat: 11.44231, lng: 98.92999 },
       momento: Date.now().toString(),
@@ -45,7 +74,7 @@ class Logica {
     let recurso = "login";
 
     try {
-      let res = await axios.post(`${servidor}:${puerto}/${recurso}`, {
+      let res = await axios.post(`${servidor}${puerto}/${recurso}`, {
         nombreUsuario: usuario,
         contrasenya: CryptoJS.SHA256(contrasenya).toString(),
       });
@@ -69,7 +98,7 @@ class Logica {
   // id:Z -> recuperarDatosUsuarioConId() -> {nombre_usuario:texto, contrasenya:texto, correo:texto, puntuacion:Z, id:Z}
   async recuperarDatosUsuarioConId(id) {
     let recurso = "usuario";
-    let res = await axios.get(`${servidor}:${puerto}/${recurso}/${id}`);
+    let res = await axios.get(`${servidor}${puerto}/${recurso}/${id}`);
 
     let data = res.data;
     //console.log(data);

@@ -19,13 +19,13 @@ module.exports = class Utilidades {
   // JSON(mediciones oficiales) -> convertirAJSONpropio() --> JSON
   // .................................................................
   convertirAJSONpropio(csv) {
-    var text = '{"Fecha":"' + this.fechaActual() + '", "Lecturas":[';
+    var text = '{"fecha":"' + this.fechaActual() + '", "lecturas":[';
     var calidad, total;
     csv.forEach(element => {
       total = element['SO2 (µg/m³)'] + element['NO2 (µg/m³)'] + element['O3 (µg/m³)'];
       calidad = this.procesarCalidadAire(element, total)
-      text += '{"Contaminación (ug/m3)":' + total + ',"Hora":' + element['Hora Solar'] + ',"Calidad":"' + calidadAire[calidad] + '",'
-        + '"Contaminantes":{"SO2 (µg/m³)":' + element['SO2 (µg/m³)'] + ',"NO2 (µg/m³)":' + element['NO2 (µg/m³)'] + ',"O3 (µg/m³)":' + element['O3 (µg/m³)'] + '}}';
+      text += '{"contaminación":' + total + ',"hora":' + element['Hora Solar'] + ',"calidad":"' + calidadAire[calidad] + '",'
+        + '"contaminantes":{"SO2 (µg/m³)":' + element['SO2 (µg/m³)'] + ',"NO2 (µg/m³)":' + element['NO2 (µg/m³)'] + ',"O3 (µg/m³)":' + element['O3 (µg/m³)'] + '}}';
       if (element['Hora Solar'] != '23') text += ','
       else text += ']}'
     });
@@ -36,16 +36,18 @@ module.exports = class Utilidades {
   // JSON(mediciones oficiales en tiempo real) -> convertirTiempoRealAJSONpropio() --> JSON
   // .................................................................
   convertirTiempoRealAJSONpropio(csv) {
-    var text = '{"Fecha":"' + this.fechaActual() + '", "Lecturas":[';
+    var text;
     var calidad, total, i = 0;
     var horaAnterior = 0
-    var sumas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    var sumas = []
+    sumas.push(0)
+    var total = 0
     var lecturas = ""
-    //var lecturas = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     csv.forEach(element => {
       var abreviatura = element.abreviatura;
       if (horaAnterior != element.hora && horaAnterior != 0) {
         i++
+        sumas.push(0)
       }
       if (element.abreviatura == "SO2" || element.abreviatura == "NO2" || element.abreviatura == "O3") {
         var temporal = element.valor;
@@ -56,11 +58,13 @@ module.exports = class Utilidades {
     });
     i= 0
     sumas.forEach(suma =>{
-      lecturas += '{"Contaminación (ug/m3)":' + suma + "}"
+      lecturas += '{"contaminación":' + suma + ',"calidad":"'+ calidadAire[this.procesarCalidadAire({"tipoMedicion":"O3"},suma)] +'"}'
+      total += suma
       if(i!=sumas.length-1) lecturas += ","
       i++
     })
-    text += lecturas + "]}"
+    total = total/sumas.length
+    text = '{"fecha":"' + this.fechaActual() + '", "calidadMedia":"'+ calidadAire[this.procesarCalidadAire({"tipoMedicion":"O3"},total)] +'", "mediciones":[' + lecturas + "]}"
     return JSON.parse(text)
   }
 
