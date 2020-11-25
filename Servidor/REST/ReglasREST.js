@@ -650,7 +650,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
       border: "10mm",
       header: {
         height: "10mm",
-        contents: '<div style="text-align: center;">TrackAir</div>',
+        contents: '<div style="text-align: center; color:#03E2A2;"><h2>TrackAir</h2></div>',
       },
       footer: {
         height: "10mm",
@@ -713,7 +713,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
       border: "10mm",
       header: {
         height: "10mm",
-        contents: '<div style="color: aquamarine;"><h2>TrackAir</h2></div>',
+        contents: '<div style="text-align: center; color:#03E2A2;"><h2>TrackAir</h2></div>',
       },
       footer: {
         height: "10mm",
