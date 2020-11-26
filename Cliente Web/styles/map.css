@@ -34,9 +34,6 @@ button {
   z-index: 1;
 }
 
-.top-opciones > div {
-}
-
 .top-opciones {
   width: 100%;
   z-index: 2;
@@ -125,8 +122,7 @@ button {
   box-shadow: 2px 3px rgba(0, 0, 0, 0.1);
   font-size: 0.8em;
 }
-.tarjeta-login * {
-}
+
 .tarjeta-login form {
   display: flex;
   flex-direction: column;
