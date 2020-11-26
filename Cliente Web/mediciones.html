@@ -14,32 +14,44 @@
 
 <body>
     <header>
-            <div id="usuarioBox" style="display:none"class="mediciones-container">
-                <div>Hola <span id="nombreText">Usuario</span>!</div>
-                <div>Calidad del aire respirada hoy: <span id="calidadAire">Actualizando...</span></div> 
-            </div>
-        <div class=" d-flex justify-content-end pr-5">
-            <a class="btn btn-primary " href="/map.html" role="button">Volver al mapa</a>
-        </div></header>
-    </br></br>
-    <div class="container-fluid">
-    <div class="row w-90 d-flex justify-content-center">
-        <div class="col-xl-5">
-                    <section class="mediciones-container" id="mediciones-container">
-                        <h3>Gases Irritantes</h3>
-                        <div class="top-row">
-                            <div class="cell">Instante</div>
-                            <div class="cell">Valor (ug/m3)</div>
-                            <div class="cell">Calidad</div>
-                        </div>
-
-                        <div class="mediciones-content" id="mediciones-content">
-                            Cargando...
-                        </div>
-                    </section>
-                    <section id="btn-container"><button id="btn-test">Test</button></section>
+        <div id="usuarioBox" style="display:none" class="mediciones-container">
+            <div>Hola <span id="nombreText">Usuario</span>!</div>
+            <div>Calidad del aire respirada hoy: <span id="calidadAire">Actualizando...</span></div>
         </div>
-        <div class="col-xl-5">
+    </header>
+    </br>
+    <div class="container-fluid">
+        <div class="row w-90 d-flex justify-content-center">
+            <div class="col-xl-2">
+                <button class="btn btn-primary " id="btn-uso" role="button">Informe de uso</button>
+            </div>
+            <div class="col-xl-2">
+                <button class="btn btn-primary " id="btn-ranking" role="button">Ranking</button>
+            </div>
+            <div class="col-xl-2">
+                <a class="btn btn-primary " href="/informacionAdicional.html" role="button">Información Adicional</a>
+            </div>
+            <div class="col-xl-2">
+                <a class="btn btn-primary " href="/map.html" role="button">Volver al mapa</a>
+            </div>
+        </div>
+        <div class="row w-90 d-flex justify-content-center">
+            <div class="col-xl-5">
+                <section class="mediciones-container" id="mediciones-container">
+                    <h3>Gases Irritantes</h3>
+                    <div class="top-row">
+                        <div class="cell">Instante</div>
+                        <div class="cell">Valor (ug/m3)</div>
+                        <div class="cell">Calidad</div>
+                    </div>
+
+                    <div class="mediciones-content" id="mediciones-content">
+                        Cargando...
+                    </div>
+                </section>
+                <section id="btn-container"><button id="btn-test">Test</button></section>
+            </div>
+            <div class="col-xl-5">
                 <section class="mediciones-container" id="medicionesTiempoReal-container">
                     <h3>Mediciones oficiales</h3>
                     <div class="top-row">
@@ -52,16 +64,9 @@
                         Cargando...
                     </div>
                 </section>
-        </div>
-        <!--
-        <div class="col">
-            <div class="collapse multi-collapse" id="multiCollapseExample2">
-                <div class="card card-body">
-                    <canvas id="myChart" width="400" height="400"></canvas>
-                </div>
             </div>
-        --></div>
         </div>
+    </div>
     </div>
 
 

@@ -37,6 +37,14 @@ function main() {
         }, 6000);
     */
     //Botón para activar y desactivar
+    var btn = document.getElementById("btn-uso");
+    btn.onclick = () => {
+        laLogica.obtenerPDFUso();
+    };
+    var btn = document.getElementById("btn-ranking");
+    btn.onclick = () => {
+        laLogica.obtenerPDFRanking();
+    };
     var btn = document.getElementById("btn-test");
     btn.onclick = () => {
         testMode = !testMode;
