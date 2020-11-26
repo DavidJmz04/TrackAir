@@ -66,7 +66,9 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
 
     private void obtenerPuntos(final int position, final Button button, final TextView codigoText){
 
-        int idUsuario= 35;//TODO Cambiar
+        AccountManager accountManager = AccountManager.get(context);
+        int idUsuario = parseInt(accountManager.getUserData(accountManager.getAccounts()[0], "id"));
+
         NetworkManager.getInstance().getRequest("/usuario/" + idUsuario, new NetworkManager.ControladorRespuestas<String>() {
             @Override
             public void getResult(String object) {
