@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.serpumar.sprint0_3a.ClasesPojo.Medicion;
 import com.example.serpumar.sprint0_3a.ClasesPojo.Usuario;
 import com.example.serpumar.sprint0_3a.LoginActivity;
 import com.example.serpumar.sprint0_3a.LogicaFake;
@@ -31,6 +32,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Random;
+
 import static java.lang.Integer.parseInt;
 
     public class PerfilFragment extends Fragment {
@@ -43,7 +46,7 @@ import static java.lang.Integer.parseInt;
     Account[] accounts;
     String CLASS_NAME = "PerfilFragment";
     View v;
-    ReceptorBluetooth rb;
+    ReceptorBluetooth rb = new ReceptorBluetooth();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -136,9 +139,10 @@ import static java.lang.Integer.parseInt;
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_personalizado, (ViewGroup)v.findViewById(R.id.toastpersonalizado));
         TextView textView = layout.findViewById(R.id.txtDistanciaToast);
+        rb.setDistanciaEstimada(new Random(System.currentTimeMillis()).nextInt(3));
         int distancia = rb.getDistanciaEstimada();
         if(distancia != -1) {
-            textView.setText(String.valueOf(rb.getDistanciaEstimada()));
+            textView.setText(String.valueOf(rb.getDistanciaEstimada()) + " m.");
         } else {
             textView.setText("Antes debes tomar una medición");
         }

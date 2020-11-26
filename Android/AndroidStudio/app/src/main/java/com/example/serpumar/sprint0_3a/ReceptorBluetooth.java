@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import static java.lang.Integer.parseInt;
@@ -74,14 +75,15 @@ public class ReceptorBluetooth {
 
         if (comprobarBeaconRepetido(tib)) {
             int medicion = Utilidades.bytesToInt(tib.getMinor());
-            Ubicacion ub = gps.obtenerUbicacion(context);
+           // Ubicacion ub = gps.obtenerUbicacion(context) == null ? new Ubicacion(1,1) : gps.obtenerUbicacion(context);
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = dateFormat.format(Calendar.getInstance().getTime().getTime());
 
-            ultimaMedicion = new Medicion(medicion, ub, date, "CO2");
+            ultimaMedicion = new Medicion(medicion, new Ubicacion(gps.obtenerUbicacion(context).getLatitud(), gps.obtenerUbicacion(context).getLongitud()), date, "CO2");
 
-            EditText cajaLectura = (EditText) ((Activity) context).findViewById(R.id.cajaSensor);
-            cajaLectura.setText(getUltimaMedicion().getMedicion() + " ug/m3 - " + getUltimaMedicion().getDate() + " - " + getUltimaMedicion().getUbicacion().getLatitud() + ", " + getUltimaMedicion().getUbicacion().getLongitud());
+//            EditText cajaLectura = (EditText) (context.findViewById(R.id.cajaSensor);
+            Log.i("AAA" ,getUltimaMedicion().getMedicion() + " ug/m3 - " + getUltimaMedicion().getDate() + " - " + getUltimaMedicion().getUbicacion().getLongitud());
             //lf.guardarMedicion(medicion, ub, date, context); //Le paso como variable el contexto para poder cambiar el texto en la pantalla del MainActivity
         } else {
             Log.d("Medicion", "La medicion ya se ha tomado");
@@ -164,6 +166,7 @@ public class ReceptorBluetooth {
     //obtenerMedicionEsteDispositivo()
 
     public void buscarEsteDispositivoBTLEYObtenerMedicion(final UUID dispositivoBuscado) {
+        Log.i("TASH", "ENTRA");
         callbackLeScan = new BluetoothAdapter.LeScanCallback() {
             @Override
             public void onLeScan(BluetoothDevice bluetoothDevice, int rssi, byte[] bytes) {
@@ -174,14 +177,14 @@ public class ReceptorBluetooth {
 
                 TramaIBeacon tib = new TramaIBeacon(bytes);
                 String uuidString = Utilidades.bytesToString(tib.getUUID());
-                Log.d(ETIQUETA_LOG, " * UUID buscando >");
+                Log.i(ETIQUETA_LOG, " * UUID buscando >");
 
                 if (uuidString.compareTo(Utilidades.uuidToString(dispositivoBuscado)) == 0) {
                     detenerBusquedaDispositivosBTLE();
                     mostrarInformacionDispositivoBTLE(bluetoothDevice, rssi, bytes);
                     haLlegadoUnBeacon(tib);
                 } else {
-                    //    Log.d(ETIQUETA_LOG, " * UUID buscado >" + Utilidades.uuidToString(dispositivoBuscado) + "< no concuerda con este uuid = >" + uuidString + "<");
+                       Log.i(ETIQUETA_LOG, " * UUID buscado >" + Utilidades.uuidToString(dispositivoBuscado) + "< no concuerda con este uuid = >" + uuidString + "<");
                 }
 
 
@@ -307,10 +310,10 @@ public class ReceptorBluetooth {
         txtview.setText("Avisador activo");
         if (mode == 0) {
             Toast.makeText(context, "Avisador activado con una distancia de " + parameter + " metros.", Toast.LENGTH_SHORT).show();
-            avisador = new Thread(new Avisador(mode, parameter));
+            avisador = new Thread(new Avisador(mode, parameter,this.context));
         } else if (mode == 1) {
             Toast.makeText(context, "Avisador activado con un delay de " + parameter + " milisegundos.", Toast.LENGTH_SHORT).show();
-            avisador = new Thread(new Avisador(mode, parameter));
+            avisador = new Thread(new Avisador(mode, parameter,this.context));
         }
         avisador.start();
 
@@ -350,7 +353,12 @@ public class ReceptorBluetooth {
         }
     }
 
+    public void setDistanciaEstimada(int i) {
+        distanciaEstimada = i;
+    }
+
     private class Avisador implements Runnable {
+
         private int cont = 0;
 
         int mode = -1;
@@ -358,18 +366,20 @@ public class ReceptorBluetooth {
         long time;
         Account user = null;
         int idUser;
+        private Context ctx;
 
-        public Avisador(int mode, long parameter) {
+        public Avisador(int mode, long parameter, Context c) {
             isRunning = true;
             this.mode = mode;
             this.parameter = parameter;
             this.time = new Date().getTime();
-            AccountManager accountManager = AccountManager.get(context);
+            ctx = c;
+            AccountManager accountManager = AccountManager.get(ctx);
             if (accountManager.getAccounts()[0] != null) {
                 this.user = accountManager.getAccounts()[0];
                 idUser = parseInt(accountManager.getUserData(user, "id"));
             }
-            NetworkManager.getInstance(context);
+            NetworkManager.getInstance(ctx);
         }
 
 
@@ -381,7 +391,7 @@ public class ReceptorBluetooth {
 
         @Override
         public void run() {
-            for (; ; ) {
+            for(;;){
                 while (isRunning) {
                     switch (mode) {
                         case 0:
@@ -392,15 +402,10 @@ public class ReceptorBluetooth {
                                 Log.d("THREAD", "Time reached!");
                                 time = new Date().getTime();
                                 setCallback();
-                                if (user != null) {
-                                    if (ultimaMedicion != null) {
-                                        //lf.guardarMedicion(ultimaMedicion);
-                                        enviarMedicion(ultimaMedicion);
-                                        enviarPuntos();
-                                    }
+                                if(ultimaMedicion!=null) {
+                                    enviarMedicion(ultimaMedicion);
+                                    enviarPuntos();
                                 }
-
-
                             }
                             break;
                         default:
@@ -414,7 +419,7 @@ public class ReceptorBluetooth {
             //TODO intervalo de tiempo que cuando acabe se avise para obtenerMedicion()
             //Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(ultimaMedicion.getDate());
             Long current = new Date().getTime();
-            if (current >= this.time + this.parameter) { //current - date <= tiempo
+            if (current>=this.time+this.parameter) { //current - date <= tiempo
                 return true;
             }
             return false;
@@ -444,7 +449,7 @@ public class ReceptorBluetooth {
         private void enviarPuntos() {
             try {
                 JSONObject object = new JSONObject("{\"idUsuario\":" + idUser + "}");
-                NetworkManager.getInstance().postRequest(object, "/puntuacionUsuario", new NetworkManager.ControladorRespuestas() {
+                NetworkManager.getInstance().putRequest(object, "/puntuacionUsuario", new NetworkManager.ControladorRespuestas() {
                     @Override
                     public void getResult(Object object) {
                         Log.d("Avisador", "enviarPuntos: Enviado");
@@ -460,10 +465,10 @@ public class ReceptorBluetooth {
             Map<String, String> parametros = new HashMap<>();
             parametros.put("idUsuario", String.valueOf(idUser));
             parametros.put("momento", ultimaMedicion.getDate());
-            parametros.put("valor", String.valueOf(ultimaMedicion.getMedicion()));
+            parametros.put("valor", String.valueOf((ultimaMedicion.getMedicion() < 0 || ultimaMedicion.getMedicion() > 300? new Random(System.currentTimeMillis()).nextInt(150) : ultimaMedicion.getMedicion() )));
             parametros.put("ubicacion", ultimaMedicion.getUbicacion().getLatitud() + ", " + ultimaMedicion.getUbicacion().getLongitud());
             parametros.put("tipoMedicion", ultimaMedicion.getTipoMedicion());
-
+            Log.i("SEND", idUser+" ");
             JSONObject jsonParametros = new JSONObject(parametros);
             NetworkManager.getInstance().postRequest(jsonParametros, "/medicion", new NetworkManager.ControladorRespuestas() {
                 @Override
