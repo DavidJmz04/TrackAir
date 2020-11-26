@@ -6,13 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.serpumar.sprint0_3a.Adapters.RecompensasAdapter;
 import com.example.serpumar.sprint0_3a.ClasesPojo.Recompensa;
 import com.example.serpumar.sprint0_3a.ClasesPojo.Usuario;
 import com.example.serpumar.sprint0_3a.LogicaFake;
@@ -32,7 +32,6 @@ public class RecompensasFragment extends Fragment implements RecompensasAdapter.
 
     RecyclerView recyclerRecompensas;
     ArrayList<Recompensa> listaRecompensas;
-    LogicaFake logicaFake;
 
     public RecompensasFragment() {
         // Required empty public constructor
@@ -42,7 +41,6 @@ public class RecompensasFragment extends Fragment implements RecompensasAdapter.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recompensas, container, false);
-        logicaFake = new LogicaFake(this.getContext());
 
         listaRecompensas = new ArrayList<>();
         recyclerRecompensas = view.findViewById(R.id.recyclerId);
@@ -64,6 +62,7 @@ public class RecompensasFragment extends Fragment implements RecompensasAdapter.
                     JSONArray jsonArray= new JSONArray(object);
                     for(int i=0; i<jsonArray.length(); i++){
 
+                        //TODO Hacer un switch de imagenes
                         JSONObject recompensa= jsonArray.getJSONObject(i);
                         listaRecompensas.add(new Recompensa(recompensa.getInt("id"),recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"),R.drawable.ic_baseline_stars_24));
                     }

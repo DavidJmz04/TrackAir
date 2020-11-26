@@ -29,7 +29,8 @@ form.addEventListener("submit", (e) => {
     //console.log(res);
     //SI ESTÁ LOGUEADO
     if (res.existe && res.id) {
-      document.cookie = `id=${res.id};`;
+      document.cookie = `id=${res.id}`;
+      document.cookie = `name=${correo}`
       //Dentro de un día
       let date = new Date(Date.now() + 86400e3);
       date = date.toUTCString();

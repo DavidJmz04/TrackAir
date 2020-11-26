@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "express": "*",
     "node-fetch": "^2.6.1",
+    "pdf-creator-node": "^1.4.1",
     "request": "*"
   },
   "devDependencies": {
