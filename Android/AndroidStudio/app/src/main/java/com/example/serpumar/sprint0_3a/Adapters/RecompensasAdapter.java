@@ -78,7 +78,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
                     JSONArray jsonArray = new JSONArray(object);
                     JSONObject usuarioJSON = jsonArray.getJSONObject(0);
 
-                    Usuario usuario = new Usuario(usuarioJSON.getInt("id"), usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"), usuarioJSON.getString("correo"), usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"), usuarioJSON.getString("telefono"), usuarioJSON.getString("id_nodo"));
+                    Usuario usuario = new Usuario(usuarioJSON.getInt("id"), usuarioJSON.getString("nombre"), usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"), usuarioJSON.getString("correo"), usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"), usuarioJSON.getString("telefono"), usuarioJSON.getString("id_nodo"));
 
                     if (usuario.getPuntosCanjeables() >= listaRecompensas.get(position).getCoste()) {
 
@@ -127,7 +127,8 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
 
         Map<String, String> parametros = new HashMap<>();
         parametros.put("id", String.valueOf(usuario.getId()));
-        parametros.put("nombreUsuario", usuario.getNombre());
+        parametros.put("nombreCompleto", usuario.getNombreCompleto());
+        parametros.put("nombreUsuario", usuario.getNombreUsuario());
         parametros.put("contrasenya", usuario.getContrasenya());
         parametros.put("correo", usuario.getCorreo());
         parametros.put("puntuacion", String.valueOf(usuario.getPuntuacion()));
