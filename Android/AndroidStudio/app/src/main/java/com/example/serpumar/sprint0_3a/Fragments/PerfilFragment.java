@@ -19,6 +19,7 @@ import com.example.serpumar.sprint0_3a.LogicaFake;
 import com.example.serpumar.sprint0_3a.MainActivity;
 import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
+import com.example.serpumar.sprint0_3a.LoginActivity;
 
 import java.io.IOException;
 
