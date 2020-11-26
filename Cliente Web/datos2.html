@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mediciones</title>
+  </head>
+
+  <style>
+    table,
+    th,
+    td {
+      border: 1px solid black;
+    }
+
+    div {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    fieldset,
+    table {
+      width: 550px;
+      padding: 10px 10px 10px 10px;
+    }
+  </style>
+
+  <body onload="rellenarListas()">
+    <div>
+      <table id="mediciones">
+        <caption style="font-size: 25px">
+          Medicion
+        </caption>
+
+        <tr>
+          <th>momento</th>
+          <th>ubicacion</th>
+          <th>valor</th>
+        </tr>
+      </table>
+
+      <button onClick="window.location.reload();">Actualizar Tabla</button>
+      <button onClick="obtenerMedicionesAPIOficial()">
+        Obtener Mediciones Oficiales en TIEMPO REAL
+      </button>
+      <button onClick="obtenerMedicionesCSV()">
+        Obtener Mediciones OficialesL
+      </button>
+    </div>
+
+    <script>
+      /*window.onload = function () {
+            setInterval(() => {
+        rellenarListas();
+        }, 4000);
+        };*/
+
+      var IP_PUERTO = "localhost:8080/";
+
+      function rellenarListas() {
+        fetch(IP_PUERTO + "obtenerMediciones", {
+          headers: {
+            "User-Agent": "SergioPujol",
+          },
+        })
+          .then((res) => res.json())
+          .then(function (res) {
+            for (var i = 0; i < res.length; i++) {
+              document.getElementById("mediciones").innerHTML +=
+                "<tr><td>" +
+                res[i].momento +
+                "</td><td>" +
+                res[i].ubicacion +
+                "</td><td>" +
+                res[i].valor +
+                "</td></tr>";
+            }
+          });
+      }
+
+      async function obtenerMedicionesCSV() {
+        var acceso;
+        acceso = "medicionesOficialesCSV";
+
+        const options = {
+          method: "GET",
+          mode: "cors",
+          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: "same-origin", // include, *same-origin, omit
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        };
+
+        // Petición HTTP
+        fetch("http://localhost:8080/" + acceso, options)
+          .then((response) => response.text())
+          .then((data) => {
+            console.log(data);
+          });
+      }
+
+      async function obtenerMedicionesAPIOficial() {
+        var acceso;
+        acceso = "medicionesOficiales";
+
+        const options = {
+          method: "GET",
+          mode: "cors",
+          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: "same-origin", // include, *same-origin, omit
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        };
+
+        // Petición HTTP
+        fetch("http://localhost:8080/" + acceso, options)
+          .then((response) => response.text())
+          .then((data) => {
+            console.log(data);
+          });
+      }
+    </script>
+  </body>
+</html>

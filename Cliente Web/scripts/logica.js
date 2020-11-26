@@ -3,9 +3,9 @@
 // ------ 21-10-2020
 // -------------------------------------
 
-//const servidor = "https://igmagi.upv.edu.es";
-const servidor = "http://localhost";
-const puerto = ":8080";
+const servidor = "https://igmagi.upv.edu.es";
+//const servidor = "http://localhost";
+//const puerto = ":8080";
 class Logica {
   constructor() {}
 
