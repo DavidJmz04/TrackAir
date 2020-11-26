@@ -120,8 +120,8 @@ async insertarMedicionesPlaceholder(){
         });
         */
 
-       window.location.href = `${servidor}:${puerto}/${recurso}`;
-       //window.open(`${servidor}:3000/${recurso}`);
+       window.location.href = `${servidor}${puerto}/${recurso}`;
+       //window.open(`${servidor}${puerto}/${recurso}`);
   }
   //Destruye la cookie que se había creado para el inicio de sesión
   logout() {
