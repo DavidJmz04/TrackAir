@@ -1,5 +1,7 @@
 package com.example.serpumar.sprint0_3a.Fragments;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,9 +10,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,6 +27,7 @@ import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 import com.example.serpumar.sprint0_3a.ReceptorBluetooth;
 import com.example.serpumar.sprint0_3a.Utilidades;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class MapaFragment extends Fragment {
@@ -152,6 +159,14 @@ public class MapaFragment extends Fragment {
         }); */
 
         fragment = new MapaFragment_filtros();
+
+        FloatingActionButton abrirInformacionAdicional = (FloatingActionButton) view.findViewById(R.id.informacionFAB);
+        abrirInformacionAdicional.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new MedicionesFragment()).commit();
+            }
+        });
 
         Button  abrirFiltro = (Button) view.findViewById(R.id.botonMapa);
         abrirFiltro.setOnClickListener(new View.OnClickListener() {
