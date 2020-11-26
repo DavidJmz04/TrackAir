@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.example.serpumar.sprint0_3a.MainActivity;
 import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 import com.example.serpumar.sprint0_3a.LoginActivity;
+import com.example.serpumar.sprint0_3a.ReceptorBluetooth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,13 +42,15 @@ import static java.lang.Integer.parseInt;
     //Esta per pulir i optimitzar
     Account[] accounts;
     String CLASS_NAME = "PerfilFragment";
+    View v;
+    ReceptorBluetooth rb;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //TODO si esta logeado, se cargan los datos, pero si no Boton login
 
-        View v = inflater.inflate(R.layout.fragment_perfil, container, false);
+        v = inflater.inflate(R.layout.fragment_perfil, container, false);
 
         ConstraintLayout perfilLayout = v.findViewById(R.id.Perfil);
         ConstraintLayout iniciarSesionLayout = v.findViewById(R.id.IniciarSesion);
@@ -84,7 +88,7 @@ import static java.lang.Integer.parseInt;
             encontrarDispositivo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO:
+                    mostrarToast();
                     Log.d("TAGGGG", "onClick: ENCONTRAR DISPOSITIVO");
                 }
             });
@@ -126,5 +130,23 @@ import static java.lang.Integer.parseInt;
         }
 
         return v;
+    }
+
+    private void mostrarToast() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_personalizado, (ViewGroup)v.findViewById(R.id.toastpersonalizado));
+        TextView textView = layout.findViewById(R.id.txtDistanciaToast);
+        int distancia = rb.getDistanciaEstimada();
+        if(distancia != -1) {
+            textView.setText(String.valueOf(rb.getDistanciaEstimada()));
+        } else {
+            textView.setText("Antes debes tomar una medición");
+        }
+
+        Toast toast = new Toast(getContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
     }
 }
