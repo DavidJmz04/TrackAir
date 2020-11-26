@@ -3,6 +3,7 @@
 // ................................................................................................................................................
 
 const mysql = require("mysql");
+const Utilidades = require("./Utilidades");
 
 // ................................................................................................................................................
 // ................................................................................................................................................
@@ -141,67 +142,79 @@ module.exports = class Logica {
 
         for (var i = 0; i < usuarios.length; i++) {
 
-            //Obtengo las medidas de cada usuario
-            var medidas = await this.buscarMedicionesDeUsuario(usuarios[i].id)
+            var objDistanciaTiempo = await this.buscarDistanciaYTiempoDeUsuario(usuarios[i].id)
 
-            for (var j = 1; j < medidas.length; j++) {
-                
-                //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
-                var dist = this.obtenerDistancia(parseFloat(medidas[j - 1].ubicacion.split(",")[0]), parseFloat(medidas[j - 1].ubicacion.split(",")[1]), parseFloat(medidas[j].ubicacion.split(",")[0]), parseFloat(medidas[j].ubicacion.split(",")[1]))
-
-                //Medida actual y anterior
-                var dia = new Date(medidas[j].momento)
-                var diaAnterior = new Date(medidas[j - 1].momento)
-                var t = (dia.getTime() - diaAnterior.getTime()) / 1000
-                
-                if (t < 900 + 300 /*Tiempo que tarda en enviar el beacon + Error de enviado*/ && dist < 10000 /*Distancia para comprobar que no ha empezado a medir desde otro lugar lejano el mismo día*/ ) {
-
-                    tiempo += t
-                    distancia += dist
-                }
-            }
-
-            var primerDia = new Date(medidas[0].momento)
+            var primerDia = new Date(objDistanciaTiempo.momentoPrimeraMedida)
             var ultimoDia = new Date();
             var nDias = Math.ceil((ultimoDia.getTime() - primerDia.getTime()) / 86400000)
 
             res.push({
-                id: usuarios[0].id,
-                nombreUsuario: usuarios[0].nombre_usuario,
-                correo: usuarios[0].correo,
-                telefono: usuarios[0].telefono,
-                idNodo: usuarios[0].id_nodo,
-                distancia: distancia / nDias,
-                tiempo: tiempo / nDias
+                id: usuarios[i].id,
+                nombreUsuario: usuarios[i].nombre_usuario,
+                correo: usuarios[i].correo,
+                telefono: usuarios[i].telefono,
+                idNodo: usuarios[i].id_nodo,
+                distancia: objDistanciaTiempo.distancia / nDias,
+                tiempo: objDistanciaTiempo.tiempo / nDias
             })
-
-            //Reseteamos la distancia y el tiempo ya que cambiamos de usuario
-            tiempo = 0
-            distancia = 0
         }
         
         return res
     }
 
     // ................................................................................................................................................
-    // <R>, <R>, <R>, <R>
-    // -->
-    // obtenerDistancia() <--
+    // id:Z -->
+    // buscarDistanciaYTiempoDeUsuario() <--
     // <--
-    // <R>
+    // {distancia=R, tiempo= R, momento=DateTime}
     // ................................................................................................................................................
-    //Empleamos la formula Haversvine
-    obtenerDistancia(lat1, lon1, lat2, lon2) {
+    async buscarDistanciaYTiempoDeUsuario(idUsuario) {
 
-        var R = 6371000
+        var distancia = 0 //En m
+        var tiempo = 0 //En s
 
-        var dLat = (lat2 - lat1) * Math.PI / 180;
-        var dLon = (lon2 - lon1) * Math.PI / 180;
+        //Obtengo los usuarios
+        //var usuarios = await this.buscarUsuarios()
+        var medidas = await this.buscarMedicionesDeUsuario(idUsuario)
 
-        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        for (var i = 1; i < medidas.length; i++) {
+                
+            //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
+            var dist = Utilidades.obtenerDistancia(parseFloat(medidas[i - 1].ubicacion.split(",")[0]), parseFloat(medidas[i - 1].ubicacion.split(",")[1]), parseFloat(medidas[i].ubicacion.split(",")[0]), parseFloat(medidas[i].ubicacion.split(",")[1]))
 
-        return R * c;
+            //Medida actual y anterior
+            var dia = new Date(medidas[i].momento)
+            var diaAnterior = new Date(medidas[i - 1].momento)
+            var t = (dia.getTime() - diaAnterior.getTime()) / 1000
+            
+            var velocidad = distancia/t * 0.277778;
+            
+            if (velocidad < 50 /*Km/h*/) {
+
+                tiempo += t
+                distancia += dist
+            }
+
+        }
+
+        res = {
+            tiempo: tiempo,
+            distancia : distancia,
+            momentoPrimeraMedida : medidas[0].momento
+        }
+        
+        return res
+    }
+
+    // ................................................................................................................................................
+    // id:Z -->
+    // obtenerPuntuacion() <--
+    // <--
+    // Z
+    // ................................................................................................................................................
+    obtenerPuntuacion(idUsuario) {
+        var distyTiempo = await this.buscarDistanciaYTiempoDeUsuario(idUsuario)
+        return Math.ceil(distyTiempo.distancia / 100)
     }
 
     // ................................................................................................................................................
@@ -214,6 +227,23 @@ module.exports = class Logica {
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [datos.nombreUsuario, datos.contrasenya, datos.correo, datos.puntuacion, datos.telefono, datos.idNodo, datos.puntosCanjeables, datos.id],
+                function (err) {
+                    err ? rechazar(err) : resolver();
+                }
+            );
+        });
+    }
+
+    // ................................................................................................................................................
+    // datos:{puntuacion=Texto, id=Z}
+    // -->
+    // editarPuntuacionUsuario() -->
+    // ................................................................................................................................................
+    editarPuntuacionUsuario(datos) {
+        var textoSQL = "update usuarios set puntuacion= puntuacion + ?, puntos_canjeables= puntos_canjeables + ? where id=  ?;";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [datos.puntuacion, datos.puntuacion, datos.id],
                 function (err) {
                     err ? rechazar(err) : resolver();
                 }
@@ -245,27 +275,6 @@ module.exports = class Logica {
             });
         });
     } // ()
-
-    // ................................................................................................................................................
-    //datos:{momento:Datetime, ubicacion:Texto}
-    // -->
-    // buscarMedicionConMomentoYUbicacion() <--
-    // <--
-    // {valor:Real, momento:Datetime, ubicacion:Texto, tipoMedicion:Texto}
-    // ................................................................................................................................................
-    buscarMedicionConMomentoYUbicacion(datos) {
-        var textoSQL = "select * from mediciones where momento= ? and ubicacion= ?";
-
-        return new Promise((resolver, rechazar) => {
-            this.laConexion.query(
-                textoSQL,
-        [datos.momento, datos.ubicacion],
-                (err, res) => {
-                    err ? rechazar(err) : resolver(res);
-                }
-            );
-        });
-    }
 
     // ................................................................................................................................................
     //id:Z

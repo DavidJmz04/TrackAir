@@ -10,24 +10,29 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.serpumar.sprint0_3a.ClasesPojo.Recompensa;
-import com.example.serpumar.sprint0_3a.Logica;
+import com.example.serpumar.sprint0_3a.ClasesPojo.Usuario;
+import com.example.serpumar.sprint0_3a.LogicaFake;
 import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
-import com.example.serpumar.sprint0_3a.adapters.RecompensasAdapter;
+import com.example.serpumar.sprint0_3a.Adapters.RecompensasAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class RecompensasFragment extends Fragment {
+public class RecompensasFragment extends Fragment implements RecompensasAdapter.OnRecompensaListener {
 
     RecyclerView recyclerRecompensas;
     ArrayList<Recompensa> listaRecompensas;
-    Logica logicaFake;
+    LogicaFake logicaFake;
 
     public RecompensasFragment() {
         // Required empty public constructor
@@ -49,6 +54,7 @@ public class RecompensasFragment extends Fragment {
     }
 
     private void llenarLista() {
+        final RecompensasAdapter.OnRecompensaListener onRecompensaListener = this;
 
         //Obtener recompensas y añadirlas a la lista
         NetworkManager.getInstance().getRequest("/recompensas", new NetworkManager.ControladorRespuestas<String>() {
@@ -65,9 +71,22 @@ public class RecompensasFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                RecompensasAdapter adapter = new RecompensasAdapter(listaRecompensas, getContext());
+                RecompensasAdapter adapter = new RecompensasAdapter(listaRecompensas, getContext(), onRecompensaListener);
                 recyclerRecompensas.setAdapter(adapter);
             }
         });
+    }
+
+    @Override
+    public void onRecompensaClick(int posicion, final Button button) {
+        Log.d("TAG", "onRecompensaClick: clicked ");
+        //TODO hacer que aparezca un texto para poder copiar
+        if (!button.isShown()) {
+            button.setVisibility(View.VISIBLE);
+        } else {
+            button.setVisibility(View.GONE);
+        }
+
+
     }
 }

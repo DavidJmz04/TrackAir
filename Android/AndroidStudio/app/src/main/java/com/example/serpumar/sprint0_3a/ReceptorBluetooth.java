@@ -37,6 +37,12 @@ public class ReceptorBluetooth {
 
     private Context context;
 
+    private int distanciaEstimada = -1;
+
+    public int getDistanciaEstimada() {
+        return this.distanciaEstimada;
+    }
+
     public void setContext(Context context) {
         this.context = context;
         lf= new LogicaFake(context);
@@ -249,7 +255,8 @@ public class ReceptorBluetooth {
         Log.d(ETIQUETA_LOG, " ****************************************************");
 
         Log.d(ETIQUETA_LOG, " ----------------------------------------------------");
-        Log.d(ETIQUETA_LOG, "Distancia estimada entre el Sensor: " + obtenerDistanciaEstimadaEntreSensorYDispositivo(tib.getTxPower(), rssi));
+        distanciaEstimada = (int)obtenerDistanciaEstimadaEntreSensorYDispositivo(tib.getTxPower(), rssi);
+        Log.d(ETIQUETA_LOG, "Distancia estimada entre el Sensor: " + distanciaEstimada);
         Log.d(ETIQUETA_LOG, " ----------------------------------------------------");
 
     } // ()

@@ -22,10 +22,14 @@
             android:layout_marginRight="10dp"
             android:src="@drawable/ic_baseline_stars_24" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="280dp"
-            android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/idRecompensa"
@@ -47,17 +51,37 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/idRecompensa" />
 
-            <Button
-                android:id="@+id/CanjearButton"
-                android:layout_width="100dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Canjear"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/idInfo" />
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/CanjearButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="16dp"
+                    android:text="Canjear"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/CopiarCodigo"
+                    android:background="@drawable/bordercodigo"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:drawableLeft="@drawable/ic_baseline_content_copy_24"
+                    android:drawableTint="@android:color/transparent"
+                    android:drawablePadding="4dp"
+                    android:padding="7dp"
+                    android:text=""
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

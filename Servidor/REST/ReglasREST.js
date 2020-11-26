@@ -282,4 +282,21 @@ module.exports.cargar = function (servidorExpress, laLogica) {
 
             });
     }) // get /mediciones
+
+    servidorExpress.post('/puntuacionUsuario', async function (peticion, respuesta) {
+
+        console.log(" * POST /puntuacionUsuario ")
+
+        var datos = JSON.parse(peticion.body)
+        // averiguo el id
+        var id = datos.idUsuario
+
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.obtenerPuntuacion(id)
+
+        await laLogica.editarPuntuacionUsuario({puntuacion: res, id: id})
+
+        respuesta.send("Se han actualizado los datos de puntuacion");
+    }) // get /codigoRecompensa
+
 } // cargar()
