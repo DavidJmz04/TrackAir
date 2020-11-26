@@ -64,7 +64,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
         });
     }
 
-    private void obtenerPuntos(final int position, final Button button){
+    private void obtenerPuntos(final int position, final Button button, final TextView codigoText){
 
         int idUsuario= 35;//TODO Cambiar
         NetworkManager.getInstance().getRequest("/usuario/" + idUsuario, new NetworkManager.ControladorRespuestas<String>() {
@@ -94,7 +94,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
         });
     }
 
-    private void canjearCodigo(int position, final Button button){
+    private void canjearCodigo(final int position, final String correo, final Button button, final TextView codigoText){
 
         NetworkManager.getInstance().getRequest("/codigoRecompensa/" + listaRecompensas.get(position).getId(), new NetworkManager.ControladorRespuestas<String>() {
             @Override

@@ -78,7 +78,7 @@ public class RecompensasFragment extends Fragment implements RecompensasAdapter.
 
     @Override
     public void onRecompensaClick(int posicion, final Button button) {
-        Log.d("TAG", "onRecompensaClick: clicked ");
+        //Log.d("TAG", "onRecompensaClick: clicked ");
         //TODO hacer que aparezca un texto para poder copiar
         if (!button.isShown()) {
             button.setVisibility(View.VISIBLE);
