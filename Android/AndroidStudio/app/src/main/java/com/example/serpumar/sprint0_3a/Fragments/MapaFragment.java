@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
@@ -18,12 +17,9 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.serpumar.sprint0_3a.GPS;
 import com.example.serpumar.sprint0_3a.LogicaFake;
-import com.example.serpumar.sprint0_3a.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 import com.example.serpumar.sprint0_3a.ReceptorBluetooth;
 import com.example.serpumar.sprint0_3a.Utilidades;

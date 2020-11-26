@@ -1,5 +1,7 @@
 package com.example.serpumar.sprint0_3a;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -7,7 +9,9 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,11 +19,19 @@ import android.widget.Toast;
 
 import com.example.serpumar.sprint0_3a.ClasesPojo.Medicion;
 import com.example.serpumar.sprint0_3a.ClasesPojo.Ubicacion;
+import com.example.serpumar.sprint0_3a.ClasesPojo.Usuario;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+
+import static java.lang.Integer.parseInt;
 
 public class ReceptorBluetooth {
 
@@ -37,9 +49,15 @@ public class ReceptorBluetooth {
 
     private Context context;
 
+    private int distanciaEstimada = -1;
+
+    public int getDistanciaEstimada() {
+        return this.distanciaEstimada;
+    }
+
     public void setContext(Context context) {
         this.context = context;
-        lf= new LogicaFake(context);
+        lf = new LogicaFake(context);
     }
 
     private Medicion ultimaMedicion = null;
@@ -163,7 +181,7 @@ public class ReceptorBluetooth {
                     mostrarInformacionDispositivoBTLE(bluetoothDevice, rssi, bytes);
                     haLlegadoUnBeacon(tib);
                 } else {
-                //    Log.d(ETIQUETA_LOG, " * UUID buscado >" + Utilidades.uuidToString(dispositivoBuscado) + "< no concuerda con este uuid = >" + uuidString + "<");
+                    //    Log.d(ETIQUETA_LOG, " * UUID buscado >" + Utilidades.uuidToString(dispositivoBuscado) + "< no concuerda con este uuid = >" + uuidString + "<");
                 }
 
 
@@ -249,7 +267,8 @@ public class ReceptorBluetooth {
         Log.d(ETIQUETA_LOG, " ****************************************************");
 
         Log.d(ETIQUETA_LOG, " ----------------------------------------------------");
-        Log.d(ETIQUETA_LOG, "Distancia estimada entre el Sensor: " + obtenerDistanciaEstimadaEntreSensorYDispositivo(tib.getTxPower(), rssi));
+        distanciaEstimada = (int) obtenerDistanciaEstimadaEntreSensorYDispositivo(tib.getTxPower(), rssi);
+        Log.d(ETIQUETA_LOG, "Distancia estimada entre el Sensor: " + distanciaEstimada);
         Log.d(ETIQUETA_LOG, " ----------------------------------------------------");
 
     } // ()
@@ -321,13 +340,14 @@ public class ReceptorBluetooth {
 
 
     public void detenerAvisador() {
-        if(avisador != null){
-        isRunning = false;
-        avisador.interrupt();
-        avisador = null;
-        Toast.makeText(context, "¡Avisador detenido!", Toast.LENGTH_SHORT).show();
-        TextView txtview = ((Activity) context).findViewById(R.id.textView_Activador);
-        txtview.setText("Avisador detenido");}
+        if (avisador != null) {
+            isRunning = false;
+            avisador.interrupt();
+            avisador = null;
+            Toast.makeText(context, "¡Avisador detenido!", Toast.LENGTH_SHORT).show();
+            TextView txtview = ((Activity) context).findViewById(R.id.textView_Activador);
+            txtview.setText("Avisador detenido");
+        }
     }
 
     private class Avisador implements Runnable {
@@ -336,12 +356,20 @@ public class ReceptorBluetooth {
         int mode = -1;
         long parameter;
         long time;
+        Account user = null;
+        int idUser;
 
         public Avisador(int mode, long parameter) {
             isRunning = true;
             this.mode = mode;
             this.parameter = parameter;
-            this.time = new Date().getTime();;
+            this.time = new Date().getTime();
+            AccountManager accountManager = AccountManager.get(context);
+            if (accountManager.getAccounts()[0] != null) {
+                this.user = accountManager.getAccounts()[0];
+                idUser = parseInt(accountManager.getUserData(user, "id"));
+            }
+            NetworkManager.getInstance(context);
         }
 
 
@@ -353,7 +381,7 @@ public class ReceptorBluetooth {
 
         @Override
         public void run() {
-            for(;;){
+            for (; ; ) {
                 while (isRunning) {
                     switch (mode) {
                         case 0:
@@ -364,8 +392,15 @@ public class ReceptorBluetooth {
                                 Log.d("THREAD", "Time reached!");
                                 time = new Date().getTime();
                                 setCallback();
-                                if(ultimaMedicion!=null)
-                                    lf.guardarMedicion(ultimaMedicion);
+                                if (user != null) {
+                                    if (ultimaMedicion != null) {
+                                        //lf.guardarMedicion(ultimaMedicion);
+                                        enviarMedicion(ultimaMedicion);
+                                        enviarPuntos();
+                                    }
+                                }
+
+
                             }
                             break;
                         default:
@@ -379,7 +414,7 @@ public class ReceptorBluetooth {
             //TODO intervalo de tiempo que cuando acabe se avise para obtenerMedicion()
             //Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(ultimaMedicion.getDate());
             Long current = new Date().getTime();
-            if (current>=this.time+this.parameter) { //current - date <= tiempo
+            if (current >= this.time + this.parameter) { //current - date <= tiempo
                 return true;
             }
             return false;
@@ -404,6 +439,38 @@ public class ReceptorBluetooth {
             //if calcular distancia entre los dos puntos => distancia --> Avisar
             if (distanciaDesdeUltimaMed >= distancia) return true;
             return false;
+        }
+
+        private void enviarPuntos() {
+            try {
+                JSONObject object = new JSONObject("{\"idUsuario\":" + idUser + "}");
+                NetworkManager.getInstance().postRequest(object, "/puntuacionUsuario", new NetworkManager.ControladorRespuestas() {
+                    @Override
+                    public void getResult(Object object) {
+                        Log.d("Avisador", "enviarPuntos: Enviado");
+                    }
+                });
+            } catch (JSONException e) {
+                Toast.makeText(context.getApplicationContext(), "El usuario no es válido", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        private void enviarMedicion(Medicion ultimaMedicion) {
+
+            Map<String, String> parametros = new HashMap<>();
+            parametros.put("idUsuario", String.valueOf(idUser));
+            parametros.put("momento", ultimaMedicion.getDate());
+            parametros.put("valor", String.valueOf(ultimaMedicion.getMedicion()));
+            parametros.put("ubicacion", ultimaMedicion.getUbicacion().getLatitud() + ", " + ultimaMedicion.getUbicacion().getLongitud());
+            parametros.put("tipoMedicion", ultimaMedicion.getTipoMedicion());
+
+            JSONObject jsonParametros = new JSONObject(parametros);
+            NetworkManager.getInstance().postRequest(jsonParametros, "/medicion", new NetworkManager.ControladorRespuestas() {
+                @Override
+                public void getResult(Object object) {
+                    Log.d("Avisador", "enviarMedicion: Enviado");
+                }
+            });
         }
 
 

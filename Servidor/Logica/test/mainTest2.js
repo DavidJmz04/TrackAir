@@ -91,6 +91,12 @@ describe("Test 2: Medicion", function () {
         assert.equal(res[0].tiempo, "900", "¿No es ese tiempo?")
     }); // it
 
+    it("puedo obtener puntuacion de un usuario", async function () {
+        var res = await laLogica.obtenerPuntuacion(idUsuario);
+
+        assert.equal(res, 1, "¿es la distancia obtenida?");
+    }); // it
+
     it("cerrar conexión a la base de datos", async function () {
         try {
             await laLogica.cerrar();

@@ -112,4 +112,29 @@ describe("Test 2: Todos los post", function () {
             } // callback
         ); // .post
     }); // it
+
+    it("probar POST /puntuacionUsuario", function (hecho) {
+        var datos = {
+            id: 12
+        };
+
+        request.post({
+                url: IP_PUERTO + "/puntuacionUsuario",
+                headers: {
+                    "User-Agent": "David",
+                    "Content-Type": "application/json",
+                },
+
+                body: JSON.stringify(datos),
+            },
+
+            function (err, respuesta, carga) {
+
+                assert.equal(err, null, "¿ha habido un error?");
+                assert.equal(respuesta.statusCode, 200, "¿El código no es 200 (OK)");
+                assert.equal(carga, res, "¿La carga no es " + res);
+                hecho();
+            } // callback
+        ); // .post
+    }); // it
 }); //describe

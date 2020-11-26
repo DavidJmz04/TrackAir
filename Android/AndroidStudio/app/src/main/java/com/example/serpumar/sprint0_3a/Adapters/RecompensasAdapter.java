@@ -1,5 +1,7 @@
 package com.example.serpumar.sprint0_3a.Adapters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.Log;
@@ -33,16 +35,18 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
 
     ArrayList<Recompensa> listaRecompensas;
     Context context;
+    private OnRecompensaListener mOnRecompensaListener;
 
-    public RecompensasAdapter(ArrayList<Recompensa> listaRecompensas, Context context) {
+    public RecompensasAdapter(ArrayList<Recompensa> listaRecompensas, Context context, OnRecompensaListener onRecompensaListener) {
         this.listaRecompensas = listaRecompensas;
         this.context = context;
+        this.mOnRecompensaListener = onRecompensaListener;
     }
 
     @Override
-    public RecompensasViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list, null, false);
-        return new RecompensasViewHolder(view);
+    public  RecompensasViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list,null, false);
+        return new RecompensasViewHolder(view, mOnRecompensaListener);
     }
 
     @Override
@@ -55,12 +59,12 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
         holder.canjearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                obtenerPuntos(position, holder.canjearButton);
+                obtenerPuntos(position, holder.canjearButton, holder.codigo);
             }
         });
     }
 
-    private void obtenerPuntos(final int position, final Button button) {
+    private void obtenerPuntos(final int position, final Button button, final TextView codigoText){
 
         AccountManager accountManager = AccountManager.get(context);
         int idUsuario = parseInt(accountManager.getUserData(accountManager.getAccounts()[0], "id"));
@@ -78,7 +82,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
 
                     if (usuario.getPuntosCanjeables() >= listaRecompensas.get(position).getCoste()) {
 
-                        canjearCodigo(position, usuario.getCorreo(), button);
+                        canjearCodigo(position, usuario.getCorreo(), button, codigoText);
                         usuario.setPuntosCanjeables(usuario.getPuntosCanjeables() - listaRecompensas.get(position).getCoste());
 
                         editarUsuario(usuario);
@@ -92,16 +96,19 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
         });
     }
 
-    private void canjearCodigo(final int position, final String correo, final Button button) {
+    private void canjearCodigo(final int position, final String correo, final Button button, final TextView codigoText){
 
         NetworkManager.getInstance().getRequest("/codigoRecompensa/" + listaRecompensas.get(position).getId(), new NetworkManager.ControladorRespuestas<String>() {
             @Override
             public void getResult(String object) {
 
                 try {
-                    JSONArray jsonArray = new JSONArray(object);
-                    String codigo = jsonArray.getJSONObject(0).getString("codigo");
-                    button.setText(codigo);
+                    JSONArray jsonArray= new JSONArray(object);
+                    String codigo= jsonArray.getJSONObject(0).getString("codigo");
+                    //button.setText(codigo);
+                    codigoText.setText(codigo);
+                    codigoText.setVisibility(View.VISIBLE);
+                    (codigoText.getCompoundDrawables())[0].setTint(context.getResources().getColor(android.R.color.black));
                     button.setEnabled(false);
 
                     Mail sm = new Mail(context, correo, listaRecompensas.get(position).getTitulo(), "Su codigo de la recompensa canjeada es: " + codigo);
@@ -146,20 +153,44 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
         return listaRecompensas.size();
     }
 
-    public class RecompensasViewHolder extends RecyclerView.ViewHolder {
+    public class  RecompensasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView txtRecompensa;
         TextView txtInfo;
         ImageView imagen;
         Button canjearButton;
+        TextView codigo;
+        OnRecompensaListener onRecompensaListener;
 
-        public RecompensasViewHolder(View itemView) {
+        public RecompensasViewHolder(View itemView, OnRecompensaListener onRecompensaListener) {
 
             super(itemView);
             txtRecompensa = itemView.findViewById(R.id.idRecompensa);
             txtInfo = itemView.findViewById(R.id.idInfo);
             imagen = itemView.findViewById(R.id.idImagen);
             canjearButton = itemView.findViewById(R.id.CanjearButton);
+            codigo = itemView.findViewById(R.id.CopiarCodigo);
+            codigo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(codigo.getText(), codigo.getText());
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(context, "Codigo copiado", Toast.LENGTH_SHORT);
+                }
+            });
+            this.onRecompensaListener = onRecompensaListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onRecompensaListener.onRecompensaClick(getAdapterPosition(), canjearButton);
+        }
+    }
+
+    public interface OnRecompensaListener {
+        void onRecompensaClick(int posicion, final Button button);
     }
 }

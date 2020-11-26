@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new MapaFragment()).commit();
         NetworkManager.getInstance(this);
 
+        NetworkManager.getInstance(this);
+
         AccountManager accountManager = AccountManager.get(this);
     } // onCreate()
 
