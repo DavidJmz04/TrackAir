@@ -72,7 +72,6 @@ async insertarMedicionesPlaceholder(){
   async login(usuario, contrasenya) {
     //console.log("LOGIN pass: " + CryptoJS.SHA256(contrasenya).toString());
     let recurso = "login";
-
     try {
       let res = await axios.post(`${servidor}${puerto}/${recurso}`, {
         nombreUsuario: usuario,
@@ -107,7 +106,7 @@ async insertarMedicionesPlaceholder(){
 
   //TEST PARA PDF
   async obtenerPDF(){
-    let recurso = "prueba";
+    let recurso = "informe/ranking";
     /*
     let res = await axios.get(`${servidor}:3000/${recurso}`, {
             method: 'GET',
@@ -121,8 +120,8 @@ async insertarMedicionesPlaceholder(){
         });
         */
 
-       window.location.href = `${servidor}:3000/${recurso}`;
-       //window.open(`${servidor}:3000/${recurso}`);
+       window.location.href = `${servidor}${puerto}/${recurso}`;
+       //window.open(`${servidor}${puerto}/${recurso}`);
   }
   //Destruye la cookie que se había creado para el inicio de sesión
   logout() {
