@@ -12,8 +12,19 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+<<<<<<< Updated upstream
 
 import java.util.UUID;
+=======
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.example.serpumar.sprint0_3a.Fragments.MapaFragment;
+import com.example.serpumar.sprint0_3a.Fragments.PerfilFragment;
+import com.example.serpumar.sprint0_3a.Fragments.RecompensasFragment;
+import com.example.serpumar.sprint0_3a.Notificaciones.ServicioNotificaciones;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+>>>>>>> Stashed changes
 
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
@@ -29,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private LogicaFake lf = new LogicaFake();
 
 
+<<<<<<< Updated upstream
     // --------------------------------------------------------------
     // --------------------------------------------------------------
     public void botonBuscarDispositivosBTLEPulsado( View v ) {
@@ -36,6 +48,12 @@ public class MainActivity extends AppCompatActivity {
         receptorBluetooth.buscarTodosLosDispositivosBTLE();
 
     } // ()
+=======
+        AccountManager accountManager = AccountManager.get(this);
+
+        startService();
+    } // onCreate()
+>>>>>>> Stashed changes
 
     // --------------------------------------------------------------
     // --------------------------------------------------------------
@@ -69,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     } // onCreate()
 
+    public void startService() {
+        Intent serviceIntent = new Intent(this, ServicioNotificaciones.class);
+        serviceIntent.putExtra("inputExtra", "Para desactivarlo cierre la app");
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
 } // class
 // --------------------------------------------------------------
 // --------------------------------------------------------------
