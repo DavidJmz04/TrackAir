@@ -73,7 +73,7 @@ public class ReceptorBluetooth {
 
     public void setContext(Context context) {
         this.context = context;
-        notificationIntent = new Intent(context,InfoActivity.class);
+        notificationIntent = new Intent(context, InfoActivity.class);
         pendingIntent = PendingIntent.getActivity(context,
                 0, notificationIntent, 0);
         notificationManager =
@@ -95,7 +95,7 @@ public class ReceptorBluetooth {
 
         if (comprobarBeaconRepetido(tib)) {
             int medicion = Utilidades.bytesToInt(tib.getMinor());
-           // Ubicacion ub = gps.obtenerUbicacion(context) == null ? new Ubicacion(1,1) : gps.obtenerUbicacion(context);
+            // Ubicacion ub = gps.obtenerUbicacion(context) == null ? new Ubicacion(1,1) : gps.obtenerUbicacion(context);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = dateFormat.format(Calendar.getInstance().getTime().getTime());
@@ -103,7 +103,7 @@ public class ReceptorBluetooth {
             ultimaMedicion = new Medicion(medicion, new Ubicacion(gps.obtenerUbicacion(context).getLatitud(), gps.obtenerUbicacion(context).getLongitud()), date, "CO2");
 
 //            EditText cajaLectura = (EditText) (context.findViewById(R.id.cajaSensor);
-            Log.i("AAA" ,getUltimaMedicion().getMedicion() + " ug/m3 - " + getUltimaMedicion().getDate() + " - " + getUltimaMedicion().getUbicacion().getLongitud());
+            Log.i("AAA", getUltimaMedicion().getMedicion() + " ug/m3 - " + getUltimaMedicion().getDate() + " - " + getUltimaMedicion().getUbicacion().getLongitud());
             //lf.guardarMedicion(medicion, ub, date, context); //Le paso como variable el contexto para poder cambiar el texto en la pantalla del MainActivity
         } else {
             Log.d("Medicion", "La medicion ya se ha tomado");
@@ -204,7 +204,7 @@ public class ReceptorBluetooth {
                     mostrarInformacionDispositivoBTLE(bluetoothDevice, rssi, bytes);
                     haLlegadoUnBeacon(tib);
                 } else {
-                       Log.i(ETIQUETA_LOG, " * UUID buscado >" + Utilidades.uuidToString(dispositivoBuscado) + "< no concuerda con este uuid = >" + uuidString + "<");
+                    Log.i(ETIQUETA_LOG, " * UUID buscado >" + Utilidades.uuidToString(dispositivoBuscado) + "< no concuerda con este uuid = >" + uuidString + "<");
                 }
 
 
@@ -330,10 +330,10 @@ public class ReceptorBluetooth {
         txtview.setText("Avisador activo");
         if (mode == 0) {
             Toast.makeText(context, "Avisador activado con una distancia de " + parameter + " metros.", Toast.LENGTH_SHORT).show();
-            avisador = new Thread(new Avisador(mode, parameter,this.context));
+            avisador = new Thread(new Avisador(mode, parameter, this.context));
         } else if (mode == 1) {
             Toast.makeText(context, "Avisador activado con un delay de " + parameter + " milisegundos.", Toast.LENGTH_SHORT).show();
-            avisador = new Thread(new Avisador(mode, parameter,this.context));
+            avisador = new Thread(new Avisador(mode, parameter, this.context));
         }
         avisador.start();
 
@@ -378,7 +378,6 @@ public class ReceptorBluetooth {
     }
 
 
-
     private class Avisador implements Runnable {
 
         private int cont = 0;
@@ -415,61 +414,61 @@ public class ReceptorBluetooth {
 
         @Override
         public void run() {
-            for(;;){
+            for (; ; ) {
                 while (isRunning) {
-                    if(user!=null) {
+                    if (user != null) {
                         error = false;
-                    switch (mode) {
-                        case 0:
-                            //if (setCriterioDistancia()) {}
-                            break;
-                        case 1:
-                            if (setCriterioTiempo()) {
-                                Log.d("THREAD", "Time reached!");
-                                time = new Date().getTime();
-                                setCallback();
-                                if(ultimaMedicion!=null) {
-                                    String ultimoTiempoMedido = ultimaMedicion.getDate();
+                        switch (mode) {
+                            case 0:
+                                //if (setCriterioDistancia()) {}
+                                break;
+                            case 1:
+                                if (setCriterioTiempo()) {
+                                    Log.d("THREAD", "Time reached!");
+                                    time = new Date().getTime();
+                                    setCallback();
+                                    if (ultimaMedicion != null) {
+                                        String ultimoTiempoMedido = ultimaMedicion.getDate();
 //                                    ultimoTiempoRegistrado = Long.parseLong(ultimoTiempoMedido);
-                                    Log.i("TAG", ultimaMedicion.getMedicion() +"");
-                                    if (ultimaMedicion.getMedicion() > 1500 || ultimaMedicion.getMedicion() < 0){
-                                        content = "Los valores de las mediciones exceden los límites";
-                                        error=true;
+                                        Log.i("TAG", ultimaMedicion.getMedicion() + "");
+                                        if (ultimaMedicion.getMedicion() > 1500 || ultimaMedicion.getMedicion() < 0) {
+                                            content = "Los valores de las mediciones exceden los límites";
+                                            error = true;
+                                        }
+                                    } else {
+                                        Log.i("TAG", "pepe");
+                                        content = "El nodo esta desconectado o demasiado lejos!";
+                                        error = true;
                                     }
-                                }else {
-                                    content="El nodo está enviando medidas erróneas";
-                                    error = true;
-                                }
 
-                                if(error){
-                                    Log.i("TAG" , "HAY ERROR");
-                                    NotificationCompat.Builder notifLimites= new NotificationCompat.Builder(ctx, "1")
-                                            .setContentTitle("Alerta")
-                                            .setContentText(content)
-                                            .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
-                                            .setContentIntent(pendingIntent);
+                                    if (error) {
+                                        Log.i("TAG", "HAY ERROR");
+                                        NotificationCompat.Builder notifLimites = new NotificationCompat.Builder(ctx, "1")
+                                                .setContentTitle("Alerta")
+                                                .setContentText(content)
+                                                .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
+                                                .setContentIntent(pendingIntent);
 
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                                    {
-                                        String channelId = "1";
-                                        NotificationChannel channel = new NotificationChannel(
-                                                channelId,
-                                                "Channel human readable title",
-                                                NotificationManager.IMPORTANCE_HIGH);
-                                        notificationManager.createNotificationChannel(channel);
-                                        notifLimites.setChannelId(channelId);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            String channelId = "1";
+                                            NotificationChannel channel = new NotificationChannel(
+                                                    channelId,
+                                                    "Channel human readable title",
+                                                    NotificationManager.IMPORTANCE_HIGH);
+                                            notificationManager.createNotificationChannel(channel);
+                                            notifLimites.setChannelId(channelId);
+                                        }
+                                        notificationManager.notify(0, notifLimites.build());
+                                    } else {
+                                        enviarMedicion(ultimaMedicion);
+                                        enviarPuntos();
                                     }
-                                    notificationManager.notify(0, notifLimites.build());
-                                } else{
-                                    enviarMedicion(ultimaMedicion);
-                                    enviarPuntos();
                                 }
-                            }
-                            break;
-                        default:
-                            break;
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                }
                 }
             }
         }
@@ -478,7 +477,7 @@ public class ReceptorBluetooth {
             //TODO intervalo de tiempo que cuando acabe se avise para obtenerMedicion()
             //Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(ultimaMedicion.getDate());
             Long current = new Date().getTime();
-            if (current>=this.time+this.parameter) { //current - date <= tiempo
+            if (current >= this.time + this.parameter) { //current - date <= tiempo
                 return true;
             }
             return false;
@@ -524,10 +523,10 @@ public class ReceptorBluetooth {
             Map<String, String> parametros = new HashMap<>();
             parametros.put("idUsuario", String.valueOf(idUser));
             parametros.put("momento", ultimaMedicion.getDate());
-            parametros.put("valor", String.valueOf((ultimaMedicion.getMedicion() < 0 || ultimaMedicion.getMedicion() > 300? new Random(System.currentTimeMillis()).nextInt(150) : ultimaMedicion.getMedicion() )));
+            parametros.put("valor", String.valueOf((ultimaMedicion.getMedicion() < 0 || ultimaMedicion.getMedicion() > 300 ? new Random(System.currentTimeMillis()).nextInt(150) : ultimaMedicion.getMedicion())));
             parametros.put("ubicacion", ultimaMedicion.getUbicacion().getLatitud() + ", " + ultimaMedicion.getUbicacion().getLongitud());
             parametros.put("tipoMedicion", ultimaMedicion.getTipoMedicion());
-            Log.i("SEND", idUser+" ");
+            Log.i("SEND", idUser + " ");
             JSONObject jsonParametros = new JSONObject(parametros);
             NetworkManager.getInstance().postRequest(jsonParametros, "/medicion", new NetworkManager.ControladorRespuestas() {
                 @Override
