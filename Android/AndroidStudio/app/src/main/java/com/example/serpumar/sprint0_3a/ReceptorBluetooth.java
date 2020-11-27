@@ -375,9 +375,9 @@ public class ReceptorBluetooth {
             this.time = new Date().getTime();
             ctx = c;
             AccountManager accountManager = AccountManager.get(ctx);
-            if (accountManager.getAccounts()[0] != null) {
-                this.user = accountManager.getAccounts()[0];
-                idUser = parseInt(accountManager.getUserData(user, "id"));
+            if (accountManager.getAccountsByType("com.example.serpumar.sprint0_3a").length > 0) {
+                idUser = parseInt(accountManager.getUserData(accountManager.getAccountsByType("com.example.serpumar.sprint0_3a")[0], "id"));
+                this.user = accountManager.getAccountsByType("com.example.serpumar.sprint0_3a")[0];
             }
             NetworkManager.getInstance(ctx);
         }
@@ -393,6 +393,7 @@ public class ReceptorBluetooth {
         public void run() {
             for(;;){
                 while (isRunning) {
+                    if(user!=null) {
                     switch (mode) {
                         case 0:
                             //if (setCriterioDistancia()) {}
@@ -403,14 +404,15 @@ public class ReceptorBluetooth {
                                 time = new Date().getTime();
                                 setCallback();
                                 if(ultimaMedicion!=null) {
-                                    enviarMedicion(ultimaMedicion);
-                                    enviarPuntos();
+                                        enviarMedicion(ultimaMedicion);
+                                        enviarPuntos();
                                 }
                             }
                             break;
                         default:
                             break;
                     }
+                }
                 }
             }
         }

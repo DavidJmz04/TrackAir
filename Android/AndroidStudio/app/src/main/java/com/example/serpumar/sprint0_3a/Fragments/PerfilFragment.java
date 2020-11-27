@@ -72,7 +72,7 @@ import static java.lang.Integer.parseInt;
         final Intent mainIntent = new Intent(getContext(), MainActivity.class);
         final Intent loginIntent = new Intent(getContext(), LoginActivity.class);
 
-        final AccountManager accountManager = AccountManager.get(getContext());
+        final AccountManager accountManager = AccountManager.get(getActivity());
 
         // Inflate the layout for this fragment
         if ((accounts = accountManager.getAccounts()).length>0) {
@@ -96,8 +96,7 @@ import static java.lang.Integer.parseInt;
                 }
             });
 
-            int idUsuario = parseInt(accountManager.getUserData(accountManager.getAccounts()[0], "id"));
-
+            int idUsuario = parseInt(accountManager.getUserData(accountManager.getAccountsByType("com.example.serpumar.sprint0_3a")[0], "id"));
             NetworkManager.getInstance().getRequest("/usuario/" + idUsuario, new NetworkManager.ControladorRespuestas<String>() {
                 @Override
                 public void getResult(String object) {

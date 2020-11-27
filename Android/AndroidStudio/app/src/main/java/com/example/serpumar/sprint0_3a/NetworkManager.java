@@ -47,13 +47,13 @@ public class NetworkManager {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url + request, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.d("Response", response.toString());
+                Log.i("Response", response.toString());
                 listener.getResult(response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Error.Response", error.toString());
+                Log.i("Error.Response", error.toString());
             }
         });
 
