@@ -538,6 +538,4 @@ public class ReceptorBluetooth {
 
 
     }
-
-
 }

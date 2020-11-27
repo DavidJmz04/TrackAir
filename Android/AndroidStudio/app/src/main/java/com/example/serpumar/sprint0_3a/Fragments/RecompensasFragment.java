@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ public class RecompensasFragment extends Fragment implements RecompensasAdapter.
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recompensas, container, false);
 
@@ -59,16 +60,38 @@ public class RecompensasFragment extends Fragment implements RecompensasAdapter.
             @Override
             public void getResult(String object) {
                 try {
-                    JSONArray jsonArray= new JSONArray(object);
-                    for(int i=0; i<jsonArray.length(); i++){
+                    JSONArray jsonArray = new JSONArray(object);
+                    for (int i = 0; i < jsonArray.length(); i++) {
 
-                        //TODO Hacer un switch de imagenes
-                        JSONObject recompensa= jsonArray.getJSONObject(i);
-                        listaRecompensas.add(new Recompensa(recompensa.getInt("id"),recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"),R.drawable.ic_baseline_stars_24));
+                        JSONObject recompensa = jsonArray.getJSONObject(i);
+                        Log.i("AAAA", recompensa.getString("titulo"));
+                        switch (recompensa.getString("titulo")) {
+
+                            case "Cine":
+                                listaRecompensas.add(new Recompensa(recompensa.getInt("id"), recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"), R.drawable.ic_baseline_local_movies_24));
+                                break;
+                            case "Cena":
+                                listaRecompensas.add(new Recompensa(recompensa.getInt("id"), recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"), R.drawable.ic_baseline_fastfood_24));
+                                break;
+                            case "Bici":
+                                listaRecompensas.add(new Recompensa(recompensa.getInt("id"), recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"), R.drawable.ic_baseline_pedal_bike_24));
+                                break;
+                            case "Pistas":
+                                listaRecompensas.add(new Recompensa(recompensa.getInt("id"), recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"), R.drawable.ic_baseline_sports_tennis_24));
+                                break;
+                            case "Cursillos":
+                                listaRecompensas.add(new Recompensa(recompensa.getInt("id"), recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"), R.drawable.ic_baseline_school_24));
+                                break;
+
+                            default:
+                                listaRecompensas.add(new Recompensa(recompensa.getInt("id"), recompensa.getString("titulo"), recompensa.getString("descripcion"), recompensa.getInt("coste"), R.drawable.ic_baseline_stars_24));
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                Log.i("AAAA", listaRecompensas.size() + "");
 
                 RecompensasAdapter adapter = new RecompensasAdapter(listaRecompensas, getContext(), onRecompensaListener);
                 recyclerRecompensas.setAdapter(adapter);

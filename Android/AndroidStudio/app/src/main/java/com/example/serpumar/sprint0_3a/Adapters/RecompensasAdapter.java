@@ -176,7 +176,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
                     ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText(codigo.getText(), codigo.getText());
                     clipboard.setPrimaryClip(clip);
-                    Toast.makeText(context, "Codigo copiado", Toast.LENGTH_SHORT);
+                    Toast.makeText(context, "Codigo copiado", Toast.LENGTH_SHORT).show();
                 }
             });
             this.onRecompensaListener = onRecompensaListener;
