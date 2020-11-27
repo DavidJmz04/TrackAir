@@ -3,7 +3,8 @@ package com.example.serpumar.sprint0_3a.ClasesPojo;
 public class Usuario {
 
     private int id;
-    private String nombre;
+    private String nombre_completo;
+    private String nombre_usuario;
     private String contrasenya;
     private String correo;
     private int puntuacion;
@@ -11,9 +12,10 @@ public class Usuario {
     private String telefono;
     private String idNodo;
 
-    public Usuario(int id, String nombre, String contrasenya, String correo, int puntuacion, int puntosCanjeables, String telefono, String idNodo){
+    public Usuario(int id, String nombre_completo, String nombre_usuario, String contrasenya, String correo, int puntuacion, int puntosCanjeables, String telefono, String idNodo){
         this.id= id;
-        this.nombre= nombre;
+        this.nombre_completo = nombre_completo;
+        this.nombre_usuario = nombre_usuario;
         this.contrasenya= contrasenya;
         this.correo= correo;
         this.puntuacion= puntuacion;
@@ -30,12 +32,20 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombreUsuario() {
+        return nombre_usuario;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombreUsuario(String nombre) {
+        this.nombre_usuario = nombre;
+    }
+
+    public String getNombreCompleto() {
+        return nombre_completo;
+    }
+
+    public void setNombreCompleto(String nombre) {
+        this.nombre_completo = nombre;
     }
 
     public String getContrasenya() {

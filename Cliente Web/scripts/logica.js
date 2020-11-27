@@ -3,9 +3,9 @@
 // ------ 21-10-2020
 // -------------------------------------
 
-//const servidor = "https://igmagi.upv.edu.es";
-const servidor = "http://localhost";
-const puerto = ":8080";
+const servidor = "https://igmagi.upv.edu.es";
+//const servidor = "http://localhost";
+//const puerto = ":8080";
 class Logica {
   constructor() {}
 
@@ -105,8 +105,26 @@ async insertarMedicionesPlaceholder(){
   }
 
   //TEST PARA PDF
-  async obtenerPDF(){
+  async obtenerPDFRanking(){
     let recurso = "informe/ranking";
+    /*
+    let res = await axios.get(`${servidor}:3000/${recurso}`, {
+            method: 'GET',
+            
+        })
+        .then(response => { 
+             //response.data.pipe(fs.createWriteStream("data.pdf"));
+        })
+        .catch(error => {
+            console.log(error)
+        });
+        */
+
+       window.location.href = `${servidor}${puerto}/${recurso}`;
+       //window.open(`${servidor}${puerto}/${recurso}`);
+  }
+  async obtenerPDFUso(){
+    let recurso = "informe/uso";
     /*
     let res = await axios.get(`${servidor}:3000/${recurso}`, {
             method: 'GET',

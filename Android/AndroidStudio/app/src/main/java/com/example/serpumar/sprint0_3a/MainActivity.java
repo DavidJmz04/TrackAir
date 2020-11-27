@@ -41,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new MapaFragment()).commit();
+
         NetworkManager.getInstance(this);
+
+        AccountManager accountManager = AccountManager.get(this);
     } // onCreate()
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = new BottomNavigationView.OnNavigationItemSelectedListener() {

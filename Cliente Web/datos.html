@@ -1,129 +1,89 @@
 <!DOCTYPE html>
+<!-- Autor: Ignasi MarÍ Giner & Marc Oller Caballé -->
 <html lang="es">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mediciones</title>
-  </head>
+    <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/mediciones.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
 
-  <style>
-    table,
-    th,
-    td {
-      border: 1px solid black;
-    }
+<body>
+    <header>
+        <div id="usuarioBox" style="display:none" class="mediciones-container">
+            <div>Hola <span id="nombreText">Usuario</span>!</div>
+            <div>Calidad del aire respirada hoy: <span id="calidadAire">Actualizando...</span></div>
+        </div>
+    </header>
+    </br>
+    <div class="container-fluid">
+        <div class="row w-90 d-flex justify-content-center">
+            <div class="col-xl-2">
+                <button class="btn btn-primary " id="btn-uso" role="button">Informe de uso</button>
+            </div>
+            <div class="col-xl-2">
+                <button class="btn btn-primary " id="btn-ranking" role="button">Ranking</button>
+            </div>
+            <div class="col-xl-2">
+                <a class="btn btn-primary " href="/informacionAdicional.html" role="button">Información Adicional</a>
+            </div>
+            <div class="col-xl-2">
+                <a class="btn btn-primary " href="/map.html" role="button">Volver al mapa</a>
+            </div>
+        </div>
+        <div class="row w-90 d-flex justify-content-center">
+            <div class="col-xl-5">
+                <section class="mediciones-container" id="mediciones-container">
+                    <h3>Gases Irritantes</h3>
+                    <div class="top-row">
+                        <div class="cell">Instante</div>
+                        <div class="cell">Valor (ug/m3)</div>
+                        <div class="cell">Calidad</div>
+                    </div>
 
-    div {
-      display: flex;
-      justify-content: space-around;
-    }
+                    <div class="mediciones-content" id="mediciones-content">
+                        Cargando...
+                    </div>
+                </section>
+                <section id="btn-container"><button id="btn-test">Test</button></section>
+            </div>
+            <div class="col-xl-5">
+                <section class="mediciones-container" id="medicionesTiempoReal-container">
+                    <h3>Mediciones oficiales</h3>
+                    <div class="top-row">
+                        <div class="cell">Instante</div>
+                        <div class="cell">Valor (ug/m3)</div>
+                        <div class="cell">Calidad</div>
+                    </div>
 
-    fieldset,
-    table {
-      width: 550px;
-      padding: 10px 10px 10px 10px;
-    }
-  </style>
-
-  <body onload="rellenarListas()">
-    <div>
-      <table id="mediciones">
-        <caption style="font-size: 25px">
-          Medicion
-        </caption>
-
-        <tr>
-          <th>momento</th>
-          <th>ubicacion</th>
-          <th>valor</th>
-        </tr>
-      </table>
-
-      <button onClick="window.location.reload();">Actualizar Tabla</button>
-      <button onClick="obtenerMedicionesAPIOficial()">
-        Obtener Mediciones Oficiales en TIEMPO REAL
-      </button>
-      <button onClick="obtenerMedicionesCSV()">
-        Obtener Mediciones OficialesL
-      </button>
+                    <div class="mediciones-content" id="medicionesTiempoReal-content">
+                        Cargando...
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
     </div>
 
-    <script>
-      /*window.onload = function () {
-            setInterval(() => {
-        rellenarListas();
-        }, 4000);
-        };*/
 
-      var IP_PUERTO = "localhost:8080/";
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="/scripts/logica.js"></script>
+    <script src="/scripts/mediciones.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 
-      function rellenarListas() {
-        fetch(IP_PUERTO + "obtenerMediciones", {
-          headers: {
-            "User-Agent": "SergioPujol",
-          },
-        })
-          .then((res) => res.json())
-          .then(function (res) {
-            for (var i = 0; i < res.length; i++) {
-              document.getElementById("mediciones").innerHTML +=
-                "<tr><td>" +
-                res[i].momento +
-                "</td><td>" +
-                res[i].ubicacion +
-                "</td><td>" +
-                res[i].valor +
-                "</td></tr>";
-            }
-          });
-      }
+</body>
 
-      async function obtenerMedicionesCSV() {
-        var acceso;
-        acceso = "medicionesOficialesCSV";
-
-        const options = {
-          method: "GET",
-          mode: "cors",
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: "same-origin", // include, *same-origin, omit
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        };
-
-        // Petición HTTP
-        fetch("http://localhost:8080/" + acceso, options)
-          .then((response) => response.text())
-          .then((data) => {
-            console.log(data);
-          });
-      }
-
-      async function obtenerMedicionesAPIOficial() {
-        var acceso;
-        acceso = "medicionesOficiales";
-
-        const options = {
-          method: "GET",
-          mode: "cors",
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: "same-origin", // include, *same-origin, omit
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        };
-
-        // Petición HTTP
-        fetch("http://localhost:8080/" + acceso, options)
-          .then((response) => response.text())
-          .then((data) => {
-            console.log(data);
-          });
-      }
-    </script>
-  </body>
 </html>

@@ -17,8 +17,8 @@ function main() {
     laLogica = new Logica();
     console.log(document.cookie)
     if(document.cookie != ""){
-    document.getElementById("nombreText").innerHTML = document.cookie.split(';')[0].split('=')[1]
-        cargarUsuario(document.cookie.split(';')[1].split('=')[1])
+    document.getElementById("nombreText").innerHTML = getCookie("name")
+        cargarUsuario(getCookie("id"))
         document.getElementById("usuarioBox").style.display = "block";
     }
     //mostrarMediciones();
@@ -37,12 +37,36 @@ function main() {
         }, 6000);
     */
     //Botón para activar y desactivar
+    var btn = document.getElementById("btn-uso");
+    btn.onclick = () => {
+        laLogica.obtenerPDFUso();
+    };
+    var btn = document.getElementById("btn-ranking");
+    btn.onclick = () => {
+        laLogica.obtenerPDFRanking();
+    };
     var btn = document.getElementById("btn-test");
     btn.onclick = () => {
         testMode = !testMode;
     };
 }
 // ()
+
+// texto -> getCookie() -> texto
+function getCookie(cname) {
+  var name = cname + "=";
+  var ca = document.cookie.split(";");
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 
 function cargarUsuario(id){
     let calidadText = document.getElementById("calidadAire");

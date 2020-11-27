@@ -12,8 +12,8 @@ window.addEventListener("load", () => {
   let id = getCookie("id");
   if (id != "") {
     let info = laLogica.recuperarDatosUsuarioConId(id).then((inf) => {
-      console.log(inf);
-      user = info;
+      //console.log(inf);
+      inf=inf[0];
       nombre.textContent=inf.nombre;
       nombreUsuario.textContent = `@${inf.nombre_usuario}`;
       reputacion.textContent = `Reputación:${inf.puntuacion}`;
