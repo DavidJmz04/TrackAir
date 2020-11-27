@@ -1,12 +1,18 @@
 package com.example.serpumar.sprint0_3a;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
 
 import org.json.JSONObject;
 
@@ -37,6 +43,32 @@ public class InfoActivity extends Activity {
             }
         });
 
+        Button subirLectura = (Button) findViewById(R.id.botonSubirLectura);
+        subirLectura.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                NotificationCompat.Builder notifLimites = new NotificationCompat.Builder(getApplicationContext(), "1")
+                        .setContentTitle("Alerta")
+                        .setContentText("Prueba")
+                        .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark);
+// === Removed some obsoletes
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                {
+                    String channelId = "Your_channel_id";
+                    NotificationChannel channel = new NotificationChannel(
+                            channelId,
+                            "Channel human readable title",
+                            NotificationManager.IMPORTANCE_HIGH);
+                    notificationManager.createNotificationChannel(channel);
+                    notifLimites.setChannelId(channelId);
+                }
+                notificationManager.notify(2, notifLimites.build());
+            }
+        });
 
         Button obtenerMediciones = (Button) findViewById(R.id.botonObtenerMediciones);
         obtenerMediciones.setOnClickListener(new View.OnClickListener() {

@@ -3,6 +3,10 @@ package com.example.serpumar.sprint0_3a;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
@@ -11,11 +15,14 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
 
 import com.example.serpumar.sprint0_3a.ClasesPojo.Medicion;
 import com.example.serpumar.sprint0_3a.ClasesPojo.Ubicacion;
@@ -32,12 +39,20 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static java.lang.Integer.parseInt;
 
 public class ReceptorBluetooth {
 
     LogicaFake lf;
 
+    long ultimoTiempoRegistrado;
+
+    Intent notificationIntent;
+    PendingIntent pendingIntent;
+
+    NotificationManager notificationManager;
+    String content;
     private BluetoothAdapter.LeScanCallback callbackLeScan = null;
 
     private ScanCallback scanCallback = null; // for api >= 21
@@ -58,6 +73,11 @@ public class ReceptorBluetooth {
 
     public void setContext(Context context) {
         this.context = context;
+        notificationIntent = new Intent(context,InfoActivity.class);
+        pendingIntent = PendingIntent.getActivity(context,
+                0, notificationIntent, 0);
+        notificationManager =
+                (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         lf = new LogicaFake(context);
     }
 
@@ -357,6 +377,8 @@ public class ReceptorBluetooth {
         distanciaEstimada = i;
     }
 
+
+
     private class Avisador implements Runnable {
 
         private int cont = 0;
@@ -389,11 +411,14 @@ public class ReceptorBluetooth {
             buscarEsteDispositivoBTLEYObtenerMedicion(Utilidades.stringToUUID("GRUP3-GTI-PROY-3"));
         }
 
+        boolean error = false;
+
         @Override
         public void run() {
             for(;;){
                 while (isRunning) {
                     if(user!=null) {
+                        error = false;
                     switch (mode) {
                         case 0:
                             //if (setCriterioDistancia()) {}
@@ -404,8 +429,40 @@ public class ReceptorBluetooth {
                                 time = new Date().getTime();
                                 setCallback();
                                 if(ultimaMedicion!=null) {
-                                        enviarMedicion(ultimaMedicion);
-                                        enviarPuntos();
+                                    String ultimoTiempoMedido = ultimaMedicion.getDate();
+//                                    ultimoTiempoRegistrado = Long.parseLong(ultimoTiempoMedido);
+                                    Log.i("TAG", ultimaMedicion.getMedicion() +"");
+                                    if (ultimaMedicion.getMedicion() > 1500 || ultimaMedicion.getMedicion() < 0){
+                                        content = "Los valores de las mediciones exceden los límites";
+                                        error=true;
+                                    }
+                                }else {
+                                    content="El nodo está enviando medidas erróneas";
+                                    error = true;
+                                }
+
+                                if(error){
+                                    Log.i("TAG" , "HAY ERROR");
+                                    NotificationCompat.Builder notifLimites= new NotificationCompat.Builder(ctx, "1")
+                                            .setContentTitle("Alerta")
+                                            .setContentText(content)
+                                            .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark)
+                                            .setContentIntent(pendingIntent);
+
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                                    {
+                                        String channelId = "1";
+                                        NotificationChannel channel = new NotificationChannel(
+                                                channelId,
+                                                "Channel human readable title",
+                                                NotificationManager.IMPORTANCE_HIGH);
+                                        notificationManager.createNotificationChannel(channel);
+                                        notifLimites.setChannelId(channelId);
+                                    }
+                                    notificationManager.notify(0, notifLimites.build());
+                                } else{
+                                    enviarMedicion(ultimaMedicion);
+                                    enviarPuntos();
                                 }
                             }
                             break;
