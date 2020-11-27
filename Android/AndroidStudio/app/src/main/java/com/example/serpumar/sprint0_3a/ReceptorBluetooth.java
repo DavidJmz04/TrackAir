@@ -405,9 +405,5 @@ public class ReceptorBluetooth {
             if (distanciaDesdeUltimaMed >= distancia) return true;
             return false;
         }
-
-
     }
-
-
 }
