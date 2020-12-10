@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a.ClasesPojo;
+package com.example.serpumar.sprint0_3a.Models;
 
 public class Recompensa {
 

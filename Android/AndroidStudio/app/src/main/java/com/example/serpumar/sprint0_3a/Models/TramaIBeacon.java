@@ -1,5 +1,5 @@
 
-package com.example.serpumar.sprint0_3a;
+package com.example.serpumar.sprint0_3a.Models;
 
 import java.math.BigInteger;
 import java.util.Arrays;

@@ -1,7 +1,6 @@
-package com.example.serpumar.sprint0_3a.Fragments;
+package com.example.serpumar.sprint0_3a.Activities.Main.Fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,9 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.serpumar.sprint0_3a.Adapters.FiltrosMapaAdapter;
-import com.example.serpumar.sprint0_3a.ClasesPojo.FiltrosMapaPojo;
-import com.example.serpumar.sprint0_3a.MainActivity;
+import com.example.serpumar.sprint0_3a.Activities.Main.Adapters.FiltrosMapaAdapter;
+import com.example.serpumar.sprint0_3a.Models.FiltrosMapa;
 import com.example.serpumar.sprint0_3a.R;
 
 import java.util.ArrayList;
@@ -42,7 +39,7 @@ public class MapaFragment_filtros extends Fragment {
         ExpandableListView expandablelistviewFilter;
 
         FragmentActivity mContext;
-        List<FiltrosMapaPojo> listDataHeader;
+        List<FiltrosMapa> listDataHeader;
         HashMap<String, List<String>> listDataChild;
 
         FiltrosMapaAdapter listAdapter;
@@ -87,12 +84,12 @@ public class MapaFragment_filtros extends Fragment {
         }
 
         private void prepareListData() {
-            listDataHeader = new ArrayList<FiltrosMapaPojo>();
+            listDataHeader = new ArrayList<FiltrosMapa>();
             listDataChild = new HashMap<>();
             // Adding child data
-            listDataHeader.add(new FiltrosMapaPojo("Gases", "Todos los gases"));
-            listDataHeader.add(new FiltrosMapaPojo("Datos", "Seleccionar que datos ver"));
-            listDataHeader.add(new FiltrosMapaPojo("Color", "Color de los datos"));
+            listDataHeader.add(new FiltrosMapa("Gases", "Todos los gases"));
+            listDataHeader.add(new FiltrosMapa("Datos", "Seleccionar que datos ver"));
+            listDataHeader.add(new FiltrosMapa("Color", "Color de los datos"));
 
 
 // Adding child data

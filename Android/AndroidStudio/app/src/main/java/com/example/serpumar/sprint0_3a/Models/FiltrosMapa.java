@@ -1,12 +1,12 @@
-package com.example.serpumar.sprint0_3a.ClasesPojo;
+package com.example.serpumar.sprint0_3a.Models;
 
 import java.io.Serializable;
 
-public class FiltrosMapaPojo implements Serializable {
+public class FiltrosMapa implements Serializable {
     private String titulo;
     private String filtroActivo;
 
-    public FiltrosMapaPojo(String titulo, String filtroActivo) {
+    public FiltrosMapa(String titulo, String filtroActivo) {
         this.titulo = titulo;
         this.filtroActivo = filtroActivo;
     }

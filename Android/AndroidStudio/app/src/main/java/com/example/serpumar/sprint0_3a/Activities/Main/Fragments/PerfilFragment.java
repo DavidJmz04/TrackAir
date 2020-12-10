@@ -1,4 +1,4 @@
-    package com.example.serpumar.sprint0_3a.Fragments;
+    package com.example.serpumar.sprint0_3a.Activities.Main.Fragments;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -18,15 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.serpumar.sprint0_3a.ClasesPojo.Medicion;
-import com.example.serpumar.sprint0_3a.ClasesPojo.Usuario;
-import com.example.serpumar.sprint0_3a.LoginActivity;
-import com.example.serpumar.sprint0_3a.LogicaFake;
-import com.example.serpumar.sprint0_3a.MainActivity;
-import com.example.serpumar.sprint0_3a.NetworkManager;
+import com.example.serpumar.sprint0_3a.Models.Usuario;
+import com.example.serpumar.sprint0_3a.Activities.Login.LoginActivity;
+import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
+import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
-import com.example.serpumar.sprint0_3a.LoginActivity;
-import com.example.serpumar.sprint0_3a.ReceptorBluetooth;
+import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +44,7 @@ import static java.lang.Integer.parseInt;
     Account[] accounts;
     String CLASS_NAME = "PerfilFragment";
     View v;
-    ReceptorBluetooth rb = new ReceptorBluetooth();
+    ReceptorBluetooth rb;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,11 +86,20 @@ import static java.lang.Integer.parseInt;
                 }
             });
 
+            rb = ((MainActivity)getActivity()).getReceptorBluetooth();
+
             encontrarDispositivo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mostrarToast();
-                    Log.d("TAGGGG", "onClick: ENCONTRAR DISPOSITIVO");
+                    //rb.setDistanciaEstimada(new Random(System.currentTimeMillis()).nextInt(3));
+                    int distancia = rb.getDistanciaEstimada();
+                    String content = "";
+                    if(distancia != -1) {
+                        content = (String.valueOf(rb.getDistanciaEstimada()) + " m.");
+                    } else {
+                        content = ("Antes debes tomar una medición");
+                    }
+                    ((MainActivity)getActivity()).mostrarToast("Distancia", content);
                 }
             });
 
@@ -108,7 +115,7 @@ import static java.lang.Integer.parseInt;
 
                         Usuario usuario = new Usuario(usuarioJSON.getInt("id"), usuarioJSON.getString("nombre"), usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"), usuarioJSON.getString("correo"), usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"), usuarioJSON.getString("telefono"), usuarioJSON.getString("id_nodo"));
                         email.setText(usuario.getCorreo());
-                        reputacion.setText(String.valueOf(usuario.getPuntuacion()));
+                        reputacion.setText("Puntos: " + String.valueOf(usuario.getPuntosCanjeables()));
                         nombreUsuario.setText("@"+usuario.getNombreUsuario());
                         nombre.setText(usuario.getNombreCompleto());
                         telefono.setText(String.valueOf(usuario.getTelefono()));
@@ -134,22 +141,4 @@ import static java.lang.Integer.parseInt;
         return v;
     }
 
-    private void mostrarToast() {
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.toast_personalizado, (ViewGroup)v.findViewById(R.id.toastpersonalizado));
-        TextView textView = layout.findViewById(R.id.txtDistanciaToast);
-        rb.setDistanciaEstimada(new Random(System.currentTimeMillis()).nextInt(3));
-        int distancia = rb.getDistanciaEstimada();
-        if(distancia != -1) {
-            textView.setText(String.valueOf(rb.getDistanciaEstimada()) + " m.");
-        } else {
-            textView.setText("Antes debes tomar una medición");
-        }
-
-        Toast toast = new Toast(getContext());
-        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setView(layout);
-        toast.show();
-    }
 }

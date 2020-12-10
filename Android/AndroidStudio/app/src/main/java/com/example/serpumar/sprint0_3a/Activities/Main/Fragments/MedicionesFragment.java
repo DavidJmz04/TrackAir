@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a.Fragments;
+package com.example.serpumar.sprint0_3a.Activities.Main.Fragments;
 
 import android.accounts.AccountManager;
 import android.os.Bundle;
@@ -12,15 +12,11 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.HttpResponse;
-import com.example.serpumar.sprint0_3a.NetworkManager;
+import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 import static java.lang.Integer.parseInt;
 
@@ -40,22 +36,26 @@ public class MedicionesFragment extends Fragment {
 
         final TextView tv = v.findViewById(R.id.calidadAire);
         NetworkManager networkManager = NetworkManager.getInstance(getContext());
-        int idUsuario = parseInt(AccountManager.get(getContext()).getUserData(AccountManager.get(getContext()).getAccountsByType("com.example.serpumar.sprint0_3a")[0], "id"));
-        Log.i("TAB", idUsuario + "");
-        tv.setText("No hay datos");
-        NetworkManager.getInstance().getRequest("/calidadAire/"+idUsuario, new NetworkManager.ControladorRespuestas<String>() {
-            @Override
-            public void getResult(String object) {
-                try {
-                    JSONArray jsonArray= new JSONArray(object);
-                    String calidadMedia= jsonArray.getJSONObject(0).getString("calidadMedia");
-                    tv.setText(calidadMedia);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        try {
+            int idUsuario = parseInt(AccountManager.get(getContext()).getUserData(AccountManager.get(getContext()).getAccountsByType("com.example.serpumar.sprint0_3a")[0], "id"));
+            Log.i("TAB", idUsuario + "");
+            tv.setText("No hay datos");
+            NetworkManager.getInstance().getRequest("/calidadAire/" + idUsuario, new NetworkManager.ControladorRespuestas<String>() {
+                @Override
+                public void getResult(String object) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(object);
+                        String calidadMedia = jsonArray.getJSONObject(0).getString("calidadMedia");
+                        tv.setText(calidadMedia);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-        });
+            });
+        }catch (Exception e){
+            tv.setText("No hay datos");
+        }
         wv.getSettings().setJavaScriptEnabled(true);
         wv.loadUrl("https://igmagi.upv.edu.es/datosMobile.html");
 

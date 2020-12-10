@@ -64,9 +64,10 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
+                    android:background="@drawable/button"
                     android:text="Canjear"
-                    android:visibility="gone"
-                    android:background="@drawable/button"/>
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/CopiarCodigo"

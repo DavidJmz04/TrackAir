@@ -1,10 +1,8 @@
-package com.example.serpumar.sprint0_3a;
+package com.example.serpumar.sprint0_3a.Helpers;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,16 +15,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.serpumar.sprint0_3a.ClasesPojo.Medicion;
-import com.example.serpumar.sprint0_3a.ClasesPojo.Ubicacion;
+import com.example.serpumar.sprint0_3a.Models.Medicion;
+import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
+import com.example.serpumar.sprint0_3a.Models.Ubicacion;
+import com.example.serpumar.sprint0_3a.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +34,8 @@ import java.util.Map;
 public class LogicaFake {
 
 
-    public int id= -1;
 
-    private static RequestQueue requestQueue;
-    private Context context;
-
-    private String url = "http://igmagi.upv.edu.es"; //Ip Zona Wifi telefono móvil -- SI SE CAMBIA AQUI, en el network_secutiry_config.xml tambien
-
-    public LogicaFake(Context context) {
-        //Iniciamos la cola
-        requestQueue = Volley.newRequestQueue(context);
-        this.context = context;
+    public LogicaFake() {
     }
 
     // ...............................................................................
@@ -52,28 +43,12 @@ public class LogicaFake {
     // <--
     // Lista {valor:Real, momento:Datetime, ubicacion:Texto, tipoMedicion:Texto}
     // ...............................................................................
-    public void obtenerMediciones() { //Obtener todas las mediciones de la base de datos (GET)
-
-        // Empezamos la cola
-        requestQueue.start();
-
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url + "/mediciones", null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Log.d("Response", response.toString());
-                //TODO Devolver esto
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("Error.Response", error.toString());
-            }
-        }
-
-        );
-        requestQueue.add(jsonArrayRequest);
+    public ArrayList<Medicion> obtenerMediciones() { //Obtener todas las mediciones de la base de datos (GET)
+        ArrayList<Medicion> mediciones = new ArrayList<>();
+        mediciones.add(new Medicion(1,new Ubicacion(1,1),new Date().toString(),"O3"));
+        return mediciones;
     }
+/* TODO: BORRAR
 
     // ...............................................................................
     //id:Z
@@ -441,5 +416,7 @@ public class LogicaFake {
         }
     }
 
+
+ */
 }
 

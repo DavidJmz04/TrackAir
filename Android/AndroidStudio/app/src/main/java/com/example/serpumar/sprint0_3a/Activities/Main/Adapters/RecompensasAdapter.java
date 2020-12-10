@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a.Adapters;
+package com.example.serpumar.sprint0_3a.Activities.Main.Adapters;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -15,11 +15,11 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.serpumar.sprint0_3a.ClasesPojo.Usuario;
-import com.example.serpumar.sprint0_3a.Mail;
-import com.example.serpumar.sprint0_3a.NetworkManager;
+import com.example.serpumar.sprint0_3a.Models.Usuario;
+import com.example.serpumar.sprint0_3a.Helpers.MailTask;
+import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
-import com.example.serpumar.sprint0_3a.ClasesPojo.Recompensa;
+import com.example.serpumar.sprint0_3a.Models.Recompensa;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +52,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
     @Override
     public void onBindViewHolder(final RecompensasViewHolder holder, final int position) {
 
-        holder.txtRecompensa.setText(listaRecompensas.get(position).getTitulo());
+        holder.txtRecompensa.setText(listaRecompensas.get(position).getTitulo() + " (" + listaRecompensas.get(position).getCoste() + " puntos)");
         holder.txtInfo.setText(listaRecompensas.get(position).getDescripcion());
         holder.imagen.setImageResource(listaRecompensas.get(position).getImageId());
 
@@ -111,7 +111,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
                     (codigoText.getCompoundDrawables())[0].setTint(context.getResources().getColor(android.R.color.black));
                     button.setEnabled(false);
 
-                    Mail sm = new Mail(context, correo, listaRecompensas.get(position).getTitulo(), "Su codigo de la recompensa canjeada es: " + codigo);
+                    MailTask sm = new MailTask(context, correo, listaRecompensas.get(position).getTitulo(), "Su codigo de la recompensa canjeada es: " + codigo);
                     sm.execute();
 
                 } catch (JSONException e) {

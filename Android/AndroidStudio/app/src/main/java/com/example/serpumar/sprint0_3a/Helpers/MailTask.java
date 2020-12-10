@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a;
+package com.example.serpumar.sprint0_3a.Helpers;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,10 +14,9 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class Mail extends AsyncTask<Void,Void,Void> {
+public class MailTask extends AsyncTask<Void,Void,Void> {
 
     //Variables
-    private Context mContext;
     private Session mSession;
 
     private String mEmail;
@@ -31,8 +30,7 @@ public class Mail extends AsyncTask<Void,Void,Void> {
 
 
     //Constructor
-    public Mail(Context mContext, String mEmail, String mSubject, String mMessage) {
-        this.mContext = mContext;
+    public MailTask(Context mContext, String mEmail, String mSubject, String mMessage) {
         this.mEmail = mEmail;
         this.mSubject = mSubject;
         this.mMessage = mMessage;
@@ -98,26 +96,6 @@ public class Mail extends AsyncTask<Void,Void,Void> {
             mm.setText(mMessage);
             //Sending email
             Transport.send(mm);
-
-//            BodyPart messageBodyPart = new MimeBodyPart();
-//
-//            messageBodyPart.setText(message);
-//
-//            Multipart multipart = new MimeMultipart();
-//
-//            multipart.addBodyPart(messageBodyPart);
-//
-//            messageBodyPart = new MimeBodyPart();
-//
-//            DataSource source = new FileDataSource(filePath);
-//
-//            messageBodyPart.setDataHandler(new DataHandler(source));
-//
-//            messageBodyPart.setFileName(filePath);
-//
-//            multipart.addBodyPart(messageBodyPart);
-
-//            mm.setContent(multipart);
 
         } catch (MessagingException e) {
             e.printStackTrace();

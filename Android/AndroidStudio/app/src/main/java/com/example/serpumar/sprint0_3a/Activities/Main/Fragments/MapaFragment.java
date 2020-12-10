@@ -1,37 +1,28 @@
-package com.example.serpumar.sprint0_3a.Fragments;
+package com.example.serpumar.sprint0_3a.Activities.Main.Fragments;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 
-import com.example.serpumar.sprint0_3a.GPS;
-import com.example.serpumar.sprint0_3a.LogicaFake;
+import com.example.serpumar.sprint0_3a.Helpers.GPSService;
+import com.example.serpumar.sprint0_3a.Helpers.LogicaFake;
 import com.example.serpumar.sprint0_3a.R;
-import com.example.serpumar.sprint0_3a.ReceptorBluetooth;
-import com.example.serpumar.sprint0_3a.Utilidades;
+import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class MapaFragment extends Fragment {
 
     private static String ETIQUETA_LOG = "MapaFragment";
-    private ReceptorBluetooth receptorBluetooth = new ReceptorBluetooth();
 
-    private GPS gps = new GPS();
+    private GPSService gpsService = new GPSService();
     public LogicaFake lf;
 
     private FragmentActivity myContext;

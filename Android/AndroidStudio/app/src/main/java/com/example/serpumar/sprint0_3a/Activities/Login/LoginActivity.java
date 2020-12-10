@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a;
+package com.example.serpumar.sprint0_3a.Activities.Login;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -12,6 +12,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
+import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
+import com.example.serpumar.sprint0_3a.R;
+import com.example.serpumar.sprint0_3a.Helpers.Utilities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,7 +72,7 @@ public class LoginActivity extends Activity {
 
     private void login() {
         nombreUser = nombre.getText().toString();
-        final String contrasenyaUser = Utilidades.sha256(contrasenya.getText().toString());
+        final String contrasenyaUser = Utilities.sha256(contrasenya.getText().toString());
         try {
             JSONObject userPOST = new JSONObject("{\"nombreUsuario\":"+nombreUser+",\"contrasenya\":"+contrasenyaUser+"}");
             NetworkManager networkManager = NetworkManager.getInstance(this);

@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a.Fragments;
+package com.example.serpumar.sprint0_3a.Activities.Main.Fragments;
 
 import android.os.Bundle;
 
@@ -11,23 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.example.serpumar.sprint0_3a.Adapters.RecompensasAdapter;
-import com.example.serpumar.sprint0_3a.ClasesPojo.Recompensa;
-import com.example.serpumar.sprint0_3a.ClasesPojo.Usuario;
-import com.example.serpumar.sprint0_3a.LogicaFake;
-import com.example.serpumar.sprint0_3a.NetworkManager;
+import com.example.serpumar.sprint0_3a.Activities.Main.Adapters.RecompensasAdapter;
+import com.example.serpumar.sprint0_3a.Models.Recompensa;
+import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
-import com.example.serpumar.sprint0_3a.Adapters.RecompensasAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RecompensasFragment extends Fragment implements RecompensasAdapter.OnRecompensaListener {
 

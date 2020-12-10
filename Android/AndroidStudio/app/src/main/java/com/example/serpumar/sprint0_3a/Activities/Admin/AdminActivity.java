@@ -1,7 +1,6 @@
-package com.example.serpumar.sprint0_3a;
+package com.example.serpumar.sprint0_3a.Activities.Admin;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
@@ -14,12 +13,13 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import org.json.JSONObject;
+import com.example.serpumar.sprint0_3a.Helpers.Utilities;
+import com.example.serpumar.sprint0_3a.Helpers.LogicaFake;
+import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
+import com.example.serpumar.sprint0_3a.R;
+import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class InfoActivity extends Activity {
+public class AdminActivity extends Activity {
 
     private static final String ETIQUETA_LOG = "InfoActivity";
     ReceptorBluetooth receptorBluetooth;
@@ -28,10 +28,6 @@ public class InfoActivity extends Activity {
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.fragment_map);
-        receptorBluetooth = new ReceptorBluetooth();
-        receptorBluetooth.setContext(this);
-
-        LogicaFake lf = new LogicaFake(this);
 
         Button obtenerLectura = (Button) findViewById(R.id.botonObtenerLectura);
         obtenerLectura.setOnClickListener(new View.OnClickListener() {
@@ -39,7 +35,7 @@ public class InfoActivity extends Activity {
             public void onClick(View v) {
                 Log.d(ETIQUETA_LOG, " boton obtenerMediciones" );
                 //receptorBluetooth.buscarEsteDispositivoBTLEYObtenerMedicion(Utilidades.stringToUUID( "GRUP3-GTI-PROY-3"));
-                receptorBluetooth.buscarEsteDispositivoBTLE(Utilidades.stringToUUID( "GRUP3-GTI-PROY-3"));
+                receptorBluetooth.buscarEsteDispositivoBTLE(Utilities.stringToUUID( "GRUP3-GTI-PROY-3"));
             }
         });
 

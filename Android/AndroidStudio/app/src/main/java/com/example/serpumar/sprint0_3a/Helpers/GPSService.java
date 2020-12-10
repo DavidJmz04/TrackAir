@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a;
+package com.example.serpumar.sprint0_3a.Helpers;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,36 +10,11 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.serpumar.sprint0_3a.ClasesPojo.Ubicacion;
+import com.example.serpumar.sprint0_3a.Models.Ubicacion;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class GPS {
-
-    /*public Ubicacion obtenerUbicacion(Context context) {
-
-        //requestPermission(context);
-
-        client = LocationServices.getFusedLocationProviderClient(context);
-
-        if(ActivityCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermission(context);
-            Log.d("Ubicacion", "ENTRA SI NO TIENES PERMISO");
-        }
-
-        client.getLastLocation().addOnSuccessListener((Activity) context, new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if(location != null) {
-                    lat = location.getLatitude();
-                    longi = location.getLongitude();
-                }
-            }
-        });
-
-        return new Ubicacion(lat, longi);
-    }*/
-
+public class GPSService {
 
     public Ubicacion obtenerUbicacion(Context context) {
         Ubicacion ub;

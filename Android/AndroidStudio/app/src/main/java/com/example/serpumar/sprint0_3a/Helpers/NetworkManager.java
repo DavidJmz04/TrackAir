@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a;
+package com.example.serpumar.sprint0_3a.Helpers;
 
 import android.content.Context;
 import android.util.Log;

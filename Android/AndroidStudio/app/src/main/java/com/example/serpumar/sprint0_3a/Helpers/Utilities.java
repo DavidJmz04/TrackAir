@@ -1,5 +1,5 @@
 
-package com.example.serpumar.sprint0_3a;
+package com.example.serpumar.sprint0_3a.Helpers;
 
 
 import java.math.BigInteger;
@@ -10,7 +10,7 @@ import java.util.UUID;
 // -----------------------------------------------------------------------------------
 // @author: Jordi Bataller i Mascarell
 // -----------------------------------------------------------------------------------
-public class Utilidades {
+public class Utilities {
 
     // -------------------------------------------------------------------------------
     // -------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ public class Utilidades {
 
         String masSignificativo = uuid.substring(0, 8);
         String menosSignificativo = uuid.substring(8, 16);
-        UUID res = new UUID( Utilidades.bytesToLong( masSignificativo.getBytes() ), Utilidades.bytesToLong( menosSignificativo.getBytes() ) );
+        UUID res = new UUID( Utilities.bytesToLong( masSignificativo.getBytes() ), Utilities.bytesToLong( menosSignificativo.getBytes() ) );
 
         // Log.d( MainActivity.ETIQUETA_LOG, " \n\n***** stringToUUID *** " + uuid  + "=?=" + Utilidades.uuidToString( res ) );
 

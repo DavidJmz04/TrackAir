@@ -1,4 +1,4 @@
-package com.example.serpumar.sprint0_3a.Adapters;
+package com.example.serpumar.sprint0_3a.Activities.Main.Adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,10 +12,9 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.serpumar.sprint0_3a.ClasesPojo.FiltrosMapaPojo;
+import com.example.serpumar.sprint0_3a.Models.FiltrosMapa;
 import com.example.serpumar.sprint0_3a.R;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ import java.util.Objects;
 public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
 
     private Activity _context;
-    private List<FiltrosMapaPojo> _listDataHeader;
+    private List<FiltrosMapa> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
     int selectedPosition = 0;
 
@@ -36,7 +35,7 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
 
     ArrayList<ArrayList<Integer>> check_states = new ArrayList<ArrayList<Integer>>();
 
-    public FiltrosMapaAdapter(FragmentActivity _context, List<FiltrosMapaPojo> _listDataHeader, HashMap<String, List<String>> _listDataChild) {
+    public FiltrosMapaAdapter(FragmentActivity _context, List<FiltrosMapa> _listDataHeader, HashMap<String, List<String>> _listDataChild) {
         this._context = _context;
         this._listDataHeader = _listDataHeader;
         this._listDataChild = _listDataChild;
@@ -54,7 +53,7 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public FiltrosMapaPojo getGroup(int groupPosition) {
+    public FiltrosMapa getGroup(int groupPosition) {
         return this._listDataHeader.get(groupPosition);
     }
 
@@ -104,7 +103,7 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final String childText = (String) getChild(groupPosition, childPosition);
-        final FiltrosMapaPojo headerText = (FiltrosMapaPojo) getGroup(groupPosition);
+        final FiltrosMapa headerText = (FiltrosMapa) getGroup(groupPosition);
         //if (convertView == null) {
         LayoutInflater infalInflater = (LayoutInflater) this._context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
