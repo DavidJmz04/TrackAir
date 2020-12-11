@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="396dp"
-        android:layout_height="413dp"
+        android:layout_height="350dp"
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
@@ -23,10 +23,10 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="108dp"
             android:layout_weight="1"
-            android:background="@drawable/googleg_standard_color_18"
+            android:background="@drawable/logo_letra"
             android:scaleType="fitCenter" />
 
         <com.google.android.material.textfield.TextInputLayout

@@ -101,11 +101,12 @@
 
             <Button
                 android:id="@+id/applyFiltersBtn"
-                android:background="@drawable/button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="Aplicar" />
+                android:background="@drawable/button"
+                android:text="Aplicar"
+                android:textColor="@color/white" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
