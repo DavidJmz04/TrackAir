@@ -1,47 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Activities.Main.MainActivity">
 
-    <Button
-        android:id="@+id/botonBuscarDispositivosBTLE"
-        android:text="Buscar Dispositivos BTLE"
-        android:onClick="botonBuscarDispositivosBTLEPulsado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <Button
-        android:id="@+id/botonDetenerBusquedaDispositivosBTLE"
-        android:text="Detener búsqueda Dispositivos BTLE"
-        android:onClick="botonDetenerBusquedaDispositivosBTLEPulsado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <Button
-        android:id="@+id/botonBuscarNuestroDispositivoBTLE"
-        android:text="Buscar nuestro dispositivo  BTLE"
-        android:onClick="botonBuscarNuestroDispositivoBTLEPulsado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <Button
-        android:id="@+id/botonObtenerUbicacion"
-        android:text="Obtener mediciones"
-        android:onClick="botonObtenerMedicionDeBDD"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-    <TextView
-        android:id="@+id/textView_valores"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="?attr/actionBarSize"/>
 
-</android.widget.LinearLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottomNav"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_navigation"/>
+
+
+
+</RelativeLayout>

@@ -58,7 +58,7 @@ public:
 
   // ............................................................
   // ............................................................
-  void publicarIrritante( int16_t valorIrritante, uint8_t contador,
+  void publicarIrritanteConvertido( int16_t valorIrritante, uint8_t contador,
 					long tiempoEspera ) {
 
 	//

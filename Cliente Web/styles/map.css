@@ -7,7 +7,23 @@
 html,
 body {
   font-size: 20px;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Montserrat", sans-serif;
+  color: #707070;
+}
+body h1,
+h2,
+h3,
+h4 {
+  font-family: "Comfortaa", sans-serif;
+  font-weight: bold;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+  color: inherit;
 }
 
 .mapa {
@@ -16,9 +32,6 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   z-index: 1;
-}
-
-.top-opciones > div {
 }
 
 .top-opciones {
@@ -44,8 +57,7 @@ body {
 }
 
 .buscar input {
-  margin-left: 15%;
-  width: 70%;
+  width: 100%;
   display: block;
   padding: 10px 20px;
   appearance: none;
@@ -62,36 +74,37 @@ body {
 .buscar input:focus {
   background-color: rgba(255, 255, 255, 0.95);
 }
+
 .perfil {
   width: 20%;
-  text-align: center;
+  text-align: end;
   font-size: 30px;
   color: #444;
 }
 /*
-.bg-icono {
-  height: 75px;
-  width: 75px;
-  border-radius: 50%;
-  background-color: red;
-  text-align: center;
-}
-*/
+  .bg-icono {
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    background-color: red;
+    text-align: center;
+  }
+  */
 .perfil i:hover {
   cursor: pointer;
 }
 
 /* 
---------------------------------------------------
-------          MODAL                      -------
----------------------------------------------------
-*/
+  --------------------------------------------------
+  ------          MODAL                      -------
+  ---------------------------------------------------
+  */
 
 .modal {
   display: none;
   min-height: 100vh;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.35);
   z-index: 45;
   position: absolute;
   top: 0;
@@ -100,18 +113,16 @@ body {
 
 .tarjeta-login {
   background-color: white;
-  color: #444;
-  border-radius: 5px;
+  border-radius: 10px;
   width: 70%;
   border: none;
-  padding: 20px;
+  padding: 30px 30px 20px 30px;
   margin: auto;
-  margin-top: 30vh;
-  box-shadow: 2px 3px rgba(0, 0, 0, 0.2);
+  margin-top: 20vh;
+  box-shadow: 2px 3px rgba(0, 0, 0, 0.1);
   font-size: 0.8em;
 }
-.tarjeta-login * {
-}
+
 .tarjeta-login form {
   display: flex;
   flex-direction: column;
@@ -119,58 +130,127 @@ body {
 
 .tarjeta-login label {
   margin-top: 5px;
-  font-size: 0.3rem;
+  font-size: 0.5rem;
+  font-weight: bold;
 }
 
 .tarjeta-login h3 {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
 
 .tarjeta-login input {
-  padding: 10px 20px;
+  padding: 9px 0px 2px 0px;
+  appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  color: #606060;
+  font-family: "Montserrat" sans-serif;
+  box-shadow: 0px 1px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+}
+
+.tarjeta-login input:focus {
   appearance: none;
   background: none;
   border: none;
   outline: none;
 
-  box-shadow: 0px 2px rgba(0, 0, 0, 0.2);
-
-  margin-bottom: 15px;
+  box-shadow: 0px 1px rgba(0, 0, 0, 0.4);
+  margin-bottom: 10px;
 }
-
+#inputUsuario {
+  margin-bottom: 20px;
+}
 .tarjeta-login button {
-  margin-top: 20px;
-  padding: 10px 20px;
+  font-family: "Comfortaa", sans-serif;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding: 8px 20px;
+  color: white;
+  font-weight: bold;
+  border-radius: 45px;
   border: none;
   outline: none;
-
+  /*background-image: linear-gradient(to right, red, yellow);*/
+  background-color: #00f0cc;
+  background-image: linear-gradient(#00f0cc, #07c5a9);
   box-shadow: 0px 1px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
 .olvide-contrasenya {
   text-align: end;
   font-size: 0.8em;
+  font-weight: bold;
 }
 .olvide-contrasenya a {
   text-decoration: none;
-  color: blue;
+  font-size: 12px;
+  color: #707070;
 }
 .olvide-contrasenya a :visited {
   text-decoration: none;
-  color: blue;
+  color: #707070;
+}
+
+.msg-error {
+  display: none;
+  color: #dd2121;
+  text-align: center;
+  font-size: 0.8em;
+
+  font-weight: bold;
 }
 
 .frase-registro {
-  margin-top: 5px;
+  margin-top: 20px;
   text-align: center;
   font-size: 0.8em;
 }
 .frase-registro a {
   text-decoration: none;
-  color: blue;
+  color: #707070;
+  font-weight: bold;
 }
 .frase-registro a :visited {
   text-decoration: none;
-  color: blue;
+  color: #707070;
+}
+
+.cerrar-modal-container {
+  width: 100%;
+  text-align: end;
+  font-size: 0.7em;
+}
+
+/* ------------------------------------------
+                Media queries
+   ------------------------------------------ */
+
+@media only screen and (min-width: 1000px) {
+  .tarjeta-login {
+    background-color: white;
+    border-radius: 10px;
+    width: 30%;
+    border: none;
+    padding: 30px 50px 40px 50px;
+    margin: auto;
+    margin-top: 20vh;
+    box-shadow: 2px 3px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
+  }
+
+  .tarjeta-login label {
+    margin-top: 5px;
+    font-size: 0.7rem;
+    font-weight: bold;
+  }
+  .tarjeta-login input {
+    font-size: 18px;
+  }
+  .tarjeta-login button {
+    font-size: 1em;
+  }
 }

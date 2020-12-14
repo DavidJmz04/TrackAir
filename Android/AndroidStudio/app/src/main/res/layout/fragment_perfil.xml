@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.Main.Fragments.PerfilFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Perfil"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/boton_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/button"
+            android:padding="12dp"
+            android:text="Cerrar sesión"
+            android:textAlignment="center"
+            android:textColor="#eee"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_dispositivo" />
+
+        <TextView
+            android:id="@+id/nombre_perfil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="52dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Usuario Usuario"
+            android:textAlignment="textStart"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/usuario_perfil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginEnd="52dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="@usuario"
+            android:textAlignment="viewStart"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nombre_perfil" />
+
+        <TextView
+            android:id="@+id/puntuacion_perfil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginEnd="52dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Reputación: 123456"
+            android:textAlignment="viewStart"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/usuario_perfil" />
+
+        <TextView
+            android:id="@+id/cuenta_label_perfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:text="Cuenta"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/item_mail"
+            app:layout_constraintTop_toBottomOf="@+id/puntuacion_perfil" />
+
+        <LinearLayout
+            android:id="@+id/item_mail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginEnd="52dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cuenta_label_perfil">
+
+            <TextView
+                android:id="@+id/correo_perfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="usuario@usuario.com"
+                android:textAlignment="viewStart"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/correo_subtexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="Toca aquí para cambiar tu dirección de correo"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/tertiary_text_light"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_telefono"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="52dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_mail">
+
+            <TextView
+                android:id="@+id/telefono_perfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="637821721"
+                android:textAlignment="viewStart"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/telefono_subtexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="Toca aquí para cambiar tu número de teléfono"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/tertiary_text_light"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/item_dispositivo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="52dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_telefono">
+
+            <TextView
+                android:id="@+id/dispositivo_perfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="Encontrar dispositivo"
+                android:textAlignment="viewStart"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/dispositivo_subtexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="Toca aquí para obtener una distancia a tu sensor"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/tertiary_text_light"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/IniciarSesion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+
+        <Button
+            android:id="@+id/boton_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/button"
+            android:padding="12dp"
+            android:text="Iniciar sesión"
+            android:textAlignment="center"
+            android:textColor="#eee"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/noCuenta"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="No hay ninguna cuenta!"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/boton_login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/noCuentaSpam"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Si esta interesado en ser Tracker, echa un vistazo a nuestros sensores..."
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noCuenta" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

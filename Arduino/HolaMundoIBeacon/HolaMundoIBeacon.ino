@@ -39,6 +39,12 @@ namespace Globales {
 #include "Publicador.h"
 #include "Medidor.h"
 
+// ..............................................................
+// ..............................................................
+int intervalo = 1000; //10000;
+float NO2MASS = 46.0055;
+float SO2MASS = 64.066;
+float O3MASS = 48;
 
 // --------------------------------------------------------------
 // --------------------------------------------------------------
@@ -52,18 +58,14 @@ namespace Globales {
 
 // --------------------------------------------------------------
 // --------------------------------------------------------------
-void inicializarPlaquita () {
-
-  // de momento nada
-
-} // ()
+void inicializarPlaquita () { } // ()
 
 // --------------------------------------------------------------
 // setup()
 // --------------------------------------------------------------
 void setup() {
 
-  Globales::elPuerto.esperarDisponible();
+  //Globales::elPuerto.esperarDisponible();
 
   // 
   // 
@@ -88,7 +90,12 @@ void setup() {
   // 
   // 
   // 
-  esperar( 1000 );
+  
+  Globales::elPuerto.escribir( "---- Calibrando medidor ---- \n " );
+  Globales::elMedidor.medirIrritante();
+  esperar( 10000 );
+  Globales::elMedidor.configurarMedidor('Z'); // Calibramos a 0 el sensor despues de unas tomas.
+  
 
   Globales::elPuerto.escribir( "---- setup(): fin ---- \n " );
 
@@ -101,6 +108,7 @@ void setup() {
 namespace Loop {
   uint8_t cont = 0;
 };
+
 
 // ..............................................................
 // ..............................................................
@@ -123,33 +131,31 @@ void loop () {
   // 
   int valorIrritante = elMedidor.medirIrritante();
 
-  elPuerto.escribir( "valorIrritante: " );
+  elPuerto.escribir( "Valor irritante (PPB): " );
   elPuerto.escribir( valorIrritante );
   elPuerto.escribir( "\n" );
-  elPuerto.escribir( cont );
+
+  int temperatura = elMedidor.medirTemperatura();
+
+  elPuerto.escribir( "Temperatura: " );
+  elPuerto.escribir( temperatura );
   elPuerto.escribir( "\n" );
 
+  //µg/m3 = (ppb)*(12.187)*(M) / (273.15 + °C)
+  float ugm3 = ((valorIrritante<0?0:valorIrritante))*(12.187)*(NO2MASS) / (273.15 + temperatura);
   
-  elPublicador.publicarIrritante( valorIrritante,
-							cont,
-							10000 // intervalo de emisión
-							);
-  
+  elPuerto.escribir( "Conversión ug/m3: " );
+  elPuerto.escribir( ugm3 );
+  elPuerto.escribir( "\n" );
+
   // 
   // mido y publico
   // 
-  /*
-  int valorTemperatura = elMedidor.medirTemperatura();
+  elPublicador.publicarIrritanteConvertido( ugm3,
+							cont,
+							intervalo // intervalo de emisión
+							);
 
-  elPuerto.escribir( "valorTemperatura: " );
-  elPuerto.escribir( valorTemperatura );
-  elPuerto.escribir( "\n" );
-  
-  elPublicador.publicarTemperatura( valorTemperatura, 
-									cont,
-									1000 // intervalo de emisión
-									);
-  */
   // 
   // prueba para emitir un iBeacon y poner
   // en la carga (21 bytes = uuid 16 major 2 minor 2 txPower 1 )
@@ -157,19 +163,8 @@ void loop () {
   // 
   // Al terminar la prueba hay que hacer Publicador::laEmisora privado
   // 
-  char datos[21] = {
-	'H', 'o', 'l', 'a',
-	'H', 'o', 'l', 'a',
-	'H', 'o', 'l', 'a',
-	'H', 'o', 'l', 'a',
-	'H', 'o', 'l', 'a',
-	'H'
-  };
 
-  // elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( &datos[0], 21 );
-  //elPublicador.laEmisora.emitirAnuncioIBeaconLibre ( "MolaMolaMolaMolaMolaM", 21 );
-
-  esperar( 2000 );
+  esperar( 1000 );
 
   elPublicador.laEmisora.detenerAnuncio();
   

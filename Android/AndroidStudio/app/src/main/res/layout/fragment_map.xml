@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.Main.Fragments.MapaFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lectura"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/botonObtenerLectura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Obtener lectura" />
+
+                <Button
+                    android:id="@+id/botonSubirLectura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Subir lectura" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/cajaSensor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:inputType="textPersonName" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mediciones"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/botonObtenerMediciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Obtener mediciones app" />
+
+            <Button
+                android:id="@+id/botonObtenerMedicionesOficialesLOCAL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Obtener mediciones oficiales" />
+
+            <Button
+                android:id="@+id/botonObtenerMedicionesOficialesAPI"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Obtener mediciones oficiales en tiempo real" />
+
+            <EditText
+                android:id="@+id/cajaMediciones"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:gravity="start|top"
+                android:inputType="textMultiLine" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Avisador"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/parametroAvisador"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Parametro (ms)"
+                    android:inputType="number"
+                    android:text="5000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/botonActivarAvisador"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="Activar Avisador" />
+
+                <Button
+                    android:id="@+id/botonDetenerAvisador"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="Detener Activador" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/botonPausarAvisador"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="Pausar Activador" />
+
+                <Button
+                    android:id="@+id/botonContinuarAvisador"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="Continuar Activador" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView_Activador"
+                android:layout_width="200dp"
+                android:layout_height="46dp"
+                android:background="@drawable/border"
+                android:gravity="center"
+                android:text="Activador detenido" />
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Activador" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

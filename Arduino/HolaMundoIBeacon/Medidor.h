@@ -21,7 +21,20 @@ class Medidor {
     
     void leer11Datos(void)
     {
-      int i = 0;
+      String dataString;
+      while (Serial1.available()) Serial1.read();
+      Serial1.write('\r');
+      while (!Serial1.available()) {
+      }
+      dataString = Serial1.readStringUntil('\n');
+      for (int i = 0; i < 11; i++) {
+        String subS = dataString.substring(0, dataString.indexOf(','));
+        if (subS.length() != 0){
+        sensorData[i] = subS.toInt();
+        dataString = dataString.substring(dataString.indexOf(',') + 2);
+        }
+      }
+      /*
       for (int i = 0; i < 11; i++) {
         //while (!Serial1.available()) { }
         while ( !Serial1 ) delay(10);
@@ -30,6 +43,7 @@ class Medidor {
         //RH [0 :99], RawSensor[ADCCount], TempDigital, RHDigital,
         //Day [0 : 99], Hour [0 : 23], Minute [0 : 59], Second [0 : 59]
       }
+      */
     }
 
 
@@ -49,6 +63,12 @@ class Medidor {
       Serial1.begin(baudios);
     } // ()
 
+    //......................................................
+    //......................................................
+    void configurarMedidor(char parameter){
+      Serial1.write(parameter);
+    } // ()
+
     // .....................................................
     // .....................................................
     int medirIrritante() {
@@ -62,8 +82,10 @@ class Medidor {
     int medirTemperatura() {
       Serial1.print('\r'); // Inicia una lectura del sensor. Ahora hay que espera a que nos envíe algo de vuelta!
       leer11Datos();
-      return sensorData[5];
+      return sensorData[2]; //Sensor DATA 5 - RAW VALUE
     } // ()
+
+    
 
 }; // class
 
