@@ -3,7 +3,9 @@ package com.example.serpumar.sprint0_3a.Activities.Main.Adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.serpumar.sprint0_3a.Models.FiltrosMapa;
 import com.example.serpumar.sprint0_3a.R;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +38,7 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
     ArrayList<String> listOfStatusFilters = new ArrayList<>();
 
     ArrayList<ArrayList<Integer>> check_states = new ArrayList<ArrayList<Integer>>();
+
 
     public FiltrosMapaAdapter(FragmentActivity _context, List<FiltrosMapa> _listDataHeader, HashMap<String, List<String>> _listDataChild) {
         this._context = _context;
@@ -95,7 +100,6 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
 
         groupStatus.setText(_listDataHeader.get(groupPosition).getActiveFilter());
 
-
         return convertView;
     }
 
@@ -122,8 +126,6 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
             filterCheckBox.setVisibility(View.VISIBLE);
             filterRadioButton.setVisibility(View.GONE);
         }
-
-
 
 
         View view = parent.getChildAt(groupPosition);
@@ -203,6 +205,15 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
         }
         return status;
     }
+
+    public HashMap getRadioButtonChecked() {
+        return childCheckedState;
+    }
+
+    public HashMap getCheckboxChecked() {
+        return childCheckboxState;
+    }
+
 
 
 }

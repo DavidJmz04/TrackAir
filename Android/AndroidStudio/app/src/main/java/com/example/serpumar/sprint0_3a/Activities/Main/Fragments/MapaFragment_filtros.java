@@ -1,8 +1,10 @@
 package com.example.serpumar.sprint0_3a.Activities.Main.Fragments;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.example.serpumar.sprint0_3a.Models.FiltrosMapa;
 import com.example.serpumar.sprint0_3a.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,6 +48,7 @@ public class MapaFragment_filtros extends Fragment {
         FiltrosMapaAdapter listAdapter;
 
         private OnFragmentInteractionListener mListener;
+
 
     public MapaFragment_filtros() { }
 
@@ -94,15 +98,14 @@ public class MapaFragment_filtros extends Fragment {
 
 // Adding child data
             List<String> gases = new ArrayList<>();
-            gases.add("O3");
+            gases.add("Irritante");
             gases.add("SO2");
             gases.add("CO");
 
-
-            List<String> datos = new ArrayList<>();
+            /*List<String> datos = new ArrayList<>();
             datos.add("Mis datos");
             datos.add("Demás usuarios");
-            datos.add("Mis datos y demás usuarios");
+            datos.add("Mis datos y demás usuarios");*/
 
             List<String> colorDeMisDatos = new ArrayList<>();
             colorDeMisDatos.add("Azul");
@@ -112,8 +115,8 @@ public class MapaFragment_filtros extends Fragment {
 
 
             listDataChild.put(listDataHeader.get(0).getTitle(), gases); // Header, Child data
-            listDataChild.put(listDataHeader.get(1).getTitle(), datos);
-            listDataChild.put(listDataHeader.get(2).getTitle(), colorDeMisDatos);
+            //listDataChild.put(listDataHeader.get(1).getTitle(), datos);
+            listDataChild.put(listDataHeader.get(1).getTitle(), colorDeMisDatos);
 
             listAdapter = new FiltrosMapaAdapter(mContext, listDataHeader, listDataChild);
             expandablelistviewFilter.setAdapter(listAdapter);
@@ -129,12 +132,11 @@ public class MapaFragment_filtros extends Fragment {
                 @Override
                 public void onClick(View v) {
                     volverAlMapa();
+                    aplicarFiltros();
                 }
             });
 
-
         }
-
 
         @Override
             public void onAttach(Activity activity) {
@@ -148,7 +150,6 @@ public class MapaFragment_filtros extends Fragment {
             mListener = null;
         }
 
-
         public interface OnFragmentInteractionListener {
             // : Update argument type and name
             void onFragmentInteraction(Uri uri);
@@ -158,6 +159,21 @@ public class MapaFragment_filtros extends Fragment {
             androidx.fragment.app.FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentManager.popBackStackImmediate();
+        }
+
+        private void aplicarFiltros() {
+            Log.d("++++","Tipo de gas: " + listAdapter.getCheckboxChecked() );
+            Log.d("++++","c: " + listAdapter.getRadioButtonChecked().get(0) );
+            if(listAdapter.getCheckboxChecked().size() > 0) {
+                for(int i=0;i<listAdapter.getCheckboxChecked().size();i++) {
+
+                }
+            }
+
+            if(listAdapter.getRadioButtonChecked().get(0) != null) {
+
+                //editor.putInt("Color", listAdapter.getRadioButtonChecked().get(0))
+            }
         }
 
 }
