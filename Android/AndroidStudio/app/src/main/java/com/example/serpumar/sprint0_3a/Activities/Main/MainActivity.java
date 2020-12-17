@@ -5,6 +5,7 @@ package com.example.serpumar.sprint0_3a.Activities.Main;
 
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,12 +29,18 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.serpumar.sprint0_3a.Activities.Main.Fragments.MapaFragment;
+import com.example.serpumar.sprint0_3a.Activities.Main.Fragments.MedicionesFragment;
 import com.example.serpumar.sprint0_3a.Activities.Main.Fragments.PerfilFragment;
 import com.example.serpumar.sprint0_3a.Activities.Main.Fragments.RecompensasFragment;
 import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
+import com.example.serpumar.sprint0_3a.Models.Usuario;
 import com.example.serpumar.sprint0_3a.R;
 import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Random;
 
@@ -46,7 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     ReceptorBluetooth receptorBluetooth;
     AccountManager accountManager;
-    boolean isLogged;
+    private boolean isLogged = false;
+    private Usuario usuario;
+
+
+
 
     // --------------------------------------------------------------
     // --------------------------------------------------------------
@@ -64,12 +76,18 @@ public class MainActivity extends AppCompatActivity {
         notificationIntent.setAction(Intent.ACTION_MAIN);
         receptorBluetooth = new ReceptorBluetooth(this, notificationIntent);
 
+
+
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new MapaFragment()).commit();
 
         //Setting up application stuff
         NetworkManager.getInstance(this);
         accountManager = AccountManager.get(this);
         isLogged = (accountManager.getAccountsByType("com.example.serpumar.sprint0_3a").length > 0);
+
+        if (isLogged) configurarUsuario();
+
+
     } // onCreate()
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -82,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new MapaFragment();
                     break;
 
+                /*case R.id.nav_mediciones:
+                    fragment = new MedicionesFragment();
+                    break;*/
+
                 case R.id.nav_recompensas:
                     fragment = new RecompensasFragment();
                     break;
@@ -89,12 +111,16 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_perfil:
                     fragment = new PerfilFragment();
                     break;
+
+
             }
             getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
 
             return true;
         }
     };
+
+
 
     @Override
     protected void onResume() {
@@ -144,6 +170,27 @@ public class MainActivity extends AppCompatActivity {
     */}
 
 
+    void configurarUsuario(){
+
+
+        int idUsuario = parseInt(accountManager.getUserData(accountManager.getAccountsByType("com.example.serpumar.sprint0_3a")[0], "id"));
+        NetworkManager.getInstance().getRequest("/usuario/" + idUsuario, new NetworkManager.ControladorRespuestas<String>() {
+            @Override
+            public void getResult(String object) {
+
+                try {
+
+                    JSONArray jsonArray = new JSONArray(object);
+                    JSONObject usuarioJSON = jsonArray.getJSONObject(0);
+                    usuario = new Usuario(usuarioJSON.getInt("id"), usuarioJSON.getString("nombre"), usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"), usuarioJSON.getString("correo"), usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"), usuarioJSON.getString("telefono"), usuarioJSON.getString("id_nodo"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
     public void mostrarToast(String title, String content) {
         LayoutInflater inflater = getLayoutInflater();
@@ -161,6 +208,22 @@ public class MainActivity extends AppCompatActivity {
 
     public ReceptorBluetooth getReceptorBluetooth() {
         return receptorBluetooth;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public boolean isLogged() {
+        return isLogged;
+    }
+
+    public void setLogged(boolean logged) {
+        isLogged = logged;
     }
 } // class
 // --------------------------------------------------------------
