@@ -32,6 +32,7 @@ import com.example.serpumar.sprint0_3a.Activities.Main.Fragments.RecompensasFrag
 import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
 import com.example.serpumar.sprint0_3a.R;
 import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Random;
@@ -162,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
     public ReceptorBluetooth getReceptorBluetooth() {
         return receptorBluetooth;
     }
+
+
 } // class
 // --------------------------------------------------------------
 // --------------------------------------------------------------

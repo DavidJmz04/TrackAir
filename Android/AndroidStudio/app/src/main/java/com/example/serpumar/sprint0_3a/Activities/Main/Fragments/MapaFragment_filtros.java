@@ -42,6 +42,7 @@ public class MapaFragment_filtros extends Fragment {
         ExpandableListView expandablelistviewFilter;
 
         FragmentActivity mContext;
+        MapaFragment mapFr = new MapaFragment();
         List<FiltrosMapa> listDataHeader;
         HashMap<String, List<String>> listDataChild;
 
@@ -50,16 +51,11 @@ public class MapaFragment_filtros extends Fragment {
         private OnFragmentInteractionListener mListener;
 
 
-    public MapaFragment_filtros() { }
+    public MapaFragment_filtros(Fragment targetFragment) {
+        this.setTargetFragment(targetFragment,0);
+    }
 
 
-        public static MapaFragment_filtros newInstance() {
-            MapaFragment_filtros fragment = new MapaFragment_filtros();
-            Bundle args = new Bundle();
-
-            fragment.setArguments(args);
-            return fragment;
-        }
 
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -92,31 +88,33 @@ public class MapaFragment_filtros extends Fragment {
             listDataChild = new HashMap<>();
             // Adding child data
             listDataHeader.add(new FiltrosMapa("Gases", "Todos los gases"));
-            listDataHeader.add(new FiltrosMapa("Datos", "Seleccionar que datos ver"));
-            listDataHeader.add(new FiltrosMapa("Color", "Color de los datos"));
+            //listDataHeader.add(new FiltrosMapa("Datos", "Seleccionar que datos ver"));
+            //listDataHeader.add(new FiltrosMapa("Color", "Color de los datos"));
 
 
 // Adding child data
             List<String> gases = new ArrayList<>();
-            gases.add("Irritante");
-            gases.add("SO2");
-            gases.add("CO");
+            gases.add("Gas irritante"); //GI
+            gases.add("CO2"); //CO2
+            gases.add("NO2"); //NO2
+            gases.add("O3"); //03
+            gases.add("SO2"); //SO2
 
             /*List<String> datos = new ArrayList<>();
             datos.add("Mis datos");
             datos.add("Demás usuarios");
             datos.add("Mis datos y demás usuarios");*/
 
-            List<String> colorDeMisDatos = new ArrayList<>();
+            /*List<String> colorDeMisDatos = new ArrayList<>();
             colorDeMisDatos.add("Azul");
             colorDeMisDatos.add("Rojo");
             colorDeMisDatos.add("Verde");
-            colorDeMisDatos.add("Amarillo");
+            colorDeMisDatos.add("Amarillo");*/
 
 
             listDataChild.put(listDataHeader.get(0).getTitle(), gases); // Header, Child data
             //listDataChild.put(listDataHeader.get(1).getTitle(), datos);
-            listDataChild.put(listDataHeader.get(1).getTitle(), colorDeMisDatos);
+            //listDataChild.put(listDataHeader.get(1).getTitle(), colorDeMisDatos);
 
             listAdapter = new FiltrosMapaAdapter(mContext, listDataHeader, listDataChild);
             expandablelistviewFilter.setAdapter(listAdapter);
@@ -132,7 +130,6 @@ public class MapaFragment_filtros extends Fragment {
                 @Override
                 public void onClick(View v) {
                     volverAlMapa();
-                    aplicarFiltros();
                 }
             });
 
@@ -156,24 +153,11 @@ public class MapaFragment_filtros extends Fragment {
         }
 
         private void volverAlMapa() {
+            ((MapaFragment)getTargetFragment()).reloadFragment();
             androidx.fragment.app.FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             fragmentManager.popBackStackImmediate();
         }
 
-        private void aplicarFiltros() {
-            Log.d("++++","Tipo de gas: " + listAdapter.getCheckboxChecked() );
-            Log.d("++++","c: " + listAdapter.getRadioButtonChecked().get(0) );
-            if(listAdapter.getCheckboxChecked().size() > 0) {
-                for(int i=0;i<listAdapter.getCheckboxChecked().size();i++) {
-
-                }
-            }
-
-            if(listAdapter.getRadioButtonChecked().get(0) != null) {
-
-                //editor.putInt("Color", listAdapter.getRadioButtonChecked().get(0))
-            }
-        }
 
 }
