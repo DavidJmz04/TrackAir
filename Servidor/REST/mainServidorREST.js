@@ -45,15 +45,16 @@ async function main() {
     });
 
     //Llama al Matlab cada hora que crea un JSON en el servidor
-    setInterval(function () {
+    setInterval(async function () {
         
         //Obtenemos las mediciones de las ultimas dos horas
-        laLogica.parsearMediciones()
+    await laLogica.parsearMediciones()
         
         //Llamamos a la función del matlab
         
         
-    }, 1000/*3600000*/)
+//    }, 1000*60*60*2)
+    }, 1000*90)
 
     // capturo control-c para cerrar el servicio ordenadamente
     process.on("SIGINT", function () {

@@ -238,7 +238,7 @@ module.exports = class Logica {
 
         return new Promise((resolver, rechazar) => {
 
-            fs.readFile('../Datos/medicionesActualizadas.json', 'utf8', function (err, data) {
+            fs.readFile('../Datos/medicionesInterpoladas.json', 'utf8', function (err, data) {
 
                 if (err) rechazar(err)
 
@@ -481,17 +481,25 @@ module.exports = class Logica {
     // parsearMediciones()
     // ................................................................................................................................................
     async parsearMediciones() {
-
-        var string = ""
+        let tipoSensor=["GI", "CO2", "NO2", "O3", "SO2"];
+        tipoSensor.forEach(async(val)=>{
+            await utilidades.crearArchivo(val, utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion(val)))
+        })
+        /*var string = ""
         string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("GI"));
         string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("CO2"));
         string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("NO2"));
         string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("O3"));
-        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("SO2"));
+        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("SO2"));*/
 
-        var fs = require('fs');
-        fs.writeFile('helloworld.txt', string, function (err) {
-            if (err) return console.log(err);
+        const { exec } = require('child_process');
+        exec('runMatlab.bat',{cwd:'../MatLab/'}, (err, stdout, stderr) => {
+        if (err) {
+            console.error(err);
+            return;
+            
+        }
+        console.log(stdout);
         });
     }
 

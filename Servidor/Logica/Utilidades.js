@@ -169,4 +169,12 @@ module.exports = class Utilidades {
         return string
     }
 
+    async crearArchivo(nombre, contenido){
+        let fs = require('fs')
+        return new Promise((resolver, rechazar)=>{
+            fs.writeFile('../Datos/'+nombre+'medicionesBD.txt', contenido, function (err) {
+                if (err) rechazar(err); else resolver
+            });
+        })
+    }
 }
