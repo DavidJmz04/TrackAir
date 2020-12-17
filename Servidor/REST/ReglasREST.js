@@ -13,8 +13,9 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     // GET /prueba
     // .......................................................
-    servidorExpress.get("/prueba/", function (peticion, respuesta) {
+    servidorExpress.get("/prueba/", async function (peticion, respuesta) {
         console.log(" * GET /prueba ");
+        laLogica.obtenerLecturas("GI")
         respuesta.send("¡Funciona!");
     }); // get /prueba
 

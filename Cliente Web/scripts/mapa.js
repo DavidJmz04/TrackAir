@@ -1,7 +1,9 @@
-var map;
+var mapa;
+var gradiente;
+var datosGradiente= [];
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('mapa'), {
+    mapa = new google.maps.Map(document.getElementById('mapa'), {
         center: {
             lat: 39.0,
             lng: -0.2
@@ -9,25 +11,38 @@ function initMap() {
         zoom: 13,
     });
 
-    var heatMapData = [
+    ponerGradiente("GI")
+    gradiente = new google.maps.visualization.HeatmapLayer({
+        data: datosGradiente,
+    });
+    gradiente.setMap(mapa);
+}
+
+async function ponerGradiente(tipoMedicion) {
+
+    vaciarGradiente();
+    
+    /*var mediciones = await laLogica.obtenerLecturas(tipoMedicion)
+    
+    for (var i = 0; i < mediciones; i++) datosGradiente.push({location: new google.maps.LatLng(mediciones[i].lat, mediciones[i].lon), weight: mediciones[i].value})*/
+
+    var datosGradiente = [
         {
-            location: new google.maps.LatLng(37.782, -122.447),
-            weight: 0.5
-        },
-  new google.maps.LatLng(37.782, -122.445),
-        {
-            location: new google.maps.LatLng(37.782, -122.443),
+            location: new google.maps.LatLng(39.0, -0.2),
             weight: 2
         },
         {
-            location: new google.maps.LatLng(37.782, -122.441),
+            location: new google.maps.LatLng(39.082, -0.2043),
+            weight: 2
+        },
+        {
+            location: new google.maps.LatLng(39.082, -0.2041),
             weight: 3
         },
         {
             location: new google.maps.LatLng(37.782, -122.439),
             weight: 2
         },
-  new google.maps.LatLng(37.782, -122.437),
         {
             location: new google.maps.LatLng(37.782, -122.435),
             weight: 0.5
@@ -41,12 +56,10 @@ function initMap() {
             location: new google.maps.LatLng(37.785, -122.445),
             weight: 2
         },
-  new google.maps.LatLng(37.785, -122.443),
         {
             location: new google.maps.LatLng(37.785, -122.441),
             weight: 0.5
         },
-  new google.maps.LatLng(37.785, -122.439),
         {
             location: new google.maps.LatLng(37.785, -122.437),
             weight: 2
@@ -55,13 +68,11 @@ function initMap() {
             location: new google.maps.LatLng(37.785, -122.435),
             weight: 3
         }
-];
-    
+    ];
+}
 
+function vaciarGradiente() {
 
-    var heatmap = new google.maps.visualization.HeatmapLayer({
-        data: heatMapData
-    });
-    heatmap.setMap(map);
-
+    datosGradiente= []
+    gradiente.setData(datosGradiente)
 }

@@ -243,6 +243,7 @@ module.exports = class Logica {
                 if (err) rechazar(err)
 
                 var mediciones = JSON.parse(data)
+                console.log(mediciones)
                 var res;
 
                 for (var i = 0; i < mediciones.length; i++) {
