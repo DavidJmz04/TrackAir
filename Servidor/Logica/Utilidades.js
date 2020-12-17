@@ -24,7 +24,7 @@ module.exports = class Utilidades {
     csv.forEach(element => {
       total = element['SO2 (µg/m³)'] + element['NO2 (µg/m³)'] + element['O3 (µg/m³)'];
       calidad = this.procesarCalidadAire(element, total)
-      text += '{"contaminación":' + total + ',"hora":' + element['Hora Solar'] + ',"calidad":"' + calidadAire[calidad] + '",'
+      text += '{"contaminacion":' + total + ',"hora":' + element['Hora Solar'] + ',"calidad":"' + calidadAire[calidad] + '",'
         + '"contaminantes":{"SO2 (µg/m³)":' + element['SO2 (µg/m³)'] + ',"NO2 (µg/m³)":' + element['NO2 (µg/m³)'] + ',"O3 (µg/m³)":' + element['O3 (µg/m³)'] + '}}';
       if (element['Hora Solar'] != '23') text += ','
       else text += ']}'
@@ -58,7 +58,7 @@ module.exports = class Utilidades {
     });
     i= 0
     sumas.forEach(suma =>{
-      lecturas += '{"contaminación":' + suma + ',"calidad":"'+ calidadAire[this.procesarCalidadAire({"tipoMedicion":"O3"},suma)] +'"}'
+      lecturas += '{"contaminacion":' + suma + ',"calidad":"'+ calidadAire[this.procesarCalidadAire({"tipoMedicion":"O3"},suma)] +'"}'
       total += suma
       if(i!=sumas.length-1) lecturas += ","
       i++
@@ -101,6 +101,10 @@ module.exports = class Utilidades {
     return calidadNum;
   }
 
+  getUltimaMedicionOficial(json) {
+    console.log(json.mediciones)
+    return json.mediciones[json.mediciones.length-1].contaminacion;
+  }
 
   fechaActual() {
     var fecha = new Date();

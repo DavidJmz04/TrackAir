@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     private void abrirActivityInfo(MenuItem item) {
         if (!receptorBluetooth.isRunning) {
             mostrarToast("Midiendo...", "El lector se ha iniciado");
-            receptorBluetooth.activarAvisador(1, 5000);
+            receptorBluetooth.activarAvisador(1, 30000);
             item.setIcon(R.drawable.ic_baseline_stop_24);
         }else{
             mostrarToast("Midiendo...", "El lector se ha detenido");
