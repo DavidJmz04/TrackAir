@@ -47,7 +47,6 @@ module.exports = class Logica {
     // ................................................................................................................................................
     // borrarFilasDeTodasLasTablas() -->
     // ................................................................................................................................................
-
     async borrarFilasDeTodasLasTablas() {
         // await this.borrarFilasDe("codigosrecompensas");
         await this.borrarFilasDe("mediciones");
@@ -118,7 +117,7 @@ module.exports = class Logica {
     // ................................................................................................................................................
     buscarUsuarioConNombreYContrasenya(datos) {
         var textoSQL = "select * from usuarios where nombre_usuario= ? and contrasenya= ?";
-        
+
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [datos.nombreUsuario, datos.contrasenya],
                 (err, res) => {
@@ -150,24 +149,25 @@ module.exports = class Logica {
     // <--
     // Lista {id:Z, nombreUsuario:Texto, correo:Texto, telefono=Texto, idNodo=Texto, distancia=R, tiempo= R}
     // ................................................................................................................................................
-    async buscarDistanciaYTiempoDeUsuarios() {
+    async buscarDistanciaYTiempoDeUsuarios(primerDia) {
 
         var res = []
         var distancia = 0 //En m
         var tiempo = 0 //En s
+
+        var primerDia = new Date(primerDia)
 
         //Obtengo los usuarios
         var usuarios = await this.buscarUsuarios()
 
         for (var i = 0; i < usuarios.length; i++) {
 
-            //Obtengo la distancia, el tiempo y la primera medida del usuario
-            var objDistanciaTiempo = await this.buscarDistanciaYTiempoDeUsuario(usuarios[i].id)
+            //Obtengo la distancia y el tiempo
+            var objDistanciaTiempo = await this.buscarDistanciaYTiempoDeUsuario(usuarios[i].id, primerDia)
 
-            var primerDia = new Date(objDistanciaTiempo.momentoPrimeraMedida)
             var ultimoDia = new Date();
 
-            //Nº de dias que han pasado desde que recibe el nodo hasta el día de hoy
+            //Nº de dias que han pasado desde que recibe el nodo hasta el día que le pasamos
             var nDias = Math.ceil((ultimoDia.getTime() - primerDia.getTime()) / 86400000)
 
             //Añadimos al usuario
@@ -191,7 +191,7 @@ module.exports = class Logica {
     // <--
     // {distancia=R, tiempo= R, momento=DateTime}
     // ................................................................................................................................................
-    async buscarDistanciaYTiempoDeUsuario(idUsuario) {
+    async buscarDistanciaYTiempoDeUsuario(idUsuario, primerDia) {
 
         var res
         var distancia = 0 //En m
@@ -202,32 +202,61 @@ module.exports = class Logica {
 
         for (var i = 1; i < medidas.length; i++) {
 
-            //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
-            dist = utilidades.obtenerDistancia(parseFloat(medidas[i - 1].ubicacion.split(",")[0]), parseFloat(medidas[i - 1].ubicacion.split(",")[1]), parseFloat(medidas[i].ubicacion.split(",")[0]), parseFloat(medidas[i].ubicacion.split(",")[1]))
-
-            //Medida actual y anterior
             var dia = new Date(medidas[i].momento)
-            var diaAnterior = new Date(medidas[i - 1].momento)
 
-            var t = (dia.getTime() - diaAnterior.getTime()) / 1000
+            if (primerDia.getTime() < dia.getTime()) {
 
-            if (t < 900 + 300 /*Tiempo que tarda en enviar el beacon + Error de enviado*/ && dist < 10000 /*Distancia para comprobar que no ha empezado a medir desde otro lugar lejano el mismo día*/ ) {
+                //Le enviamos la latitud y longitud de las dos medidas ya separadas y convertidas a real y obtenemos la distancia que se la sumamos a la global
+                dist = utilidades.obtenerDistancia(parseFloat(medidas[i - 1].ubicacion.split(",")[0]), parseFloat(medidas[i - 1].ubicacion.split(",")[1]), parseFloat(medidas[i].ubicacion.split(",")[0]), parseFloat(medidas[i].ubicacion.split(",")[1]))
 
-                tiempo += t
-                distancia += dist
+                //Medida anterior
+                var diaAnterior = new Date(medidas[i - 1].momento)
+
+                var t = (dia.getTime() - diaAnterior.getTime()) / 1000
+
+                if (t < 900 + 300 /*Tiempo que tarda en enviar el beacon + Error de enviado*/ && dist < 10000 /*Distancia para comprobar que no ha empezado a medir desde otro lugar lejano el mismo día*/ ) {
+
+                    tiempo += t
+                    distancia += dist
+                }
             }
-
         }
 
         res = {
             tiempo: tiempo,
             distancia: distancia,
             ultimaDistancia: dist,
-            momentoPrimeraMedida: medidas[0].momento
         }
 
         return res
     }
+
+
+    obtenerLecturas(tipoLectura) {
+
+        var fs = require('fs');
+
+        return new Promise((resolver, rechazar) => {
+
+            fs.readFile('../Datos/medicionesInterpoladas.json', 'utf8', function (err, data) {
+
+                if (err) rechazar(err)
+
+                var mediciones = JSON.parse(data)
+                console.log(mediciones)
+                var res;
+
+                for (var i = 0; i < mediciones.length; i++) {
+
+                    if (mediciones[i].TipoMedicion == tipoLectura) res = mediciones[i].mediciones
+                }
+                resolver(res);
+
+            })
+
+        })
+    }
+
 
     // ................................................................................................................................................
     // datos:{id=Z, nombreUsuario:Texto, contrasenya=Texto, correo=Texto, puntuacion=Texto, telefono=Texto, idNodo=Texto}
@@ -316,12 +345,29 @@ module.exports = class Logica {
     // <--
     // Lista {valor:Real, momento:Datetime, ubicacion:Texto, tipoMedicion:Texto}
     // ................................................................................................................................................
-    async buscarMedicionesDeUsuario(idUsuario) {
-        var textoSQL =
-            "select m.* from medicionesdeusuarios mu, mediciones m where m.ubicacion = mu.ubicacion_medicion AND mu.momento_medicion = m.momento AND mu.id_usuario = ?";
+    buscarMedicionesDeUsuario(idUsuario) {
+        var textoSQL = "select m.* from medicionesdeusuarios mu, mediciones m where m.ubicacion = mu.ubicacion_medicion AND mu.momento_medicion = m.momento AND mu.id_usuario = ?";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [idUsuario], (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        });
+    }
+
+    // ................................................................................................................................................
+    //tipoMedicion: Texto
+    // -->
+    // buscarMedicionesDeTipoMedicion() <--
+    // <--
+    // Lista {valor:Real, momento:Datetime, ubicacion:Texto, tipoMedicion:Texto}
+    // ................................................................................................................................................
+    buscarMedicionesDeTipoMedicion(tipoMedicion) {
+
+        var textoSQL = "select * from mediciones WHERE tipoMedicion= ? AND momento >= DATE_SUB(NOW(),INTERVAL 2 HOUR)";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [tipoMedicion], (err, res) => {
                 err ? rechazar(err) : resolver(res);
             });
         });
@@ -368,7 +414,7 @@ module.exports = class Logica {
     // ................................................................................................................................................
     async obtenerPuntuacion(idUsuario) {
 
-        var distyTiempo = await this.buscarDistanciaYTiempoDeUsuario(idUsuario)
+        var distyTiempo = await this.buscarDistanciaYTiempoDeUsuario(idUsuario, new Date(2000, 12, 10))
         return Math.ceil(distyTiempo.ultimaDistancia / 100)
     }
 
@@ -412,7 +458,7 @@ module.exports = class Logica {
             })
         })
     }
-    
+
     // ................................................................................................................................................
     //id:Z
     // -->
@@ -432,7 +478,33 @@ module.exports = class Logica {
     }
 
     // ................................................................................................................................................
-    // ce   rar() -->
+    // parsearMediciones()
+    // ................................................................................................................................................
+    async parsearMediciones() {
+        let tipoSensor=["GI", "CO2", "NO2", "O3", "SO2"];
+        tipoSensor.forEach(async(val)=>{
+            await utilidades.crearArchivo(val, utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion(val)))
+        })
+        /*var string = ""
+        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("GI"));
+        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("CO2"));
+        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("NO2"));
+        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("O3"));
+        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("SO2"));*/
+
+        const { exec } = require('child_process');
+        exec('runMatlab.bat',{cwd:'../MatLab/'}, (err, stdout, stderr) => {
+        if (err) {
+            console.error(err);
+            return;
+            
+        }
+        console.log(stdout);
+        });
+    }
+
+    // ................................................................................................................................................
+    // cerrar() -->
     // ................................................................................................................................................
     cerrar() {
         return new Promise((resolver, rechazar) => {

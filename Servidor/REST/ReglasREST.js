@@ -15,7 +15,6 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     servidorExpress.get("/prueba/", function (peticion, respuesta) {
         console.log(" * GET /prueba ");
-
         respuesta.send("¡Funciona!");
     }); // get /prueba
 
@@ -37,7 +36,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // todo ok
         respuesta.send(json);
     }); // get /mediciones
-    
+
     // .......................................................
     // GET /mediciones/:idUsuario
     // .......................................................
@@ -58,7 +57,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // todo ok
         respuesta.send(JSON.stringify(res))
     }) // get /mediciones/:idUsuario
-    
+
     // .......................................................
     // GET /mediciones oficiales off line
     // .......................................................
@@ -117,6 +116,27 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     }); // get /mediciones
 
     // .......................................................
+    // GET /lecturas/:tipoGas
+    // .......................................................
+    servidorExpress.get('/lecturas/:tipoGas', async function (peticion, respuesta) {
+
+        console.log(" * GET /lecturas/:tipoGas ")
+
+        // averiguo el id
+        var tipoGas = peticion.params.tipoGas
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.obtenerLecturas(tipoGas)
+        //Si el array esta vacío
+        if (res.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré la lectura")
+            return
+        }
+        // todo ok
+        respuesta.send(JSON.stringify(res))
+    }) // get /mediciones/:idUsuario
+    
+    // .......................................................
     // GET /calidadAire/:idUsuario
     // .......................................................
     servidorExpress.get("/calidadAire/:idUsuario", async function (peticion, respuesta) {
@@ -136,7 +156,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // todo ok
         respuesta.send(res);
     }); // get /mediciones/:idUsuario
-    
+
     // .......................................................
     // GET /tipoMedicion/:idMedicion
     // .......................................................
@@ -177,7 +197,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // todo ok
         respuesta.send(JSON.stringify(res));
     }); // get /usuario
-    
+
     // .......................................................
     // GET /distanciaYTiempoUsario/
     // .......................................................
@@ -237,7 +257,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // todo ok
         respuesta.send(JSON.stringify(res))
     }) // get /codigoRecompensa
-    
+
     // .......................................................
     // GET /informe/ranking
     // .......................................................
@@ -303,11 +323,15 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     // GET /informe/uso
     // .......................................................
-    servidorExpress.get("/informe/uso", async function (peticion, respuesta) {
-        console.log(" * GET /informe/uso ");
+    servidorExpress.get("/informe/uso/:primerDia", async function (peticion, respuesta) {
+
+        console.log(" * GET /informe/uso/:primerDia ");
+
+        // averiguo el primerDia del intervalo
+        var primerDia = peticion.params.primerDia
 
         // llamo a la función adecuada de la lógica
-        var res = await laLogica.buscarDistanciaYTiempoDeUsuarios();
+        var res = await laLogica.buscarDistanciaYTiempoDeUsuarios(primerDia);
         console.log(res);
 
         if (res.length == 0) {
@@ -405,7 +429,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
 
         respuesta.send(JSON.stringify(res[0]))
     }) // post /usuario  
-    
+
     // .......................................................
     // POST /login/
     // .......................................................

@@ -1,100 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mapa de calidad</title>
 
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Montserrat:wght@300;400;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="./styles/map.css" />
     <link rel="stylesheet" href="./styles/loader.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  </head>
-  <body>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCixKcEtrvAKye7pgNfrVYBEQmUCeXEjkA&libraries=visualization&callback=initMap">
+    </script>
+</head>
+
+<body>
     <div id="loader-wrapper">
-      <div id="loader"></div>
-    
-      <div class="loader-section section-left"></div>
-      <div class="loader-section section-right"></div>
-    
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
     </div>
     <div class="content">
-    <div class="mapa"></div>
-    <div class="modal">
-      <div class="tarjeta-login">
-        <div class="cerrar-modal-container">
+        <div id="mapa"></div>
+        <div class="modal">
+            <div class="tarjeta-login">
+                <div class="cerrar-modal-container">
 
-          <i class="cerrar-modal fas fa-times"></i>
-        </div>
-        <div class="tarjeta-login-titulo">
-          <h3>Iniciar Sesión</h3>
-        </div>
-        <div class="tarjeta-login-cuerpo">
-          <form action="" autocomplete="off">
-            <label for="uname"><b>Nombre de usuario</b></label>
-            <input
-              id="inputUsuario"
-              type=""
-              placeholder="Introduzca su nombre de usuario"
-              name="uname"
-              required
-            />
+                    <i class="cerrar-modal fas fa-times"></i>
+                </div>
+                <div class="tarjeta-login-titulo">
+                    <h3>Iniciar Sesión</h3>
+                </div>
+                <div class="tarjeta-login-cuerpo">
+                    <form action="" autocomplete="off">
+                        <label for="uname"><b>Nombre de usuario</b></label>
+                        <input id="inputUsuario" type="" placeholder="Introduzca su nombre de usuario" name="uname" required />
 
-            <label for="psw"><b>Contraseña</b></label>
-            <input
-              id="inputContrasenya"
-              type="password"
-              placeholder="Introduzca su contraseña"
-              name="psw"
-              required
-            />
-            <span class="olvide-contrasenya"
-              ><a href="">Olvidó su contraseña?</a></span
-            >
-            <button id="btnSubmit" type="submit">INICIAR SESIÓN</button>
+                        <label for="psw"><b>Contraseña</b></label>
+                        <input id="inputContrasenya" type="password" placeholder="Introduzca su contraseña" name="psw" required />
+                        <span class="olvide-contrasenya"><a href="">Olvidó su contraseña?</a></span>
+                        <button id="btnSubmit" type="submit">INICIAR SESIÓN</button>
 
-            <span class="msg-error">Usuario y/o contraseña no válidos.</span>
-            <span class="frase-registro"
-              >¿Aún no es miembro de TrackAir?</br>
-              <a href="./#info"> ¡Contáctenos!</a></span
-            >
-          </form>
+                        <span class="msg-error">Usuario y/o contraseña no válidos.</span>
+                        <span class="frase-registro">¿Aún no es miembro de TrackAir?<br><a href="./#info"> ¡Contáctenos!</a></span>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="top-opciones">
+            <div class="menu">
+                <a href="/mediciones.html" class="icono" onclick="">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+            <div class="buscar" onclick="quitarGradiente()">
+                <input type="text" placeholder="Buscar..." />
+            </div>
+            <div class="perfil">
+                <!-- <div class="bg-icono"><i class="fas fa-user"></i></div> -->
+                <i class="fas fa-user icono-usuario"></i>
+            </div>
+        </div>
     </div>
-    <div class="top-opciones">
-      <div class="menu">
-        <a href="/mediciones.html" class="icono" onclick="">
-          <i class="fa fa-bars"></i>
-        </a>
-      </div>
-      <div class="buscar">
-        <input type="text" placeholder="Buscar..." />
-      </div>
-      <div class="perfil">
-        <!-- <div class="bg-icono"><i class="fas fa-user"></i></div> -->
-        <i class="fas fa-user icono-usuario"></i>
-      </div>
-    </div>
-    </div>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"
-      integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A=="
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A==" crossorigin="anonymous"></script>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./scripts/logica.js"></script>
     <script src="./scripts/modalLogin.js"></script>
     <script src="./scripts/login.js"></script>
     <script src="./scripts/loader.js"></script>
-  </body>
+    <script src="./scripts/mapa.js"></script>
+</body>
+
 </html>
