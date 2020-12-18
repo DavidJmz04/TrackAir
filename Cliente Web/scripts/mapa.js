@@ -54,7 +54,7 @@ async function initMap() {
         zoom: 14,
     });
 
-    await ponerGradiente("GI")
+    await ponerGradiente("CO2")
 }
 
 async function ponerGradiente(tipoMedicion) {
@@ -63,19 +63,19 @@ async function ponerGradiente(tipoMedicion) {
 
     var mediciones = await laLogica.obtenerLecturas(tipoMedicion)
 
-    medicionesBuenas = medicionesBuenas(mediciones);
-    tSizeBueno = medicionesBuenas.length
-    gradienteBueno= crearGradiente(medicionesBuenas, verde)
+    var mBuenas = medicionesBuenas(mediciones);
+    tSizeBueno = mBuenas.length
+    gradienteBueno= crearGradiente(mBuenas, verde)
     modificarZoom(gradienteBueno,tSizeBueno)
 
-    medicionesMedias = medicionesMedias(mediciones);
-    tSizeMedio = medicionesMedias.length
-    gradienteMedio= crearGradiente(medicionesMedias, amarillo, tSizeMedio)
+    var mMedias = medicionesMedias(mediciones);
+    tSizeMedio = mMedias.length
+    gradienteMedio= crearGradiente(mMedias, amarillo, tSizeMedio)
     modificarZoom(gradienteMedio,tSizeMedio)
 
-    medicionesMalas = medicionesMalas(mediciones);
-    tSizeMalo = medicionesMalas.length
-    gradienteMalo= crearGradiente(medicionesMalas, rojo, tSizeMalo)
+    var mMalas = medicionesMalas(mediciones);
+    tSizeMalo = mMalas.length
+    gradienteMalo= crearGradiente(mMalas, rojo, tSizeMalo)
     modificarZoom(gradienteMalo,tSizeMalo)
 }
 
@@ -163,8 +163,6 @@ function vaciarGradiente(gradiente) {
 
     if (gradiente != null) gradiente.setData([])
 }
-
-
 
 
 
