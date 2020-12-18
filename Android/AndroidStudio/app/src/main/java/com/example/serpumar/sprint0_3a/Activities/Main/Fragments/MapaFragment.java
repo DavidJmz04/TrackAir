@@ -135,6 +135,9 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
 
         mMap = googleMap;
 
+        mMap.setMinZoomPreference(15.0f);
+        mMap.setMaxZoomPreference(15.0f);
+
         Ubicacion ub = new Ubicacion(gpsService.obtenerUbicacion(getContext()).getLatitud(), gpsService.obtenerUbicacion(getContext()).getLongitud());
         LatLng ubActual = new LatLng(ub.getLatitud(), ub.getLongitud());
         //mMap.addMarker(new MarkerOptions().position(ubActual));
@@ -172,8 +175,8 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
                 // Create a heat map tile provider, passing it the latlngs of the police stations.
                 HeatmapTileProvider provider = new HeatmapTileProvider.Builder().weightedData(WlatLngs)./*gradient(establecerGradiente(WlatLngs.get(i).getIntensity())).*/build();
                 //provider.setOpacity(0.7);
-                provider.setRadius(20);
-                provider.setMaxIntensity(100);
+                provider.setRadius(30);
+                provider.setMaxIntensity(110);
 
 
                 int[] colors = { //Rojo encima limite amarillo verde
