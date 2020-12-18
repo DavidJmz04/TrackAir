@@ -232,6 +232,12 @@ module.exports = class Logica {
     }
 
 
+    // ................................................................................................................................................
+    // tipoLectura:Texto -->
+    // obtenerLecturas() <--
+    // <--
+    // Lista:{lat=R, lon= R, value=R}
+    // ................................................................................................................................................
     obtenerLecturas(tipoLectura) {
 
         var fs = require('fs');
@@ -485,12 +491,6 @@ module.exports = class Logica {
         tipoSensor.forEach(async(val)=>{
             await utilidades.crearArchivo(val, utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion(val)))
         })
-        /*var string = ""
-        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("GI"));
-        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("CO2"));
-        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("NO2"));
-        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("O3"));
-        string += utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion("SO2"));*/
 
         const { exec } = require('child_process');
         exec('runMatlab.bat',{cwd:'../MatLab/'}, (err, stdout, stderr) => {
