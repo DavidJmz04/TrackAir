@@ -73,13 +73,14 @@ import static java.lang.Integer.parseInt;
         final AccountManager accountManager = AccountManager.get(getActivity());
 
         // Inflate the layout for this fragment
-        if ((accounts = accountManager.getAccounts()).length>0) {
+        if (((MainActivity)getActivity()).isLogged()) {
             perfilLayout.setVisibility(View.VISIBLE);
             iniciarSesionLayout.setVisibility(View.INVISIBLE);
             //nombre.setText(accountManager.getAccounts()[0].name);
             cerrarSesionBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    accounts = accountManager.getAccounts();
                     accountManager.removeAccountExplicitly(accounts[0]);
                     startActivity(mainIntent);
 
@@ -103,28 +104,14 @@ import static java.lang.Integer.parseInt;
                 }
             });
 
-            int idUsuario = parseInt(accountManager.getUserData(accountManager.getAccountsByType("com.example.serpumar.sprint0_3a")[0], "id"));
-            NetworkManager.getInstance().getRequest("/usuario/" + idUsuario, new NetworkManager.ControladorRespuestas<String>() {
-                @Override
-                public void getResult(String object) {
+            Usuario usuario = ((MainActivity)getActivity()).getUsuario();
 
-                    try {
+            email.setText(usuario.getCorreo());
+            reputacion.setText("Puntos: " + String.valueOf(usuario.getPuntosCanjeables()));
+            nombreUsuario.setText("@"+usuario.getNombreUsuario());
+            nombre.setText(usuario.getNombreCompleto());
+            telefono.setText(String.valueOf(usuario.getTelefono()));
 
-                        JSONArray jsonArray = new JSONArray(object);
-                        JSONObject usuarioJSON = jsonArray.getJSONObject(0);
-
-                        Usuario usuario = new Usuario(usuarioJSON.getInt("id"), usuarioJSON.getString("nombre"), usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"), usuarioJSON.getString("correo"), usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"), usuarioJSON.getString("telefono"), usuarioJSON.getString("id_nodo"));
-                        email.setText(usuario.getCorreo());
-                        reputacion.setText("Puntos: " + String.valueOf(usuario.getPuntosCanjeables()));
-                        nombreUsuario.setText("@"+usuario.getNombreUsuario());
-                        nombre.setText(usuario.getNombreCompleto());
-                        telefono.setText(String.valueOf(usuario.getTelefono()));
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
 
         } else {
             iniciarSesionLayout.setVisibility(View.VISIBLE);

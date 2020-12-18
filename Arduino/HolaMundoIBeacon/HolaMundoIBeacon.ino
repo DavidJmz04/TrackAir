@@ -46,6 +46,12 @@ float NO2MASS = 46.0055;
 float SO2MASS = 64.066;
 float O3MASS = 48;
 
+// ..............................................................
+// ..............................................................
+int buff[100];
+int puntero = 0;
+boolean lleno = false;
+
 // --------------------------------------------------------------
 // --------------------------------------------------------------
 namespace Globales {
@@ -93,7 +99,6 @@ void setup() {
   
   Globales::elPuerto.escribir( "---- Calibrando medidor ---- \n " );
   Globales::elMedidor.medirIrritante();
-  esperar( 10000 );
   Globales::elMedidor.configurarMedidor('Z'); // Calibramos a 0 el sensor despues de unas tomas.
   
 
@@ -109,7 +114,6 @@ namespace Loop {
   uint8_t cont = 0;
 };
 
-
 // ..............................................................
 // ..............................................................
 void loop () {
@@ -118,6 +122,10 @@ void loop () {
   using namespace Globales;
 
   cont++;
+  if(puntero>=100){
+    puntero = 0;
+    lleno = true;
+  }
 
   elPuerto.escribir( "\n---- loop(): empieza " );
   elPuerto.escribir( cont );
@@ -125,12 +133,22 @@ void loop () {
 
 
   //lucecitas();
+  int valorMedio = 0;
 
-  // 
-  // mido y publico
-  // 
+    // 
+    // mido
+    // 
   int valorIrritante = elMedidor.medirIrritante();
-
+   // buff[puntero]=valorIrritante;
+   // valorMedio+=valorIrritante;
+  
+  //valorMedio/=(lleno?100:puntero);
+  //elPuerto.escribir( "Valor medio (PPB): " );
+  //elPuerto.escribir( valorMedio );
+  //elPuerto.escribir( "\n" );
+  //elPuerto.escribir( "Coeficiente: " );
+  //elPuerto.escribir( valorIrritante/valorMedio );
+  //elPuerto.escribir( "\n" );
   elPuerto.escribir( "Valor irritante (PPB): " );
   elPuerto.escribir( valorIrritante );
   elPuerto.escribir( "\n" );
@@ -142,18 +160,28 @@ void loop () {
   elPuerto.escribir( "\n" );
 
   //µg/m3 = (ppb)*(12.187)*(M) / (273.15 + °C)
-  float ugm3 = ((valorIrritante<0?0:valorIrritante))*(12.187)*(NO2MASS) / (273.15 + temperatura);
+  //float ugm3 = ((valorIrritante<0?0:valorIrritante))*(12.187)*(NO2MASS) / (273.15 + temperatura);
+  float ugm3 = 0.0014 * valorIrritante + 66.67;
+  
+  buff[puntero]=ugm3;
+  for(int i= 0; i<(lleno?100:puntero); i++){
+  valorMedio+=buff[i];
+  }
+  
+  valorMedio/=(lleno?100:puntero);
   
   elPuerto.escribir( "Conversión ug/m3: " );
   elPuerto.escribir( ugm3 );
   elPuerto.escribir( "\n" );
+
+  
 
   // 
   // mido y publico
   // 
   elPublicador.publicarIrritanteConvertido( ugm3,
 							cont,
-							intervalo // intervalo de emisión
+						intervalo // intervalo de emisión
 							);
 
   // 
@@ -167,6 +195,8 @@ void loop () {
   esperar( 1000 );
 
   elPublicador.laEmisora.detenerAnuncio();
+
+  puntero++;
   
   // 
   // 
@@ -174,7 +204,6 @@ void loop () {
   elPuerto.escribir( "---- loop(): acaba **** " );
   elPuerto.escribir( cont );
   elPuerto.escribir( "\n" );
-  
 } // loop ()
 // --------------------------------------------------------------
 // --------------------------------------------------------------

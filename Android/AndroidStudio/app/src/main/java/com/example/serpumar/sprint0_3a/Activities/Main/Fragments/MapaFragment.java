@@ -1,24 +1,62 @@
 package com.example.serpumar.sprint0_3a.Activities.Main.Fragments;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.serpumar.sprint0_3a.Activities.Main.Adapters.FiltrosMapaAdapter;
+import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
 import com.example.serpumar.sprint0_3a.Helpers.GPSService;
 import com.example.serpumar.sprint0_3a.Helpers.LogicaFake;
+import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
+import com.example.serpumar.sprint0_3a.Models.Ubicacion;
 import com.example.serpumar.sprint0_3a.R;
 import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.maps.android.heatmaps.Gradient;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.google.maps.android.heatmaps.WeightedLatLng;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.security.cert.LDAPCertStoreParameters;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 
-public class MapaFragment extends Fragment {
+public class MapaFragment extends Fragment implements OnMapReadyCallback {
 
     private static String ETIQUETA_LOG = "MapaFragment";
 
@@ -30,131 +68,42 @@ public class MapaFragment extends Fragment {
     FragmentTransaction transaction;
     Fragment fragment;
 
-    public MapaFragment() { }
+    private MapView mapView;
+
+    private GoogleMap mMap;
+
+    private HashMap hashGases;
+
+    SharedPreferences pref; // 0 - for private mode
+    SharedPreferences.Editor editor;
+
+
+    /*Cargar de primeras en el mapa aquello que este marcado en los filtros --> Primeras opciones de cada uno*/
+
+    public MapaFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         final View view = inflater.inflate(R.layout.fragment_map_, container, false);
-        /*receptorBluetooth.setContext(getContext());
+        fragment = new MapaFragment_filtros(this);
 
-        lf = new LogicaFake(this.getContext());
+        if (mMap != null) {
+            Log.d("Recargar", "Recargar");
+            mMap.clear();
+        }
 
-        Button obtenerLectura = (Button) view.findViewById(R.id.botonObtenerLectura);
-        obtenerLectura.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(ETIQUETA_LOG, " boton obtenerMediciones" );
-                receptorBluetooth.buscarEsteDispositivoBTLEYObtenerMedicion(Utilidades.stringToUUID( "GRUP3-GTI-PROY-3"));
-                }
-        });
-
-        Button subirLectura = (Button) view.findViewById(R.id.botonSubirLectura);
-        subirLectura.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(ETIQUETA_LOG, " boton obtenerMediciones" );
-                if(receptorBluetooth.getUltimaMedicion() != null)
-                    lf.guardarMedicion(receptorBluetooth.getUltimaMedicion());
-                else
-                    Toast.makeText(getContext(), "Primero debes tomar una lectura", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Button obtenerMediciones = (Button) view.findViewById(R.id.botonObtenerMediciones);
-        obtenerMediciones.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(),"HOLA",Toast.LENGTH_LONG).show();
-                Log.d(ETIQUETA_LOG, " boton obtenerMediciones" );
-                NetworkManager.getInstance().getRequest("/mediciones", new NetworkManager.ControladorRespuestas<String>() {
-                    @Override
-                    public void getResult(String object) {
-                        Log.d("MapaFragment",object);
-                        Toast.makeText(getContext(),"a- " + object,Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
-
-        Button obtenerMedicionesOficialesAPI = (Button) view.findViewById(R.id.botonObtenerMedicionesOficialesAPI);
-        obtenerMedicionesOficialesAPI.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(ETIQUETA_LOG, " boton obtenerMedicionesOficiales" );
-                //lf.obtenerMedicionesOficialesAPI(getContext());
-                NetworkManager.getInstance().getRequest("/medicionesOficiales", new NetworkManager.ControladorRespuestas<String>() {
-                    @Override
-                    public void getResult(String object) {
-                        Log.d("MapaFragment",object);
-                    }
-                });
-            }
-        });
-
-        Button obtenerMedicionesOficialesLOCAL = (Button) view.findViewById(R.id.botonObtenerMedicionesOficialesLOCAL);
-        obtenerMedicionesOficialesLOCAL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(ETIQUETA_LOG, " boton obtenerMedicionesOficialesLOCAL" );
-                //lf.obtenerMedicionesOficialesLOCAL(getContext());
-                NetworkManager.getInstance().getRequest("/medicionesOficialesCSV", new NetworkManager.ControladorRespuestas<String>() {
-                    @Override
-                    public void getResult(String object) {
-                        Log.d("MapaFragment",object);
-                    }
-                });
-            }
-        });
-
-        Button activarAvisador = (Button) view.findViewById(R.id.botonActivarAvisador);
-        activarAvisador.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(ETIQUETA_LOG, " boton activar avisador" );
-                EditText parametro = (EditText)view.findViewById(R.id.parametroAvisador);
-                receptorBluetooth.activarAvisador(1,Integer.parseInt(parametro.getText().toString()));
-            }
-        });
-
-        Button continuarAvisador = (Button) view.findViewById(R.id.botonContinuarAvisador);
-        continuarAvisador.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(ETIQUETA_LOG, " boton continuar avisador" );
-                receptorBluetooth.continuarAvisador();
-            }
-        });
-
-        Button pausarAvisador = (Button) view.findViewById(R.id.botonPausarAvisador);
-        pausarAvisador.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(ETIQUETA_LOG, " boton pausar avisador" );
-                receptorBluetooth.pausarAvisador();
-            }
-        });
-
-        Button detenerAvisador = (Button) view.findViewById(R.id.botonDetenerAvisador);
-        detenerAvisador.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(ETIQUETA_LOG, " boton detener avisador" );
-                receptorBluetooth.detenerAvisador();
-            }
-        }); */
-
-        fragment = new MapaFragment_filtros();
-
-        FloatingActionButton abrirInformacionAdicional = (FloatingActionButton) view.findViewById(R.id.informacionFAB);
+        /*FloatingActionButton abrirInformacionAdicional = (FloatingActionButton) view.findViewById(R.id.informacionFAB);
         abrirInformacionAdicional.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new MedicionesFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new MedicionesFragment()).commit();
             }
-        });
+        });*/
 
-        Button  abrirFiltro = (Button) view.findViewById(R.id.botonMapa);
+        Button abrirFiltro = (Button) view.findViewById(R.id.botonMapa);
         abrirFiltro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,8 +112,40 @@ public class MapaFragment extends Fragment {
             }
         });
 
+        pref = getActivity().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = pref.edit();
+
+        //valoresQueSeCarganEnMapa();
+
         return view;
 
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mapView = (MapView) view.findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        mMap = googleMap;
+
+        mMap.setMinZoomPreference(15.0f);
+        mMap.setMaxZoomPreference(15.0f);
+
+        Ubicacion ub = new Ubicacion(gpsService.obtenerUbicacion(getContext()).getLatitud(), gpsService.obtenerUbicacion(getContext()).getLongitud());
+        LatLng ubActual = new LatLng(ub.getLatitud(), ub.getLongitud());
+        //mMap.addMarker(new MarkerOptions().position(ubActual));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubActual, 15.0f));
+        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubActual, 12.0f));
+
+        cargarMapaDeCalor();
+        //addHeatMap();
     }
 
     private void showFragment() {
@@ -175,4 +156,175 @@ public class MapaFragment extends Fragment {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+
+    private void addHeatMap(JSONArray jarray) {
+        List<WeightedLatLng> WlatLngs = null;
+        // Get the data: latitude/longitude positions of police stations.
+        /*try {
+            WlatLngs = readItems(jsonPrueba());
+        } catch (JSONException e) {
+            Toast.makeText(myContext, "Problem reading list of locations.", Toast.LENGTH_LONG).show();
+        }
+        */
+        JSONArray listaJSON = jarray;
+        Log.d("Cre", "addHeatMap: " + listaJSON.length());
+        if(listaJSON != null && listaJSON.length()>0) {
+            try {
+                WlatLngs = readItems(jarray);
+                // Create a heat map tile provider, passing it the latlngs of the police stations.
+                HeatmapTileProvider provider = new HeatmapTileProvider.Builder().weightedData(WlatLngs)./*gradient(establecerGradiente(WlatLngs.get(i).getIntensity())).*/build();
+                //provider.setOpacity(0.7);
+                provider.setRadius(30);
+                provider.setMaxIntensity(110);
+
+
+                int[] colors = { //Rojo encima limite amarillo verde
+                        Color.rgb(0, 255, 0), // Verde
+                        Color.rgb(255, 255, 0), // Amarrillo
+                        Color.rgb(255, 0, 0)    // Rojo
+                };
+                float[] startPoints = {
+                        0.33f, 0.67f, 1f
+                };
+                Gradient grd = new Gradient(colors, startPoints, 150);
+                provider.setGradient(grd);
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(jarray.getJSONObject(0).getDouble("lat"),jarray.getJSONObject(0).getDouble("lon")), 15.0f));
+
+                //provider.setMaxDrawing
+                // Add a tile overlay to the map, using the heat map tile provider.
+                TileOverlay overlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
+                overlay.clearTileCache();
+
+            } catch (JSONException e) {
+                Log.e("Error JSON", e.toString());
+            }
+        }
+
+
+    }
+
+    private List<WeightedLatLng> readItems(JSONArray array) throws JSONException {
+        List<WeightedLatLng> result = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject object = array.getJSONObject(i);
+            double weigth = object.getDouble("value");
+            double lat = object.getDouble("lat");
+            double lng = object.getDouble("lon");
+            result.add(new WeightedLatLng(new LatLng(lat, lng), weigth));
+        }
+        return result;
+    }
+
+    private JSONArray jsonPrueba() {
+        JSONArray jarray = new JSONArray();
+        Random r = new Random();
+        for (int i = 0; i < 500; i++) {
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("weight", (1 + (150) * r.nextDouble()));
+                obj.put("lat", (38.869172 + (39.018634 - 38.869172) * r.nextDouble()));
+                obj.put("lng", (-0.245314 + (-0.137187 - -0.245314) * r.nextDouble()));
+                jarray.put(obj);
+            } catch (JSONException e) {
+
+            }
+
+        }
+        return jarray;
+    }
+
+    private void cargarMapaDeCalor() {
+        String radioButtonChecked = pref.getString("radioButtonString", "");
+
+        if (radioButtonChecked.length() > 0) {
+
+            String[] radioButtonInfo = radioButtonChecked.split(";");
+            if (Integer.parseInt(radioButtonInfo[1]) == 0) {
+                cargarValoresDeServidor("GI"); // <JSONObject> listaIrritante = new ArrayList<>();
+                //jsonArray = lo que devuelve llamada al servidor GI
+                Log.d("Gas", radioButtonInfo[1] + "GI");
+            } else if (Integer.parseInt(radioButtonInfo[1]) == 1) {
+                cargarValoresDeServidor("CO2"); // <JSONObject> listaIrritante = new ArrayList<>();
+                //jsonArray = lo que devuelve llamada al servidor CO2
+                Log.d("Gas", radioButtonInfo[1] + "CO2");
+            } else if (Integer.parseInt(radioButtonInfo[1]) == 2) {
+                cargarValoresDeServidor("NO2"); // <JSONObject> listaIrritante = new ArrayList<>();
+                //jsonArray = lo que devuelve llamada al servidor NO2
+                Log.d("Gas", radioButtonInfo[1] + "NO2");
+            } else if (Integer.parseInt(radioButtonInfo[1]) == 3) {
+                cargarValoresDeServidor("O3"); // <JSONObject> listaIrritante = new ArrayList<>();
+                //jsonArray = lo que devuelve llamada al servidor O3
+                Log.d("Gas", radioButtonInfo[1] + "O3");
+            } else if (Integer.parseInt(radioButtonInfo[1]) == 4) {
+                cargarValoresDeServidor("SO2"); // <JSONObject> listaIrritante = new ArrayList<>();
+                //jsonArray = lo que devuelve llamada al servidor SO2
+                Log.d("Gas", radioButtonInfo[1] + "SO2");
+            }
+
+
+        }
+    }
+
+    private void cargarValoresDeServidor(String gas) {
+        NetworkManager.getInstance().getRequest("/lecturas/" + gas, new NetworkManager.ControladorRespuestas<String>() {
+            @Override
+            public void getResult(String object) {
+                try {
+                    addHeatMap(new JSONArray(object));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+    }
+
+    public void reloadFragment() {
+        if (mMap != null) {
+            Log.d("Recargar", "Recargar");
+            mMap.clear();
+            cargarMapaDeCalor();
+        }
+    }
+
+    private Gradient establecerGradiente(double valor) { //0-50 verde 51-100 amarillo 101-150 rojo
+
+        double porc_verde = 0;
+        double porc_amarillo = 0;
+        double porc_rojo = 0;
+
+        if (valor > 50) {
+            if (valor > 100) {
+                porc_verde = 50 / valor;
+                porc_amarillo = 50 / valor;
+                porc_rojo = 1 - (porc_verde + porc_amarillo);
+            } else {
+                porc_verde = 50 / valor;
+                porc_amarillo = 1 - porc_verde;
+            }
+        } else {
+            porc_verde = 1;
+        }
+
+        int[] colors = { //Rojo encima limite amarillo verde
+                Color.rgb(0, 255, 0), // Verde
+                Color.rgb(255, 255, 0), // Amarrillo
+                Color.rgb(255, 0, 0)    // Rojo
+        };
+
+        Log.d("Colores", "Valor " + valor);
+        Log.d("Colores", "" + porc_rojo + " " + porc_amarillo + " " + porc_verde);
+
+        float[] startPoints = {
+                (float) porc_rojo - 0.02f, (float) porc_amarillo - 0.01f, (float) porc_verde
+        };
+
+        return new Gradient(colors, startPoints);
+
+
+    }
+
+
 }

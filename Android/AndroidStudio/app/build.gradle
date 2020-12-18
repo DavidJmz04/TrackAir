@@ -36,6 +36,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
+    def lottieVersion = "3.4.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    // Maps
+    implementation 'com.google.maps.android:android-maps-utils:1.0.2'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
 
 }

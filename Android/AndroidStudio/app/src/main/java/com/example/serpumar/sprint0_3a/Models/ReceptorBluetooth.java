@@ -164,6 +164,7 @@ public class ReceptorBluetooth implements Serializable {
 
 
     public void buscarEsteDispositivoBTLE(final UUID dispositivoBuscado) {
+        Log.wtf("TAG", "initializing");
         this.scanCallback = new ScanCallback() {
             // Se dispara cada vez que encuentra un dispositivo
             @Override
@@ -174,8 +175,9 @@ public class ReceptorBluetooth implements Serializable {
                 // Dispostivo encontrado
                 byte[] data = result.getScanRecord().getBytes();
                 TramaIBeacon tib = new TramaIBeacon(data);
+                Log.wtf("TAG", "searching");
                 String strUUIDEncontrado = Utilities.bytesToString(tib.getUUID());
-                Log.d(ETIQUETA_LOG, "API >= 21 - UUID dispositivo encontrado!!!!: " + tib.getUUID().toString());
+                Log.wtf("TAG", "API >= 21 - UUID dispositivo encontrado!!!!: " + tib.getUUID().toString());
                 if (strUUIDEncontrado.compareTo(Utilities.uuidToString(dispositivoBuscado)) == 0) {
                     Log.d("Encontrado", "Dispositivo Encontrado");
                     // Detenemos la búsqueda de dispositivos
@@ -375,6 +377,7 @@ public class ReceptorBluetooth implements Serializable {
             avisador.interrupt();
             avisador = null;
             Toast.makeText(context, "¡Avisador detenido!", Toast.LENGTH_SHORT).show();
+            BluetoothAdapter.getDefaultAdapter().getBluetoothLeScanner().stopScan(this.scanCallback);
         }
     }
 
@@ -402,6 +405,7 @@ public class ReceptorBluetooth implements Serializable {
                 this.user = accountManager.getAccountsByType("com.example.serpumar.sprint0_3a")[0];
             }
             NetworkManager.getInstance(context);
+            setCallback();
         }
 
 
@@ -426,7 +430,6 @@ public class ReceptorBluetooth implements Serializable {
                                 if (setCriterioTiempo()) {
                                     Log.d("THREAD", "Time reached!");
                                     time = new Date().getTime();
-                                    setCallback();
                                     if (ultimaMedicion != null) {
                                         String ultimoTiempoMedido = ultimaMedicion.getDate();
                                         Log.i("TAG", ultimaMedicion.getMedicion() + "");
@@ -507,10 +510,11 @@ public class ReceptorBluetooth implements Serializable {
             Map<String, String> parametros = new HashMap<>();
             parametros.put("idUsuario", String.valueOf(idUser));
             parametros.put("momento", ultimaMedicion.getDate());
-            parametros.put("valor", String.valueOf((ultimaMedicion.getMedicion() < 0 || ultimaMedicion.getMedicion() > 300 ? new Random(System.currentTimeMillis()).nextInt(150) : ultimaMedicion.getMedicion())));
+            parametros.put("valor", String.valueOf((ultimaMedicion.getMedicion())));
             parametros.put("ubicacion", ultimaMedicion.getUbicacion().getLatitud() + ", " + ultimaMedicion.getUbicacion().getLongitud());
             parametros.put("tipoMedicion", ultimaMedicion.getTipoMedicion());
             Log.i("SEND", idUser + " ");
+            Log.wtf("SEND", "MEDICION: " + parametros.get("valor"));
             JSONObject jsonParametros = new JSONObject(parametros);
             NetworkManager.getInstance().postRequest(jsonParametros, "/medicion", new NetworkManager.ControladorRespuestas() {
                 @Override
