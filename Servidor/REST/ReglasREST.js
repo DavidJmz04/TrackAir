@@ -127,11 +127,11 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // llamo a la función adecuada de la lógica
         var res = await laLogica.obtenerLecturas(tipoGas)
         //Si el array esta vacío
-        if (res.length == 0) {
+//        if (res.length == 0) {
             // 404: not found
-            respuesta.status(404).send("No encontré la lectura")
-            return
-        }
+//            respuesta.status(404).send("No encontré la lectura")
+//            return
+//        }
         // todo ok
         respuesta.send(JSON.stringify(res))
     }) // get /mediciones/:idUsuario

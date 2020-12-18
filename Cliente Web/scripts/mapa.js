@@ -1,3 +1,20 @@
+const filtro = document.querySelector("#filtrogas");
+filtro.addEventListener("change",async ()=>{
+    console.log(filtro.value);
+    await ponerGradiente(filtro.value)
+})
+const noLecturas = document.querySelector(".no-medidas");
+const sidebar = document.querySelector(".sidebar");
+const iconoFiltros = document.querySelector(".menu");
+iconoFiltros.addEventListener("click", ()=>{
+    //alert();
+    toggleSidebar();
+})
+
+function toggleSidebar(){
+    sidebar.classList.toggle("hidden-sidebar");
+}
+
 var mapa;
 var tSizeBueno = 0;
 var tSizeMedio = 0;
@@ -54,7 +71,7 @@ async function initMap() {
         zoom: 14,
     });
 
-    await ponerGradiente("GI")
+    await ponerGradiente("CO2")
 }
 
 async function ponerGradiente(tipoMedicion) {
@@ -62,20 +79,25 @@ async function ponerGradiente(tipoMedicion) {
     vaciarGradientes()
 
     var mediciones = await laLogica.obtenerLecturas(tipoMedicion)
-
-    medicionesBuenas = medicionesBuenas(mediciones);
-    tSizeBueno = medicionesBuenas.length
-    gradienteBueno= crearGradiente(medicionesBuenas, verde)
+    //console.log(mediciones);
+    if(mediciones.length > 0 ){
+        noLecturas.style.display = "none";
+    }else{
+        noLecturas.style.display = "block";
+    }
+    let _medicionesBuenas = medicionesBuenas(mediciones);
+    tSizeBueno = _medicionesBuenas.length
+    gradienteBueno= crearGradiente(_medicionesBuenas, verde)
     modificarZoom(gradienteBueno,tSizeBueno)
 
-    medicionesMedias = medicionesMedias(mediciones);
-    tSizeMedio = medicionesMedias.length
-    gradienteMedio= crearGradiente(medicionesMedias, amarillo, tSizeMedio)
+    let _medicionesMedias = medicionesMedias(mediciones);
+    tSizeMedio = _medicionesMedias.length
+    gradienteMedio= crearGradiente(_medicionesMedias, amarillo, tSizeMedio)
     modificarZoom(gradienteMedio,tSizeMedio)
 
-    medicionesMalas = medicionesMalas(mediciones);
-    tSizeMalo = medicionesMalas.length
-    gradienteMalo= crearGradiente(medicionesMalas, rojo, tSizeMalo)
+    let _medicionesMalas = medicionesMalas(mediciones);
+    tSizeMalo = _medicionesMalas.length
+    gradienteMalo= crearGradiente(_medicionesMalas, rojo, tSizeMalo)
     modificarZoom(gradienteMalo,tSizeMalo)
 }
 
