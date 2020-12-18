@@ -6,11 +6,11 @@ const calidadAireMult = {
 }
 
 const calidadAire = {
-  0: "Muy buena",
-  1: "Buena",
-  2: "Media",
-  3: "Mala",
-  4: "Peligroso"
+    0: "Muy buena",
+    1: "Buena",
+    2: "Media",
+    3: "Mala",
+    4: "Peligroso"
 }
 
 module.exports = class Utilidades {
@@ -98,23 +98,23 @@ module.exports = class Utilidades {
       else if (calidadNum >= 4 && calidadNum < 8) calidadNum = 3
       else if (calidadNum >= 2 && calidadNum < 4) calidadNum = 2
     }
-    return calidadNum;
-  }
+    return calidadNum;s
+    }
 
   getUltimaMedicionOficial(json) {
     console.log(json.mediciones)
     return json.mediciones[json.mediciones.length-1].contaminacion;
   }
 
-  fechaActual() {
-    var fecha = new Date();
-    var dd = String(fecha.getDate()).padStart(2, '0');
-    var mm = String(fecha.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = fecha.getFullYear();
+    fechaActual() {
+        var fecha = new Date();
+        var dd = String(fecha.getDate()).padStart(2, '0');
+        var mm = String(fecha.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = fecha.getFullYear();
 
-    fecha = dd + '/' + mm + '/' + yyyy;
-    return fecha;
-  }
+        fecha = dd + '/' + mm + '/' + yyyy;
+        return fecha;
+    }
 
     // ................................................................................................................................................
     // <R>, <R>, <R>, <R>
@@ -137,4 +137,43 @@ module.exports = class Utilidades {
         return R * c;
     }
 
+    parsearMedicion(mediciones) {
+
+        var string = ""
+
+        for (var i = 0; i < mediciones.length; i++) {
+
+            string += mediciones[i].ubicacion.split(",")[0]
+            if (i < mediciones.length - 1) string += ", "
+        }
+
+        string += "\n"
+
+        for (var i = 0; i < mediciones.length; i++) {
+
+            string += mediciones[i].ubicacion.split(",")[1]
+            if (i < mediciones.length - 1) string += ", "
+        }
+
+        string += "\n"
+
+        for (var i = 0; i < mediciones.length; i++) {
+
+            string += mediciones[i].valor
+            if (i < mediciones.length - 1) string += ", "
+        }
+        
+        string += "\n"
+
+        return string
+    }
+
+    async crearArchivo(nombre, contenido){
+        let fs = require('fs')
+        return new Promise((resolver, rechazar)=>{
+            fs.writeFile('../Datos/'+nombre+'medicionesBD.txt', contenido, function (err) {
+                if (err) rechazar(err); else resolver
+            });
+        })
+    }
 }

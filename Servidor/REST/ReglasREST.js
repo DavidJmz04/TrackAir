@@ -17,7 +17,6 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     servidorExpress.get("/prueba/", function (peticion, respuesta) {
         console.log(" * GET /prueba ");
-
         respuesta.send("¡Funciona!");
     }); // get /prueba
 
@@ -78,6 +77,27 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         respuesta.send(online)
     }); // get /mediciones
 
+    // .......................................................
+    // GET /lecturas/:tipoGas
+    // .......................................................
+    servidorExpress.get('/lecturas/:tipoGas', async function (peticion, respuesta) {
+
+        console.log(" * GET /lecturas/:tipoGas ")
+
+        // averiguo el id
+        var tipoGas = peticion.params.tipoGas
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.obtenerLecturas(tipoGas)
+        //Si el array esta vacío
+        if (res.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré la lectura")
+            return
+        }
+        // todo ok
+        respuesta.send(JSON.stringify(res))
+    }) // get /mediciones/:idUsuario
+    
     // .......................................................
     // GET /calidadAire/:idUsuario
     // .......................................................
@@ -265,11 +285,15 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     // GET /informe/uso
     // .......................................................
-    servidorExpress.get("/informe/uso", async function (peticion, respuesta) {
-        console.log(" * GET /informe/uso ");
+    servidorExpress.get("/informe/uso/:primerDia", async function (peticion, respuesta) {
+
+        console.log(" * GET /informe/uso/:primerDia ");
+
+        // averiguo el primerDia del intervalo
+        var primerDia = peticion.params.primerDia
 
         // llamo a la función adecuada de la lógica
-        var res = await laLogica.buscarDistanciaYTiempoDeUsuarios();
+        var res = await laLogica.buscarDistanciaYTiempoDeUsuarios(primerDia);
         console.log(res);
 
         if (res.length == 0) {
