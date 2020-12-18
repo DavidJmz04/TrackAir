@@ -1,4 +1,4 @@
-function y = interpolar()
+function y = interpolacion()
 TIPOGASES = ["GI", "CO2", "NO2", "O3", "SO2"];
 format long;
 %[x]Generar JSON
@@ -28,7 +28,7 @@ for tg=1:length(TIPOGASES)
     
     %GRID PARA ZONA GND
     LatStep = 3.6015e-04;
-    LonStep = 4.6208e-06;
+    LonStep = 4.6208e-04;
     
     if (max(Lat)- min(Lat)) < LatStep
         LatStep = (max(Lat)- min(Lat))/10;

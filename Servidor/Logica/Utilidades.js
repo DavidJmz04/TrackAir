@@ -177,4 +177,5 @@ module.exports = class Utilidades {
             });
         })
     }
+
 }

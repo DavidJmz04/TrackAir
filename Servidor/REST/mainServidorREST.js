@@ -48,9 +48,8 @@ async function main() {
     setInterval(async function () {
         
         //Obtenemos las mediciones de las ultimas dos horas
-    await laLogica.parsearMediciones()
-        
-        //Llamamos a la función del matlab
+        laLogica.setEstaEscribiendo(true);
+        await laLogica.parsearMediciones()
         
         
 //    }, 1000*60*60*2)
