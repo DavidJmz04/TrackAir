@@ -9,36 +9,35 @@
         android:id="@+id/lblListHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/comfortaabold"
         android:gravity="center_vertical|start"
         android:layoutDirection="ltr"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        tools:text="Status"
         android:textColor="@color/greyish_brown_two_80"
+        android:textSize="16sp"
+        android:textStyle="normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Status" />
 
     <TextView
         android:id="@+id/groupStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="2dp"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/comfortaasemibold"
         android:gravity="center_vertical|start"
         android:layoutDirection="ltr"
-        android:textSize="12sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="#8492a8"
         android:lineSpacingExtra="5sp"
+        android:textColor="#8492a8"
+        android:textSize="12sp"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Open"
-        app:layout_constraintTop_toBottomOf="@+id/lblListHeader" />
+        app:layout_constraintTop_toBottomOf="@+id/lblListHeader"
+        tools:text="Open" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:backgroundTint="#1ddba6"
         android:layout_marginBottom="?attr/actionBarSize"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,7 +19,13 @@
         android:id="@+id/bottomNav"
         android:layout_alignParentBottom="true"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_navigation"/>
+        app:menu="@menu/bottom_navigation"
+        app:itemIconSize="26dp"
+        app:backgroundTint="#1ddba6"
+        app:itemIconTint="#ffffff"
+        app:itemTextColor="#ffffff"
+        app:itemRippleColor="@color/black_80"
+        app:elevation="36dp"/>
 
 
 

@@ -10,6 +10,8 @@ const fs = require("fs");
 module.exports.cargar = function (servidorExpress, laLogica) {
     var utilidad = new utilidades();
     var csv = require("../Datos/MedicionesOficiales.json"); // your json file path
+    var online = require("../Datos/MedicionesOficialesOnline.json"); // your json file path
+    var calibrar = false;
     // .......................................................
     // GET /prueba
     // .......................................................
@@ -70,49 +72,9 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // GET /mediciones oficiales en línea
     // .......................................................
     servidorExpress.get('/medicionesOficiales', async function (peticion, respuesta) {
-        const fetch = require("node-fetch");
+
         console.log(" * GET /mediciones oficiales")
-
-        const options = {
-            method: "POST",
-            mode: 'cors',
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': "*"
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({
-                "idEstacion": 5
-            }) // body data type must match "Content-Type" header
-        };
-
-        // Petición HTTP
-        fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerEstacionById", options)
-            .then(response => response.text())
-            .then(data => {
-
-                if (data.length == 0) {
-                    // 404: not found
-                    respuesta.status(404).send("{}")
-                    return
-                }
-                // todo ok
-                fetch("https://webcat-web.gva.es/webcat_web/datosOnlineRvvcca/obtenerTablaPestanyaDatosOnline", options)
-                    .then(response => response.text())
-                    .then(data => {
-                        if (data.length == 0) {
-                            // 404: not found
-                            respuesta.status(404).send("{}")
-                            return
-                        }
-                        // todo ok
-                        respuesta.send(utilidad.convertirTiempoRealAJSONpropio((JSON.parse(data))['listMagnitudesMediasHorarias']))
-
-                    });
-
-            });
+        respuesta.send(online)
     }); // get /mediciones
 
     // .......................................................
@@ -395,17 +357,42 @@ module.exports.cargar = function (servidorExpress, laLogica) {
 
         var datos = JSON.parse(peticion.body)
 
-        await laLogica.insertarMedicion(datos)
-        var res = await laLogica.buscarMedicionConMomentoYUbicacion(datos)
-
+        // Procesado de la medicion
+        var sensor = await laLogica.buscarSensorPertenecienteA(datos.idUsuario)
         // supuesto procesamiento
-        if (res.length != 1) {
+        if (sensor.length > 0) {
+            var error = sensor[0].error;
+            var medicion = datos.valor;
+            var medicionConError = medicion * (1 / error);
+            var ultimaMedicionOficial = utilidad.getUltimaMedicionOficial(online);
+            console.log(ultimaMedicionOficial + " - " + medicionConError + " _-_ " + (ultimaMedicionOficial + ultimaMedicionOficial * 0.2))
+            if (medicionConError > (ultimaMedicionOficial + ultimaMedicionOficial * 0.2) | medicionConError < (ultimaMedicionOficial - ultimaMedicionOficial * 0.2)) {
+                //if ((ultimaMedicionOficial - ultimaMedicionOficial * 0.2) < medicionConError)
+                if (calibrar) {
+                    error = medicionConError / ultimaMedicionOficial;
+                    await laLogica.modificarErrorSensor(sensor[0].id_nodo, error);
+                    var medicionConError = medicion * (1 / error);
+                    calibrar = false;
+                } else {
+                    calibrar = true;
+                }
+            }
+            datos.valor = (medicionConError < 0 ? 0 : medicionConError);
+            await laLogica.insertarMedicion(datos);
+            var res = await laLogica.buscarMedicionConMomentoYUbicacion(datos)
 
-            respuesta.status(404).send("No se ha podido insertar la medicion")
+            // supuesto procesamiento
+            if (res.length != 1) {
+
+                respuesta.status(404).send("No se ha podido insertar la medicion")
+                return
+            }
+
+            respuesta.send(JSON.stringify(res[0]))
+        } else {
+            respuesta.status(404).send("No se ha encontrado sensor")
             return
         }
-
-        respuesta.send(JSON.stringify(res[0]))
     }) // post /medicion
 
     // .......................................................

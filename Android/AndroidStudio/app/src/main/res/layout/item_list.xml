@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:fontFamily="@font/comfortaabold">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -16,75 +18,71 @@
 
         <ImageView
             android:id="@+id/idImagen"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/ic_baseline_stars_24" />
+            android:layout_width="118dp"
+            android:layout_height="115dp"
+            android:src="@drawable/ic_baseline_stars_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/idRecompensa"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="vertical">
+            android:layout_marginStart="8dp"
+            android:text="Recompensa"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/idImagen"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/idRecompensa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Recompensa"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/idCoste"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Puntos"
+            app:layout_constraintStart_toEndOf="@+id/idImagen"
+            app:layout_constraintTop_toBottomOf="@+id/idRecompensa" />
 
-            <TextView
-                android:id="@+id/idInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Informacion"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/idRecompensa" />
+        <TextView
+            android:id="@+id/idInfo"
+            android:layout_width="262dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="8dp"
+            android:text="Informacion"
+            app:layout_constraintStart_toEndOf="@+id/idImagen"
+            app:layout_constraintTop_toBottomOf="@+id/idCoste" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent">
+        <TextView
+            android:id="@+id/CopiarCodigo"
+            android:layout_width="68dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bordercodigo"
+            android:drawableLeft="@drawable/ic_baseline_content_copy_24"
+            android:drawablePadding="4dp"
+            android:drawableTint="@android:color/transparent"
+            android:padding="7dp"
+            android:text=""
 
-                <Button
-                    android:id="@+id/CanjearButton"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/button"
-                    android:text="Canjear"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/CopiarCodigo"
-                    android:background="@drawable/bordercodigo"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:drawableLeft="@drawable/ic_baseline_content_copy_24"
-                    android:drawableTint="@android:color/transparent"
-                    android:drawablePadding="4dp"
-                    android:padding="7dp"
-                    android:text=""
-                    android:visibility="gone" />
-            </LinearLayout>
+        <Button
+            android:id="@+id/CanjearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/button"
+            android:text="Canjear"
+            android:textColor="@color/white"
 
-        </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

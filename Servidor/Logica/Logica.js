@@ -298,6 +298,19 @@ module.exports = class Logica {
         });
     }
 
+
+    modificarErrorSensor(idnodo, error){
+        var textoSQL = "update sensores set error=? where id_nodo=?;";
+        console.log(idnodo + " - " + error)
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [error, idnodo],
+                function (err) {
+                    err ? rechazar(err) : resolver();
+                }
+            );
+        });
+    }
+
     // ................................................................................................................................................
     // datos:{idUsuario:Z, valor:Real, momento:Datetime, ubicacion:Texto, tipoMedicion:Texto}
     // -->
@@ -410,6 +423,17 @@ module.exports = class Logica {
             });
         });
     }
+
+    buscarSensorPertenecienteA(id){
+        var textoSQL = "select * from sensores s, usuarios u where u.id_nodo=s.id_nodo and u.id= ?";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [id], (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        });
+    }
+    
 
     // ................................................................................................................................................
     // id:Z 

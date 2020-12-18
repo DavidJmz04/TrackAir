@@ -1,5 +1,7 @@
 package com.example.serpumar.sprint0_3a.Activities.Main.Fragments;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,10 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.serpumar.sprint0_3a.Activities.Main.Adapters.RecompensasAdapter;
+import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
 import com.example.serpumar.sprint0_3a.Models.Recompensa;
 import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
+import com.example.serpumar.sprint0_3a.Models.Usuario;
 import com.example.serpumar.sprint0_3a.R;
 
 import org.json.JSONArray;
@@ -23,10 +29,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static java.lang.Integer.parseInt;
+
 public class RecompensasFragment extends Fragment implements RecompensasAdapter.OnRecompensaListener {
 
     RecyclerView recyclerRecompensas;
     ArrayList<Recompensa> listaRecompensas;
+    LottieAnimationView lottieAnimationView3Bar;
+    TextView puntosUsuario;
+    Account[] accounts;
+//    final AccountManager accountManager = AccountManager.get(getActivity());
 
     public RecompensasFragment() {
         // Required empty public constructor
@@ -40,11 +52,27 @@ public class RecompensasFragment extends Fragment implements RecompensasAdapter.
         listaRecompensas = new ArrayList<>();
         recyclerRecompensas = view.findViewById(R.id.recyclerId);
         recyclerRecompensas.setLayoutManager(new LinearLayoutManager(getContext()));
+        //lottieAnimationView3Bar = view.findViewById(R.id.animationViewBar);
+        puntosUsuario = view.findViewById(R.id.puntosUsuarios);
+
+        Usuario usuario = ((MainActivity)getActivity()).getUsuario();
+
+        if(((MainActivity)getActivity()).isLogged()){
+            puntosUsuario.setText(String.valueOf(usuario.getPuntosCanjeables()));
+            //lottieAnimationView3Bar.setVisibility(View.VISIBLE);
+        }else{
+            puntosUsuario.setText("Debes estar logueado");
+            //lottieAnimationView3Bar.setVisibility(View.INVISIBLE);
+        }
+
 
         llenarLista();
 
         return view;
     }
+
+    /*Usuario usuario = new Usuario(usuarioJSON.getInt("id"), usuarioJSON.getString("nombre"), usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"), usuarioJSON.getString("correo"), usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"), usuarioJSON.getString("telefono"), usuarioJSON.getString("id_nodo"));
+    reputacion.setText("Puntos: " + String.valueOf(usuario.getPuntosCanjeables()));*/
 
     private void llenarLista() {
         final RecompensasAdapter.OnRecompensaListener onRecompensaListener = this;
@@ -92,6 +120,8 @@ public class RecompensasFragment extends Fragment implements RecompensasAdapter.
             }
         });
     }
+
+
 
     @Override
     public void onRecompensaClick(int posicion, final Button button) {

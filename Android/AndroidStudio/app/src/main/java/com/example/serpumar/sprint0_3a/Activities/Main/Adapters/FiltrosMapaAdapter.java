@@ -3,7 +3,9 @@ package com.example.serpumar.sprint0_3a.Activities.Main.Adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,8 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.serpumar.sprint0_3a.Models.FiltrosMapa;
 import com.example.serpumar.sprint0_3a.R;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +31,7 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
     private Activity _context;
     private List<FiltrosMapa> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
+
     int selectedPosition = 0;
 
     HashMap<Integer, Integer> childCheckedState = new HashMap<>();
@@ -34,6 +39,10 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
     ArrayList<String> listOfStatusFilters = new ArrayList<>();
 
     ArrayList<ArrayList<Integer>> check_states = new ArrayList<ArrayList<Integer>>();
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
 
     public FiltrosMapaAdapter(FragmentActivity _context, List<FiltrosMapa> _listDataHeader, HashMap<String, List<String>> _listDataChild) {
         this._context = _context;
@@ -95,6 +104,25 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
 
         groupStatus.setText(_listDataHeader.get(groupPosition).getActiveFilter());
 
+        pref = _context.getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = pref.edit();
+        /*
+        String checkbox;
+        if((checkbox = pref.getString("checkbox", "")).length() > 0) {
+            String[] checkboxIndex = checkbox.split(";");
+            int count = checkboxIndex.length;
+            for (int i = 0; i < count; i++) {
+                childCheckboxState.put(Integer.parseInt(checkboxIndex[i]), 1);
+            }
+        }
+*/
+        String radioButtonChecked = pref.getString("radioButtonString", "");
+        if (radioButtonChecked.length() > 0) {
+                Log.wtf("TAG", radioButtonChecked + " CHECKED");
+                String[] radioButtonInfo = radioButtonChecked.split(";");
+                childCheckedState.put(Integer.parseInt(radioButtonInfo[0]), Integer.parseInt(radioButtonInfo[1]));
+            }
+
 
         return convertView;
     }
@@ -116,11 +144,15 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
         final RadioButton filterRadioButton = convertView.findViewById(R.id.filterNameRadioButton);
         //txtListChild.setText(childText);
         if (groupPosition > 0) {
-            filterCheckBox.setVisibility(View.GONE);
-            filterRadioButton.setVisibility(View.VISIBLE);
-        } else {
+            //filterCheckBox.setVisibility(View.GONE);
+            //filterRadioButton.setVisibility(View.VISIBLE);
             filterCheckBox.setVisibility(View.VISIBLE);
             filterRadioButton.setVisibility(View.GONE);
+        } else {
+            //filterCheckBox.setVisibility(View.VISIBLE);
+            //filterRadioButton.setVisibility(View.GONE);
+            filterCheckBox.setVisibility(View.GONE);
+            filterRadioButton.setVisibility(View.VISIBLE);
         }
 
 
@@ -144,8 +176,11 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
                 public void onClick(View v) {
                     childCheckedState.put(groupPosition, (Integer) v.getTag());
                     if (_listDataChild.get(headerText.getTitle()) != null) {
-                        headerText.setActiveFilter(_listDataChild.get(headerText.getTitle()).get(childPosition));
-
+                        //headerText.setActiveFilter(_listDataChild.get(headerText.getTitle()).get(childPosition));
+                        Log.wtf("TAG", v.getTag() + " tag");
+                        editor.remove("radioButtonString");
+                        editor.putString("radioButtonString", groupPosition + ";" + childPosition);
+                        editor.commit();
                     }
                     notifyDataSetChanged();
 
@@ -162,14 +197,18 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
                     }
                 }
             }
-
+/*
             filterCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (filterCheckBox.isChecked()) {
+                        editor.putString("checkbox",pref.getString("checkbox", "") + childPosition+";");
+                        editor.commit();
                         childCheckboxState.put(childPosition, 1);
                         listOfStatusFilters.add(_listDataChild.get(headerText.getTitle()).get(childPosition));
                     } else {
+                        editor.putString("checkbox",pref.getString("checkbox", "").replace(childPosition+";", ""));
+                        editor.commit();
                         childCheckboxState.put(childPosition, 0);
                         listOfStatusFilters.remove(_listDataChild.get(headerText.getTitle()).get(childPosition));
                     }
@@ -180,7 +219,7 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
 
                 }
             });
-
+*/
         } catch (Exception e) {
 
         }
@@ -204,5 +243,13 @@ public class FiltrosMapaAdapter extends BaseExpandableListAdapter {
         return status;
     }
 
+    public HashMap getRadioButtonChecked() {
+
+        return childCheckedState;
+    }
+
+    public HashMap getCheckboxChecked() {
+        return childCheckboxState;
+    }
 
 }
