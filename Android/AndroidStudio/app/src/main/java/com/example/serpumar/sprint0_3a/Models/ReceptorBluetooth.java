@@ -118,10 +118,10 @@ public class ReceptorBluetooth implements Serializable {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = dateFormat.format(Calendar.getInstance().getTime().getTime());
 
-            ultimaMedicion = new Medicion(medicion, new Ubicacion(gpsService.obtenerUbicacion(context).getLatitud(), gpsService.obtenerUbicacion(context).getLongitud()), date, "CO2");
+            ultimaMedicion = new Medicion(medicion, new Ubicacion(gpsService.obtenerUbicacion(context).getLatitud(), gpsService.obtenerUbicacion(context).getLongitud()), date, "GI");
 
 //            EditText cajaLectura = (EditText) (context.findViewById(R.id.cajaSensor);
-            Log.i("AAA", getUltimaMedicion().getMedicion() + " ug/m3 - " + getUltimaMedicion().getDate() + " - " + getUltimaMedicion().getUbicacion().getLongitud());
+            Log.wtf("AAA", getUltimaMedicion().getMedicion() + " ug/m3 - " + getUltimaMedicion().getUbicacion().getLatitud() + " - " + getUltimaMedicion().getUbicacion().getLongitud());
             //lf.guardarMedicion(medicion, ub, date, context); //Le paso como variable el contexto para poder cambiar el texto en la pantalla del MainActivity
         } else {
             Log.d("Medicion", "La medicion ya se ha tomado");
