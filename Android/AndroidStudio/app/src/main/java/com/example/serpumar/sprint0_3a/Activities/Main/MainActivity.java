@@ -5,12 +5,11 @@ package com.example.serpumar.sprint0_3a.Activities.Main;
 
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
-import android.accounts.Account;
+
 import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,21 +27,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.serpumar.sprint0_3a.Activities.Main.Fragments.MapaFragment;
-import com.example.serpumar.sprint0_3a.Activities.Main.Fragments.MedicionesFragment;
 import com.example.serpumar.sprint0_3a.Activities.Main.Fragments.PerfilFragment;
 import com.example.serpumar.sprint0_3a.Activities.Main.Fragments.RecompensasFragment;
 import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
+import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
 import com.example.serpumar.sprint0_3a.Models.Usuario;
 import com.example.serpumar.sprint0_3a.R;
-import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Random;
 
 import static java.lang.Integer.parseInt;
 
