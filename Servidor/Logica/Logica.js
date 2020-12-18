@@ -370,7 +370,7 @@ module.exports = class Logica {
     // ................................................................................................................................................
     buscarMedicionesDeTipoMedicion(tipoMedicion) {
 
-        var textoSQL = "select * from mediciones WHERE tipoMedicion= ? AND momento >= DATE_SUB(NOW(),INTERVAL 2 HOUR)";
+        var textoSQL = "select * from mediciones WHERE tipoMedicion= ? AND momento >= DATE_SUB(NOW(),INTERVAL 4 HOUR)";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [tipoMedicion], (err, res) => {
