@@ -12,7 +12,7 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.serpumar.sprint0_3a.MainActivity;
+import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
 import com.example.serpumar.sprint0_3a.R;
 
 public class ServicioNotificaciones extends Service {
