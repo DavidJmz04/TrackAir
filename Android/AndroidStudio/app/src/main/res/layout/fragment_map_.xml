@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
+    android:id="@+id/map_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.Main.Fragments.MapaFragment"
-    android:background="@drawable/mapaimagen">
+    android:background="@drawable/mapaimagen"
+    class="com.google.android.gms.maps.SupportMapFragment">
 
 
     <FrameLayout
@@ -16,6 +17,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" >
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
