@@ -135,8 +135,8 @@ class Logica {
         window.location.href = `${servidor}${puerto}/${recurso}`;
         //window.open(`${servidor}${puerto}/${recurso}`);
     }
-    async obtenerPDFUso() {
-        let recurso = "informe/uso";
+    async obtenerPDFUso(fecha) {
+        let recurso = "informe/uso/" + fecha;
         /*
         let res = await axios.get(`${servidor}:3000/${recurso}`, {
                 method: 'GET',
