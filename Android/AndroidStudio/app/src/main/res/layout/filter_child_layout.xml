@@ -10,37 +10,38 @@
         android:id="@+id/textviewFilterName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/comfortaabold"
+        android:layoutDirection="ltr"
+        android:padding="16dp"
+        android:textColor="@color/nav_text"
+        app:fontFamily="@font/comfortaabold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Not started"
-        android:padding="16dp"
-        android:layoutDirection="ltr"
-        android:textColor="@color/nav_text"
-        />
+        tools:text="Not started" />
 
     <CheckBox
         android:id="@+id/filterNameCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"
-        android:layoutDirection="ltr"
+        android:layout_marginEnd="16dp"
         android:button="@drawable/checkbox_background"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:fontFamily="@font/comfortaabold"
+        android:layoutDirection="ltr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RadioButton
         android:id="@+id/filterNameRadioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"
-        android:visibility="gone"
-        android:layoutDirection="ltr"
+        android:layout_marginEnd="16dp"
         android:button="@drawable/radiobutton_bg"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:fontFamily="@font/comfortaabold"
+        android:layoutDirection="ltr"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

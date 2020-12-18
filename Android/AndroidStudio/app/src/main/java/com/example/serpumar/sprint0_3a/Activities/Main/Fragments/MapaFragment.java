@@ -146,13 +146,13 @@ public class MapaFragment extends Fragment {
 
         fragment = new MapaFragment_filtros();
 
-        FloatingActionButton abrirInformacionAdicional = (FloatingActionButton) view.findViewById(R.id.informacionFAB);
+        /*FloatingActionButton abrirInformacionAdicional = (FloatingActionButton) view.findViewById(R.id.informacionFAB);
         abrirInformacionAdicional.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,new MedicionesFragment()).commit();
             }
-        });
+        });*/
 
         Button  abrirFiltro = (Button) view.findViewById(R.id.botonMapa);
         abrirFiltro.setOnClickListener(new View.OnClickListener() {

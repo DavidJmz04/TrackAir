@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
 import com.example.serpumar.sprint0_3a.Models.Usuario;
 import com.example.serpumar.sprint0_3a.Helpers.MailTask;
 import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
@@ -25,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +38,8 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
     ArrayList<Recompensa> listaRecompensas;
     Context context;
     private OnRecompensaListener mOnRecompensaListener;
+    public boolean isLogged = false;
+    int idUsuario;
 
     public RecompensasAdapter(ArrayList<Recompensa> listaRecompensas, Context context, OnRecompensaListener onRecompensaListener) {
         this.listaRecompensas = listaRecompensas;
@@ -46,13 +50,23 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
     @Override
     public  RecompensasViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list,null, false);
+
+        try {
+            AccountManager accountManager = AccountManager.get(context);
+            idUsuario = parseInt(accountManager.getUserData(accountManager.getAccountsByType("com.example.serpumar.sprint0_3a")[0], "id"));
+            isLogged = true;
+        }catch(Exception e){
+            isLogged = false;
+        }
+
         return new RecompensasViewHolder(view, mOnRecompensaListener);
     }
 
     @Override
     public void onBindViewHolder(final RecompensasViewHolder holder, final int position) {
 
-        holder.txtRecompensa.setText(listaRecompensas.get(position).getTitulo() + " (" + listaRecompensas.get(position).getCoste() + " puntos)");
+        holder.txtRecompensa.setText(listaRecompensas.get(position).getTitulo() );
+        holder.textCoste.setText(listaRecompensas.get(position).getCoste() + " puntos");
         holder.txtInfo.setText(listaRecompensas.get(position).getDescripcion());
         holder.imagen.setImageResource(listaRecompensas.get(position).getImageId());
 
@@ -65,10 +79,6 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
     }
 
     private void obtenerPuntos(final int position, final Button button, final TextView codigoText){
-
-        AccountManager accountManager = AccountManager.get(context);
-        int idUsuario = parseInt(accountManager.getUserData(accountManager.getAccountsByType("com.example.serpumar.sprint0_3a")[0], "id"));
-
         NetworkManager.getInstance().getRequest("/usuario/" + idUsuario, new NetworkManager.ControladorRespuestas<String>() {
             @Override
             public void getResult(String object) {
@@ -155,6 +165,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
 
     public class  RecompensasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        TextView textCoste;
         TextView txtRecompensa;
         TextView txtInfo;
         ImageView imagen;
@@ -166,10 +177,15 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
 
             super(itemView);
             txtRecompensa = itemView.findViewById(R.id.idRecompensa);
+            textCoste = itemView.findViewById(R.id.idCoste);
             txtInfo = itemView.findViewById(R.id.idInfo);
             imagen = itemView.findViewById(R.id.idImagen);
             canjearButton = itemView.findViewById(R.id.CanjearButton);
             codigo = itemView.findViewById(R.id.CopiarCodigo);
+            if(!isLogged){
+                codigo.setVisibility(View.GONE);
+                canjearButton.setVisibility(View.GONE);
+            }
             codigo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -186,6 +202,7 @@ public class RecompensasAdapter extends RecyclerView.Adapter<RecompensasAdapter.
 
         @Override
         public void onClick(View v) {
+            if (isLogged)
             onRecompensaListener.onRecompensaClick(getAdapterPosition(), canjearButton);
         }
     }
