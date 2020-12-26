@@ -1,4 +1,4 @@
-function y = interpolar()
+function y = interpolacion()
 TIPOGASES = ["GI", "CO2", "NO2", "O3", "SO2"];
 format long;
 %[x]Generar JSON

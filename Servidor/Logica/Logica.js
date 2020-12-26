@@ -5,12 +5,13 @@
 const mysql = require("mysql");
 const Utilidades = require("./Utilidades.js");
 var utilidades = new Utilidades();
-
+let cacheMediciones={"GI": [], "CO2":[], "SO2":[], "O3":[], "NO2":[]};
+let horaActualizacion=new Date(1999-1-1);
 // ................................................................................................................................................
 // ................................................................................................................................................
 
 module.exports = class Logica {
-
+    
     // ................................................................................................................................................
     // nombreBD: Texto
     // -->
@@ -231,6 +232,10 @@ module.exports = class Logica {
         return res
     }
 
+    estaEscribiendo=false;
+    setEstaEscribiendo(bool){
+        this.estaEscribiendo = bool;
+    }
 
     // ................................................................................................................................................
     // tipoLectura:Texto -->
@@ -239,11 +244,14 @@ module.exports = class Logica {
     // Lista:{lat=R, lon= R, value=R}
     // ................................................................................................................................................
     obtenerLecturas(tipoLectura) {
-
+        
         var fs = require('fs');
+        let horaActual = new Date();
+        console.log("actualizacion = "+horaActualizacion)
 
-        return new Promise((resolver, rechazar) => {
 
+        if(!this.estaEscribiendo){
+            return new Promise((resolver, rechazar) => {
             fs.readFile('../Datos/medicionesInterpoladas.json', 'utf8', function (err, data) {
 
                 if (err) rechazar(err)
@@ -253,14 +261,18 @@ module.exports = class Logica {
                 var res;
 
                 for (var i = 0; i < mediciones.length; i++) {
-
+                    cacheMediciones[mediciones[i].TipoMedicion] = mediciones[i].mediciones;
                     if (mediciones[i].TipoMedicion == tipoLectura) res = mediciones[i].mediciones
                 }
+                cacheMediciones[tipoLectura] = res;
                 resolver(res);
-
             })
-
         })
+        
+        }else{
+            return cacheMediciones[tipoLectura]
+        }
+        
     }
 
 
@@ -383,7 +395,7 @@ module.exports = class Logica {
     // ................................................................................................................................................
     buscarMedicionesDeTipoMedicion(tipoMedicion) {
 
-        var textoSQL = "select * from mediciones WHERE tipoMedicion= ? AND momento >= DATE_SUB(NOW(),INTERVAL 2 HOUR)";
+        var textoSQL = "select * from mediciones WHERE tipoMedicion= ? AND momento >= DATE_SUB(NOW(),INTERVAL 4 HOUR)";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [tipoMedicion], (err, res) => {
@@ -521,9 +533,12 @@ module.exports = class Logica {
         if (err) {
             console.error(err);
             return;
-            
         }
-        console.log(stdout);
+        //console.log(stdout);
+        this.estaEscribiendo=false;
+        horaActualizacion = new Date();
+        console.log(horaActualizacion);
+
         });
     }
 
