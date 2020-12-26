@@ -4,165 +4,114 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="1"
     tools:context=".Activities.Main.Fragments.PerfilFragment">
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/Perfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/Perfil"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="10dp"
-                android:visibility="visible">
-
-                <Button
-                    android:id="@+id/boton_logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
-                    android:background="@drawable/button"
-                    android:padding="12dp"
-                    android:text="Cerrar sesión"
-                    android:textAlignment="center"
-                    android:textColor="#eee"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.539"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/preguntas_frecuentes" />
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="411dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/nombre_perfil"
                     android:layout_width="309dp"
                     android:layout_height="59dp"
-                    android:layout_marginTop="28dp"
                     android:fontFamily="@font/comfortaabold"
                     android:gravity="center"
                     android:text="Cargando..."
                     android:textAlignment="center"
                     android:textSize="36sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/usuario_perfil"
                     android:layout_width="311dp"
                     android:layout_height="36dp"
-                    android:layout_marginEnd="52dp"
                     android:fontFamily="@font/comfortaasemibold"
                     android:gravity="center"
                     android:text="@"
                     android:textAlignment="center"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/nombre_perfil"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/nombre_perfil"
-                    app:layout_constraintTop_toBottomOf="@+id/nombre_perfil" />
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/calidadBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    android:padding="12dp"
+                    android:text="Tu calidad del aire" />
+
+                <LinearLayout
+                    android:id="@+id/item_calidad"
+                    android:layout_width="match_parent"
+                    android:layout_height="120px"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/calidad_aire"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/comfortaasemibold"
+                        android:gravity="center"
+                        android:text="Tu calidad del aire"
+                        android:textAlignment="center"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/chartParent"
+                    layout="@layout/chart_common"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="50px">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/comfortaabold"
+                    android:text="Cuenta"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/puntuacion_perfil"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="52dp"
                     android:fontFamily="@font/comfortaasemibold"
                     android:gravity="center"
                     android:textAlignment="viewStart"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-                <TextView
-                    android:id="@+id/notificaciones_y_sonido"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="52dp"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:text="Notificaciones y sonido"
-                    android:textAlignment="viewStart"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/item_dispositivo" />
-
-                <TextView
-                    android:id="@+id/politica_de_privacidad"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="52dp"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:text="Política de privacidad"
-                    android:textAlignment="viewStart"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-                <TextView
-                    android:id="@+id/preguntas_frecuentes"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="52dp"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:text="Preguntas frecuentes"
-                    android:textAlignment="viewStart"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/politica_de_privacidad" />
-
-                <TextView
-                    android:id="@+id/Idioma"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="52dp"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:text="Idioma"
-                    android:textAlignment="viewStart"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/notificaciones_y_sonido" />
+                    android:textSize="18sp" />
 
                 <LinearLayout
                     android:id="@+id/item_mail"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="52dp"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/puntuacion_perfil">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/correo_perfil"
@@ -177,15 +126,9 @@
 
                 <LinearLayout
                     android:id="@+id/item_telefono"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="52dp"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/item_mail">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/telefono_perfil"
@@ -198,58 +141,28 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/comfortaabold"
-                    android:text="Cuenta"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/usuario_perfil" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="50px">
 
                 <TextView
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
                     android:fontFamily="@font/comfortaabold"
                     android:text="Ajustes"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.151"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/item_telefono" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/comfortaabold"
-                    android:text="Ayuda"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.151"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/Idioma" />
+                    android:textSize="18sp" />
 
                 <LinearLayout
                     android:id="@+id/item_dispositivo"
-                    android:layout_width="0dp"
+                    android:layout_width="307dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="52dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="52dp"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5">
+                    android:orientation="vertical">
 
 
                     <TextView
@@ -264,7 +177,73 @@
 
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/notificaciones_y_sonido"
+                    android:layout_width="307dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/comfortaasemibold"
+                    android:gravity="center"
+                    android:text="Notificaciones y sonido"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/Idioma"
+                    android:layout_width="307dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/comfortaasemibold"
+                    android:gravity="center"
+                    android:text="Idioma"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="50px">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/comfortaabold"
+                    android:text="Ayuda"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/politica_de_privacidad"
+                    android:layout_width="307dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/comfortaasemibold"
+                    android:gravity="center"
+                    android:text="Política de privacidad"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/preguntas_frecuentes"
+                    android:layout_width="307dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/comfortaasemibold"
+                    android:gravity="center"
+                    android:text="Preguntas frecuentes"
+                    android:textAlignment="viewStart"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/boton_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button"
+                android:padding="12px"
+                android:text="Cerrar sesión"
+                android:textAlignment="center"
+                android:textColor="#eee"
+                android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>
 

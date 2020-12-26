@@ -20,8 +20,8 @@ import org.json.JSONArray;
 public class NetworkManager {
 
     private static NetworkManager instance = null;
-    //private String url = "http://igmagi.upv.edu.es"; //Ip Zona Wifi telefono móvil -- SI SE CAMBIA AQUI, en el network_secutiry_config.xml tambien
-    private String url = "http://192.168.1.88:8080";
+    private String url = "http://igmagi.upv.edu.es"; //Ip Zona Wifi telefono móvil -- SI SE CAMBIA AQUI, en el network_secutiry_config.xml tambien
+    //private String url = "http://192.168.1.88:8080";
 
     //for Volley API
     public RequestQueue requestQueue;
