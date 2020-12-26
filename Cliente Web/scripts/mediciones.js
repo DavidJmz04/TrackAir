@@ -41,6 +41,23 @@ function main() {
     btn.onclick = () => {
         laLogica.obtenerPDFUso();
     };
+
+    var slc = document.getElementById("select-uso");
+    slc.addEventListener("change", () => {
+        
+        var dia= new Date();
+        var res;
+
+        switch (slc.value){
+            
+            case "dia": res= new Date(dia.getTime()-1000*60*60*24); break;
+            case "semana": res= new Date(dia.getTime()-1000*60*60*24*7); break;
+            case "mes": res= new Date(dia.getTime()-1000*60*60*24*30); break;
+        }
+            
+        console.log(res)
+        laLogica.obtenerPDFUso(res);
+    })
     var btn = document.getElementById("btn-ranking");
     btn.onclick = () => {
         laLogica.obtenerPDFRanking();
