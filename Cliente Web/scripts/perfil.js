@@ -9,9 +9,9 @@ let ranking = document.querySelector(".item-ranking");
 const laLogica = new Logica();
 let user;
 window.addEventListener("load", () => {
-  let id = getCookie("id");
+  let id = laLogica.getCookie("id");
   if (id != "") {
-    let info = laLogica.recuperarDatosUsuarioConId(id).then((inf) => {
+    let info = laLogica.get("usuario/" + id).then((inf) => {
       //console.log(inf);
       inf=inf[0];
       nombre.textContent=inf.nombre;
@@ -32,22 +32,6 @@ window.addEventListener("load", () => {
     window.location.href = "./../";
   }
 });
-
-// texto -> getCookie() -> texto
-function getCookie(cname) {
-  var name = cname + "=";
-  var ca = document.cookie.split(";");
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
 
 cerrarSesion.addEventListener("click", () => {
   logout = confirm(`¿Está seguro de querer cerrar sesión?`);

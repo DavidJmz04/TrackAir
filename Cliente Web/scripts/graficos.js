@@ -1,91 +1,100 @@
-// -------------------------------------
-// ------ Autor: Ignasi Marí Giner & Marc Oller Caballé
-// ------ 21-10-2020
-// -------------------------------------
+let laLogica;
+let testMode = false;
 
 //Cuando se carga la página
 window.onload = function () {
     main();
 };
-let laLogica;
-let intervalo;
-let testMode = false;
 
 // Punto de arranque
 function main() {
+
     //Creamos objeto de la Logica
     laLogica = new Logica();
+
+    //Creamos la gráfica
+    crearGrafica("Mediciones")
+
     console.log(document.cookie)
-    if(document.cookie != ""){
-    document.getElementById("nombreText").innerHTML = getCookie("name")
+    if (document.cookie != "") {
+        document.getElementById("nombreText").innerHTML = getCookie("name")
         cargarUsuario(getCookie("id"))
         document.getElementById("usuarioBox").style.display = "block";
     }
-    //mostrarMediciones();
+
+
+
+
     mostrarMedicionesTiempoReal();
 
     mostrarMediciones();
-    //Cada 4 segundos recuperamos los datos
-    /*
-        intervalo = setInterval(() => {
-            mostrarMediciones();
-        }, 4000);
-    
-        //Cada 6 segundos hace post con mediciones fake
-        setInterval(() => {
-            testPOST();
-        }, 6000);
-    */
-    //Botón para activar y desactivar
-    var btn = document.getElementById("btn-uso");
-    btn.onclick = () => {
-        laLogica.obtenerPDFUso();
-    };
 
-    var slc = document.getElementById("select-uso");
-    slc.addEventListener("change", () => {
-        
-        var dia= new Date();
-        var res;
 
-        switch (slc.value){
-            
-            case "dia": res= new Date(dia.getTime()-1000*60*60*24); break;
-            case "semana": res= new Date(dia.getTime()-1000*60*60*24*7); break;
-            case "mes": res= new Date(dia.getTime()-1000*60*60*24*30); break;
-        }
-            
-        console.log(res)
-        laLogica.obtenerPDFUso(res);
     })
     var btn = document.getElementById("btn-ranking");
     btn.onclick = () => {
         laLogica.obtenerPDFRanking();
     };
-    var btn = document.getElementById("btn-test");
-    btn.onclick = () => {
-        testMode = !testMode;
-    };
 }
 // ()
 
-// texto -> getCookie() -> texto
-function getCookie(cname) {
-  var name = cname + "=";
-  var ca = document.cookie.split(";");
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
+
+function crearGrafica(titulo) {
+
+    // create data
+    var data = [
+      ["January", 10000],
+      ["February", 12000],
+      ["March", 18000],
+      ["April", 11000],
+      ["May", 9000]
+    ];
+
+    // create a chart
+    var chart = anychart.line();
+
+    // create a line series and set the data
+    var series = chart.line(data);
+    
+    // set the chart title
+    chart.title(titulo);
+
+    // set the titles of the axes
+    var xAxis = chart.xAxis();
+    xAxis.title("Hora");
+    var yAxis = chart.yAxis();
+    yAxis.title("Valor");
+
+    // set the container id
+    chart.container("myChart");
+    
+    chart.xScale().mode('continuous');
+
+    // initiate drawing the chart
+    chart.draw();
+
 }
 
-function cargarUsuario(id){
+
+
+
+// texto -> getCookie() -> texto
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(";");
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == " ") {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function cargarUsuario(id) {
     let calidadText = document.getElementById("calidadAire");
     let promesa = laLogica.recuperarCalidadAire(id).then((calidad) => {
         calidadText.innerHTML = calidad ? calidad.calidadMedia : "No hay información"
@@ -185,8 +194,7 @@ function mostrarMedicionesTiempoReal() {
                 row.style.backgroundColor = color
                 medicionesContent.appendChild(row);
             });
-        } else {
-        }
+        } else {}
     });
 }
 
@@ -206,7 +214,7 @@ function mostrarMediciones() {
 
 
                 let divHora = document.createElement("div");
-                divHora.innerText =dateToString(medicion.momento);
+                divHora.innerText = dateToString(medicion.momento);
                 divHora.classList.add("cell");
 
                 let divValor = document.createElement("div");
@@ -249,16 +257,15 @@ function mostrarMediciones() {
                 row.style.backgroundColor = color
                 medicionesContent.appendChild(row);
             });
-        } else {
-        }
+        } else {}
     });
 }
 
-function dateToString(date){
+function dateToString(date) {
     var date = new Date(date),
         mnth = ("0" + (date.getMonth() + 1)).slice(-2),
         day = ("0" + date.getDate()).slice(-2);
-    return  [day, mnth, date.getFullYear()].join("/") + " " + date.getHours() + ":" + date.getMinutes();
+    return [day, mnth, date.getFullYear()].join("/") + " " + date.getHours() + ":" + date.getMinutes();
 }
 
 //llama a la logica y hace postea mediciones fake
@@ -270,46 +277,7 @@ function testPOST() {
     }
 }
 
-// Grafico ejemplo
-var ctx = document.getElementById('myChart');
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['20 nov', '21 nov', '22 nov', '23 nov', '24 nov', '25 nov'],
-        datasets: [{
-            label: 'NO2',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 3
-        }]
-    },
-    options: {
-        scales: {
 
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-
-    }
-});
 //show hide divs
 function showHideFunction() {
     var x = document.getElementById("mediciones-container");
