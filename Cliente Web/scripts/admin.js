@@ -1,7 +1,6 @@
 const laLogica = new Logica()
 var expanded = false
 
-
 //Cuando se carga la página
 window.onload = function () {
     buscarUsuarios();
@@ -38,10 +37,9 @@ function buscarUsuarios() {
         var contenedor = document.getElementById("contenedor")
 
         //Llenamos el contenedor con la información que nos interesa 
-        for (var i = 0; i < usuarios.length; i++) {
-            contenedor.innerHTML += '<button class="item" data-value="' + usuarios[i].nombre + '">' + usuarios[i].nombre + '(@' + usuarios[i].nombre_usuario + ')</button><div class="caja-parrafo row"><div class="col-4"><p class="texto-parrafo">Nombre: </p><input type="text" value="' + usuarios[i].nombre + '"><p class="texto-parrafo">Telefono: </p><input type="text" value="' + usuarios[i].telefono + '"><p class="texto-parrafo">Puntuacion: </p><input type="text" value="' + usuarios[i].puntuacion + '"></div><div class="col-4"><p class="texto-parrafo">Nombre Usuario: </p><input type="text" value="' + usuarios[i].nombre_usuario + '"><p class="texto-parrafo">Correo: </p><input type="text" value="' + usuarios[i].correo + '"><p class="texto-parrafo">Puntos canjeables: </p><input type="text" value="' + usuarios[i].puntos_canjeables + '"></div><div class="col-4"><p class="texto-parrafo">Contraseña: </p><input type="text" value="' + usuarios[i].contrasenya + '"><p class="texto-parrafo">ID Nodo: </p><input type="text" value="' + usuarios[i].id_nodo + '" disabled></div><div><button onclick="editarUsuario(' + usuarios[i].id + ')">Guardar</button><button onclick="borrarUsuario(' + usuarios[i].id + ')">Borrar</button></div>'
-        }
-        
+        for (var i = 0; i < usuarios.length; i++)
+            contenedor.innerHTML += '<button class="item" data-value="' + usuarios[i].nombre + '" data-nombre="' + usuarios[i].nombre_usuario + '">' + usuarios[i].nombre + '(@' + usuarios[i].nombre_usuario + ')</button><div class="caja-parrafo"><form action="" autocomplete="off" class="row" id="' + usuarios[i].id + '"><div class="col-4"><p class="texto-parrafo">Nombre: </p><input type="text" value="' + usuarios[i].nombre + '" required><p class="texto-parrafo">Telefono: </p><input type="text" value="' + usuarios[i].telefono + '" required><p class="texto-parrafo">Puntuacion: </p><input type="text" value="' + usuarios[i].puntuacion + '" required></div><div class="col-4"><p class="texto-parrafo">Nombre Usuario: </p><input type="text" value="' + usuarios[i].nombre_usuario + '" required><p class="texto-parrafo">Correo: </p><input type="text" value="' + usuarios[i].correo + '" required><p class="texto-parrafo">Puntos canjeables: </p><input type="text" value="' + usuarios[i].puntos_canjeables + '" required></div><div class="col-4"><p class="texto-parrafo">Contraseña: </p><input type="text" value="' + usuarios[i].contrasenya + '" disabled><p class="texto-parrafo">ID Nodo: </p><input type="text" value="' + usuarios[i].id_nodo + '" disabled></div><div><button type="submit" onclick="editarUsuario(' + usuarios[i].id + ')">Guardar</button><button type="button" onclick="borrarUsuario(' + usuarios[i].id + ')">Borrar</button></form></div>'
+            
         acordeon()
     })
 }
@@ -61,109 +59,89 @@ function acordeon() {
     }
 }
 
+function crearUsuario() {
 
-/*
-function crearUsuario(){       
-    
     laLogica.post("usuario", {
-        nombreUsuario:,
-        nombre:,
-        contrasenya:,
-        correo:,
-        telefono:,
+        nombreUsuario: document.getElementById("NombreUsuario").value,
+        nombre: document.getElementById("Nombre").value,
+        contrasenya: CryptoJS.SHA256(document.getElementById("Contrasenya").value).toString(),
+        correo: document.getElementById("Correo").value,
+        telefono: document.getElementById("Telefono").value
     })
 }
 
-function editarUsuario(id){
-    
+function editarUsuario(id) {
+
     laLogica.put("editarUsuario", {
         id: id,
-        nombreUsuario:,
-        nombre:,
-        contrasenya:,
-        correo:,
-        puntuacion:,
-        telefono:,
-        puntosCanjeables:
+        nombreUsuario: document.getElementById(id).getElementsByTagName("input")[3].value,
+        nombre: document.getElementById(id).getElementsByTagName("input")[0].value,
+        contrasenya: document.getElementById(id).getElementsByTagName("input")[6].value,
+        correo: document.getElementById(id).getElementsByTagName("input")[4].value,
+        puntuacion: document.getElementById(id).getElementsByTagName("input")[2].value,
+        telefono: document.getElementById(id).getElementsByTagName("input")[1].value,
+        puntosCanjeables: document.getElementById(id).getElementsByTagName("input")[5].value
     })
 }
 
-function borrarUsuario(id){
-    
-    if(confirm('¿Quieres borrar definitivamente el usuario?'))laLogica.delete("borrarUsuario", {id: id})
+function borrarUsuario(id) {
+
+
+    if (confirm('¿Quieres borrar definitivamente el usuario?')) {
+        laLogica.delete("borrarUsuario", {
+            id: id
+        })
+        location.reload();
+    }
 }
 
-
+//Muestra o esconde a los usuarios dependiendo de lo que pone en el input del buscador
 function buscar() {
 
+    //Valor escrito
     var valor = document.getElementById("buscar").value
-    var selector = document.getElementById("selector")
-    var elementos = document.getElementsByClassName("elementos")
-    var checklist = document.getElementsByTagName("input")
 
+    //Lista de usuarios
+    var selector = document.getElementsByClassName("item")
+    
     var res = []
 
-    for (var i = 0; i < selector.children.length; i++) {
+    //Llenamos una lista de booleanos que representan los usuarios (Si es ese usuario se pone a true)
+    for (var i = 0; i < selector.length; i++) res.push(false)
 
-        res.push(false)
-    }
-    
-    for (var i = 1; i < checklist.length; i++) {
+    for (var i = 0; i < selector.length; i++) {
 
-        if (checklist[i].checked) {
+        var lCoincidenNUsuario = buscarLetrasQueCoinciden(valor, selector[i].getAttribute('data-nombre'))
+        var lCoincidenNombre = buscarLetrasQueCoinciden(valor, selector[i].getAttribute('data-value'))
 
-            for (var j = 0; j < selector.children.length; j++) {
-
-                var buscado = 0
-
-                for (var k = 6 * j; k < 6 + 6 * j; k++) {
-
-                    var filtro = elementos[k].getAttribute('data-filtro')
-
-                    if (filtro == checklist[i].id) {
-
-                        var palabra = elementos[k].getAttribute('data-value')
-
-                        for (var l = 0; l < valor.length; l++) {
-
-                            if (palabra[l] != undefined) {
-
-                                if (valor[l].toUpperCase() == palabra[l].toUpperCase()) {
-
-                                    buscado++
-                                }
-                            }
-                        }
-
-                        if (valor.length <= buscado) {
-
-                            buscado = valor.length
-
-                        } else {
-
-                            buscado = 0
-                        }
-                    }
-
-                    if (buscado == valor.length) {
-
-                        res[j] = true
-                    }
-                }
-            }
-        }
+        if (lCoincidenNUsuario == valor.length || lCoincidenNombre == valor.length) res[i] = true
     }
 
-    for (var i = 0; i < selector.children.length; i++) {
 
-        if (res[i]) {
+    for (var i = 0; i < selector.length; i++) {
 
-            selector.children[i].style.display = "block"
-            
-        } else {
-
-            selector.children[i].style.display = "none"
-        }
+        if (res[i]) selector[i].style.display = "block"
+        else selector[i].style.display = "none"
     }
 }
-*/
+
+// <Texto>, <Texto> --> buscarLetrasQueCoinciden() --> <Z>
+
+//Busca las letras que coinciden entre dos palabras
+function buscarLetrasQueCoinciden(valor, palabra) {
+
+    var letrasCoinciden = 0
+
+    for (var j = 0; j < valor.length; j++) {
+
+        if (palabra[j] != undefined) {
+
+            if (valor[j].toUpperCase() == palabra[j].toUpperCase()) letrasCoinciden++
+        }
+    }
+    
+    if (valor.length <= letrasCoinciden) letrasCoinciden = valor.length 
+    else letrasCoinciden = 0
+
+    return letrasCoinciden
+}

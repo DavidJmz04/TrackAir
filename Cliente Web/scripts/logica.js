@@ -12,7 +12,6 @@ class Logica {
         let res = await axios.get(`${servidor}${puerto}/${recurso}`);
 
         let data = res.data;
-        console.log(data);
         return data;
     }
 
@@ -20,7 +19,6 @@ class Logica {
 
         let res = await axios.post(`${servidor}${puerto}/${recurso}`, datos);
         let data = res.data;
-        console.log(data);
         return data;
     }
 
@@ -28,7 +26,6 @@ class Logica {
 
         let res = await axios.put(`${servidor}${puerto}/${recurso}`, datos);
         let data = res.data;
-        console.log(data);
         return data;
     }
 
@@ -36,12 +33,11 @@ class Logica {
 
         let res = await axios.delete(`${servidor}${puerto}/${recurso}`, datos);
         let data = res.data;
-        console.log(data);
         return data;
     }
 
     // texto -> getCookie() -> texto
-    getCookie(cname) {
+    getCookie( cname) {
         var name = cname + "=";
         var ca = document.cookie.split(";");
         for (var i = 0; i < ca.length; i++) {
