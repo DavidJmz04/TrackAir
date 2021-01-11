@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graficos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/admin.css" />
+    <link rel="stylesheet" href="./styles/landing.css" />
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div>
+        <label for="uso">Informe gas del último:</label>
+        <select name="uso" id="select-uso">
+            <option value="dia">Dia</option>
+            <option value="semana">Semana</option>
+            <option value="mes">Mes</option>
+        </select>
+    </div>
+
+    <input type="text" placeholder="Buscar cliente..." id="buscar" oninput="buscar()">
+
+    <!-- Button trigger modal -->
+    <button class="btn btn-primary" data-toggle="modal" data-target="#crearUsuario">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal" id="crearUsuario" tabindex="-1" role="dialog" aria-labelledby="titulo" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titulo">Crear cliente</h5>
+                    <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+
+                    <form action="" autocomplete="off" class="row">
+                        <div class="col-4">
+                            <p>Nombre: </p><input type="text" id="Nombre" required>
+                            <p>Telefono: </p><input type="text" id="Telefono" required>
+                        </div>
+                        <div class="col-4">
+                            <p>Nombre Usuario: </p><input type="text" id="NombreUsuario" required>
+                            <p>Correo: </p><input type="text" id="Correo" required>
+                        </div>
+                        <div class="col-4">
+                            <p>Contraseña: </p><input type="text" id="Contrasenya" required>
+                        </div>
+                        <button type="submit" onclick="crearUsuario()">Guardar</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="contenedor"></div>
+
+    <button>Obtener Manual de Usuario</button>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./scripts/logica.js"></script>
+    <script src="./scripts/admin.js"></script>
+
+
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

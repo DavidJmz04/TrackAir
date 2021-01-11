@@ -78,14 +78,11 @@ async function ponerGradiente(tipoMedicion) {
 
     vaciarGradientes()
 
-    var mediciones = await laLogica.obtenerLecturas(tipoMedicion)
+    var mediciones = await laLogica.get("lecturas/" + tipoMedicion)
 
-    //console.log(mediciones);
-    if (mediciones.length > 0) {
-        noLecturas.style.display = "none";
-    } else {
-        noLecturas.style.display = "block";
-    }
+    if (mediciones.length > 0) noLecturas.style.display = "none";
+    else noLecturas.style.display = "block";
+    
     let _medicionesBuenas = medicionesBuenas(mediciones);
     tSizeBueno = _medicionesBuenas.length
     gradienteBueno = crearGradiente(_medicionesBuenas, verde)
@@ -249,7 +246,6 @@ MercatorProjection.prototype.fromPointToLatLng = function (point) {
 var desiredRadiusPerPointInMeters = 1000;
 
 function getNewRadius() {
-
 
     var numTiles = 1 << mapa.getZoom();
     var center = mapa.getCenter();
