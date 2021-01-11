@@ -109,7 +109,7 @@ async function main() {
         await laLogica.parsearMediciones()
         
 //    }, 1000*60*60*2)
-    }, 1000*90)
+    }, 1000*15)
 
     // capturo control-c para cerrar el servicio ordenadamente
     process.on("SIGINT", function () {

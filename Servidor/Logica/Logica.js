@@ -523,6 +523,17 @@ module.exports = class Logica {
     // parsearMediciones()
     // ................................................................................................................................................
     async parsearMediciones() {
+        let ahora = new Date();
+        horaActualizacion = new Date(ahora.getTime() - 1000*60*60*2);
+        let anyoAct=horaActualizacion.getFullYear();
+        let mesAct=horaActualizacion.getMonth();
+        mesAct+=1;
+        if (mesAct < 10) mesAct="0"+mesAct;
+        let diaAct=horaActualizacion.getDate();
+        if (diaAct < 10) diaAct="0"+diaAct;
+        let horaAct=horaActualizacion.getHours();
+        let nombreArchivoNuevo=(anyoAct+""+mesAct+""+diaAct+"-"+horaAct);
+        await utilidades.copiarArchivo("../Datos/MedicionesInterpoladas.json", "../Datos/Historico/"+nombreArchivoNuevo+".json");
         let tipoSensor=["GI", "CO2", "NO2", "O3", "SO2"];
         tipoSensor.forEach(async(val)=>{
             await utilidades.crearArchivo(val, utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion(val)))
@@ -536,7 +547,7 @@ module.exports = class Logica {
         }
         //console.log(stdout);
         this.estaEscribiendo=false;
-        horaActualizacion = new Date();
+        
         console.log(horaActualizacion);
 
         });
