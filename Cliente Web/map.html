@@ -25,7 +25,7 @@
 <nav class="menu_lateral">
     <div class="text">Menú</div>
     <ul>
-        <li><a href="#" data-toggle="modal" data-target="#login"> Perfil</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#login" onclick="chequearCookies()"> Perfil</a></li>
         <li><a href="#" class="gases-btn">Gases <span class="fas fa-caret-down first"></span></a>
             <ul class="gases-show" name="filtrogas" id="filtrogas">
                 <li><input type="radio" name="gases" class="input2" value="CO2" id="CO2" checked="checked"><label for="CO2" class="label-menu">CO2</label></li>
@@ -139,6 +139,17 @@
     <script src="./scripts/loader.js"></script>
     <script src="./scripts/mapa.js"></script>
     <script>
+        
+function chequearCookies(){
+    let id = laLogica.getCookie("id");
+    console.log("id" + id)
+  let logout = false;
+  if (id != "") {
+    window.location.href = "./perfil.html";
+  } else {
+    document.getElementById("login").style.display = "block";
+  }
+}
         $('.menu-btn').click(function () {
             $(this).toggleClass("click");
             $('.menu_lateral').toggleClass("show");

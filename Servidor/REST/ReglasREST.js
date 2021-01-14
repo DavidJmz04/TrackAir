@@ -74,7 +74,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     servidorExpress.get('/medicionesOficiales', async function (peticion, respuesta) {
 
         console.log(" * GET /mediciones oficiales")
-        respuesta.send(online)
+        respuesta.send(require("../Datos/MedicionesOficialesOnline.json")); // your json file path)
     }); // get /mediciones
 
     // .......................................................
@@ -381,19 +381,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // llamo a la función adecuada de la lógica
         var resErrorMediciones = await laLogica.buscarNodosConFallos();
         console.log(resUltimasMediciones);
-/*
-        if (resUltimasMediciones.length == 0) {
-            // 404: not found
-            respuesta.status(404).send("No encontré ultimas mediciones");
-            return;
-        }
 
-        if (resErrorMediciones.length == 0) {
-            // 404: not found
-            respuesta.status(404).send("No encontré mediciones con errores");
-            return;
-        }
-        */
         // todo ok
         // Read HTML Template
         var html = fs.readFileSync("plantillaInformeNodos.html", "utf8");

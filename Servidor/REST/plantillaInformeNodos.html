@@ -45,21 +45,48 @@
   <body>
     <section class="mediciones-container">
       <table>
-        <h4>Informe de nodos</h4>
+        <h3>Informe de nodos</h3>
+        <h5>Los siguientes nodos estuvieron 24h inactivos: </h5>
       <tr class="top-row">
+        <td class="cell">Nodo</td>
+        <td class="cell">MAC</td>
+        <td class="cell">Ultima medicion</td>
         <td class="cell">Usuario</td>
-        <td class="cell">Momento</td>
-        
+        <td class="cell">Telefono</td>
       </tr>
       {{#each inactivos}}
     
       <tr class="row">
-        <td class="cell"><small>{{this.id_usuario}}</small></td>
+        <td class="cell"><small>{{this.id_nodo}}</small></td>
+        <td class="cell"><small>{{this.MAC}}</small></td>
         <td class="cell"><small>{{this.momento_medicion}}</small></td>
+        <td class="cell"><small>{{this.id}}</small></td>
+        <td class="cell"><small>{{this.telefono}}</small></td>
       </tr>
     
       {{/each}}
     </table>
+    <table>
+      <h5>Los siguientes nodos han fallado: </h5>
+    <tr class="top-row">
+      <td class="cell">Nodo</td>
+      <td class="cell">MAC</td>
+      <td class="cell">Error</td>
+      <td class="cell">Usuario</td>
+      <td class="cell">Telefono</td>
+    </tr>
+    {{#each fallos}}
+  
+    <tr class="row">
+      <td class="cell"><small>{{this.id_nodo}}</small></td>
+      <td class="cell"><small>{{this.MAC}}</small></td>
+      <td class="cell"><small>{{this.error}}</small></td>
+      <td class="cell"><small>{{this.id}}</small></td>
+      <td class="cell"><small>{{this.telefono}}</small></td>
+    </tr>
+  
+    {{/each}}
+  </table>
     </section>
   </body>
 </html>

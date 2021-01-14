@@ -60,8 +60,8 @@ function cargarMedicionesOficiales(){
                         }
                         // todo ok
                         
-                        fs.writeFile("./Servidor/Datos/medicionesOficialesOnline.json", JSON.stringify(utilidad.convertirTiempoRealAJSONpropio((JSON.parse(data))['listMagnitudesMediasHorarias'])), function (err) {
-                          if (err) console.log("Error")
+                        fs.writeFile("../Datos/medicionesOficialesOnline.json", JSON.stringify(utilidad.neoConvertirTiempoRealAJSONpropio((JSON.parse(data))['listMagnitudesMediasHorarias'])), function (err) {
+                          if (err) console.log("Error - " + err)
                           else console.log("save")
                         })
 
@@ -77,6 +77,7 @@ function cargarMedicionesOficiales(){
 async function main() {
     var laLogica = await cargarLogica("proyecto3a");
 
+    cargarMedicionesOficiales();
     // creo el servidor
     var servidorExpress = express();
     servidorExpress.use(cors());
