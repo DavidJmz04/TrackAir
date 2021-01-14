@@ -1,0 +1,1 @@
+start matlab -batch run(interpolacion)

@@ -95,6 +95,7 @@ async function main() {
         console.log("servidor REST escuchando en el puerto 8080 ");
     });
 
+    console.log("Antes del interval")
     //Carga y guarda las mediciones oficiales
     setInterval(() => {
       // Petición HTTP
@@ -103,13 +104,13 @@ async function main() {
   
     //Llama al Matlab cada hora que crea un JSON en el servidor
     setInterval(async function () {
-        
+        console.log("dentro del interval")
         //Obtenemos las mediciones de las ultimas dos horas
         laLogica.setEstaEscribiendo(true);
         await laLogica.parsearMediciones()
         
 //    }, 1000*60*60*2)
-    }, 1000*15)
+    }, 1000*95)
 
     // capturo control-c para cerrar el servicio ordenadamente
     process.on("SIGINT", function () {

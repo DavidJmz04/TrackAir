@@ -49,7 +49,7 @@ const amarillo = ['rgba(255, 255, 0, 0)',
     'rgba(255, 255, 0, 1)']
 
 const rojo = [
-    'rgba(255, 0, 0, 0)',
+    'rgba(255, 0, 0, 0.0)',
     'rgba(255, 0, 0, 0.1)',
     'rgba(255, 0, 0, 0.2)',
     'rgba(255, 0, 0, 0.3)',
@@ -59,7 +59,8 @@ const rojo = [
     'rgba(255, 0, 0, 0.7)',
     'rgba(255, 0, 0, 0.8)',
     'rgba(255, 0, 0, 0.9)',
-    'rgba(255, 0, 0, 1)']
+    'rgba(255, 0, 0, 1)'
+]
 
 async function initMap() {
 
@@ -76,10 +77,25 @@ async function initMap() {
 
 async function ponerGradiente(tipoMedicion) {
 
-    vaciarGradientes()
+    //vaciarGradientes()
 
     var mediciones = await laLogica.get("lecturas/" + tipoMedicion)
+    console.log(mediciones);
 
+
+    //TILE_SIZE = datosGradiente.length
+
+    gradiente = new google.maps.visualization.HeatmapLayer({
+        data: medicionesBuenas(mediciones),
+        radius: 0.001,
+        dissipating: false,
+    });
+
+    gradiente.setMap(mapa);
+    //gradiente.set('gradient', color);
+
+    //return gradiente;
+    /*
     if (mediciones.length > 0) noLecturas.style.display = "none";
     else noLecturas.style.display = "block";
     
@@ -97,20 +113,25 @@ async function ponerGradiente(tipoMedicion) {
     tSizeMalo = _medicionesMalas.length
     gradienteMalo = crearGradiente(_medicionesMalas, rojo, tSizeMalo)
     modificarZoom(gradienteMalo, tSizeMalo)
+    */
+
 }
 
 function medicionesBuenas(mediciones) {
 
     var datosGradiente = []
-
+    var mayor;
     for (var i = 0; i < mediciones.length; i++) {
-
-        if (mediciones[i].value < 50) datosGradiente.push({
+        if(!mayor || mediciones[i].value>mayor.value) mayor = mediciones[i];
+        if(mediciones[i].value > 5)datosGradiente.push({
             location: new google.maps.LatLng(mediciones[i].lat, mediciones[i].lon),
             weight: mediciones[i].value
         })
     }
-
+    datosGradiente.push({
+        location: new google.maps.LatLng(mayor.lat, mayor.lon),
+        weight: 95
+    })
     return datosGradiente
 }
 
