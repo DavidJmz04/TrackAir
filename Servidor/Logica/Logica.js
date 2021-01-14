@@ -12,6 +12,7 @@ let cacheMediciones = {
     "O3": [],
     "NO2": []
 };
+let historicoMapasDisponibles=[];
 let horaActualizacion = new Date(1999 - 1 - 1);
 // ................................................................................................................................................
 // ................................................................................................................................................
@@ -457,7 +458,7 @@ module.exports = class Logica {
     obtenerLecturas(tipoLectura) {
 
         var fs = require('fs');
-        let horaActual = new Date();
+        //let horaActual = new Date();
         console.log("actualizacion = " + horaActualizacion)
 
 
@@ -487,7 +488,7 @@ module.exports = class Logica {
     }
 
     buscarSensorPertenecienteA(id) {
-        var textoSQL = "select * from sensores s, usuarios u where u.id_nodo=s.id_nodo and u.id= ?";
+        var textoSQL = "select * from nodos s, usuarios u where u.id_nodo=s.id_nodo and u.id= ?";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [id], (err, res) => {
@@ -497,7 +498,7 @@ module.exports = class Logica {
     }
 
     modificarErrorSensor(idnodo, error) {
-        var textoSQL = "update sensores set error=? where id_nodo=?;";
+        var textoSQL = "update nodos set error=? where id_nodo=?;";
         console.log(idnodo + " - " + error)
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [error, idnodo],
@@ -563,6 +564,57 @@ module.exports = class Logica {
         })
     }
 
+    // ................................................................................................................................................
+    //id:Z
+    // -->
+    // buscarMedicionesDeUsuario() <--
+    // <--
+    // Lista {valor:Real, momento:Datetime, ubicacion:Texto, tipoMedicion:Texto}
+    // ................................................................................................................................................
+    async buscarMedicionesDeUsuarioDeHoy(idUsuario) {
+        var textoSQL =
+            "select m.* from medicionesdeusuarios mu, mediciones m where m.ubicacion = mu.ubicacion_medicion AND mu.momento_medicion = m.momento AND mu.id_usuario = ? AND DATE(m.momento)=CURRENT_DATE";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [idUsuario], (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        });
+    }
+
+    // ................................................................................................................................................
+    // parsearMediciones()
+    // ................................................................................................................................................
+    async parsearMediciones() {
+        
+        horaActualizacion = new Date();
+        let anyoAct=horaActualizacion.getFullYear();
+        let mesAct=horaActualizacion.getMonth();
+        mesAct+=1;
+        if (mesAct < 10) mesAct="0"+mesAct;
+        let diaAct=horaActualizacion.getDate();
+        if (diaAct < 10) diaAct="0"+diaAct;
+        let horaAct=horaActualizacion.getHours();
+        let nombreArchivoNuevo=(anyoAct+""+mesAct+""+diaAct+"-"+horaAct);
+        
+        let tipoSensor=["GI", "CO2", "NO2", "O3", "SO2"];
+        tipoSensor.forEach(async(val)=>{
+            await utilidades.crearArchivo(val, utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion(val)))
+        })
+
+        const { exec } = require('child_process');
+        exec('runMatlab.bat',{cwd:'../MatLab/'}, (err, stdout, stderr) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        //console.log(stdout);
+        this.estaEscribiendo=false;
+        utilidades.copiarArchivo("../Datos/MedicionesInterpoladas.json", "../Datos/Historico/"+nombreArchivoNuevo+".json");
+        console.log(horaActualizacion);
+
+        });
+    }
 
     // ................................................................................................................................................
     // cerrar() -->
