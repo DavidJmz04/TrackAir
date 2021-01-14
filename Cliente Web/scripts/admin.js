@@ -4,6 +4,7 @@ var expanded = false
 //Cuando se carga la página
 window.onload = function () {
     buscarUsuarios();
+    obtenerPDFUso();
 };
 
 function obtenerPDFUso() {
@@ -27,7 +28,7 @@ function obtenerPDFUso() {
                 break;
         }
 
-        laLogica.obtenerPDFUso(res);
+        laLogica.get("informe/uso/" + res);
     })
 }
 

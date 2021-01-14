@@ -26,7 +26,9 @@
     </div>
     <div class="content">
         <div id="mapa"></div>
-        <div class="no-medidas"><h2>NO HAY MEDICIONES DE ESTE GAS</h2></div>
+        <div class="no-medidas">
+            <h2>NO HAY MEDICIONES DE ESTE GAS</h2>
+        </div>
         <div class="sidebar">
             <label for="filtrogas">Seleccione un gas:</label>
             <div>
@@ -51,7 +53,6 @@
                 </div>
                 <div class="tarjeta-login-cuerpo">
 
-                    
 
                     <form action="" autocomplete="off">
                         <label for="uname"><b>Nombre de usuario</b></label>
@@ -68,7 +69,42 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal" id="login" tabindex="-1" role="dialog" aria-labelledby="titulo" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="titulo">Crear cliente</h5>
+                        <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <form action="" autocomplete="off">
+                            <label for="uname"><b>Nombre de usuario</b></label>
+                            <input id="inputUsuario" type="" placeholder="Introduzca su nombre de usuario" name="uname" required />
+
+                            <label for="psw"><b>Contraseña</b></label>
+                            <input id="inputContrasenya" type="password" placeholder="Introduzca su contraseña" name="psw" required />
+                            <span class="olvide-contrasenya"><a href="">Olvidó su contraseña?</a></span>
+                            <button id="btnSubmit" type="submit">INICIAR SESIÓN</button>
+
+                            <span class="msg-error">Usuario y/o contraseña no válidos.</span>
+                            <span class="frase-registro">¿Aún no es miembro de TrackAir?<br><a href="./index.html#info"> ¡Contáctenos!</a></span>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="top-opciones">
+           
+           <!-- Button trigger modal -->
+        <button class="btn btn-primary" data-toggle="modal" data-target="#login">
+            Launch demo modal
+        </button>
             <div class="menu">
                 <div class="icono" onclick="">
                     <i class="fa fa-bars"></i>
@@ -76,16 +112,21 @@
             </div>
             <div class="buscar">
                 <input type="text" placeholder="Buscar..." />
-                
+
             </div>
             <div class="perfil">
                 <!-- <div class="bg-icono"><i class="fas fa-user"></i></div> -->
                 <i class="fas fa-user icono-usuario"></i>
-                
+
             </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A==" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./scripts/logica.js"></script>

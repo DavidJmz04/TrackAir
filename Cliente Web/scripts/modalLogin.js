@@ -4,7 +4,7 @@ let modal = document.querySelector(".modal");
 // Si le da click al botón de usuario, se abre el popup
 botonUsuario.addEventListener("click", (e) => {
   let id = laLogica.getCookie("id");
-    console.log("id" + id)
+  console.log("id" + id)
   let logout = false;
   if (id != "") {
     window.location.href = "./perfil.html";

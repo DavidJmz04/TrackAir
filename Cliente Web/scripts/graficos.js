@@ -30,7 +30,6 @@ function main() {
     mostrarMediciones();
 
 
-    })
     var btn = document.getElementById("btn-ranking");
     btn.onclick = () => {
         laLogica.obtenerPDFRanking();
@@ -42,13 +41,7 @@ function main() {
 function crearGrafica(titulo) {
 
     // create data
-    var data = [
-      ["January", 10000],
-      ["February", 12000],
-      ["March", 18000],
-      ["April", 11000],
-      ["May", 9000]
-    ];
+    var data = [400, 403,49,59,34];
 
     // create a chart
     var chart = anychart.line();
@@ -73,25 +66,6 @@ function crearGrafica(titulo) {
     // initiate drawing the chart
     chart.draw();
 
-}
-
-
-
-
-// texto -> getCookie() -> texto
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(";");
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == " ") {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
 }
 
 function cargarUsuario(id) {
