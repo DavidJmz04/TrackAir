@@ -5,13 +5,19 @@
 const mysql = require("mysql");
 const Utilidades = require("./Utilidades.js");
 var utilidades = new Utilidades();
-let cacheMediciones={"GI": [], "CO2":[], "SO2":[], "O3":[], "NO2":[]};
-let horaActualizacion=new Date(1999-1-1);
+let cacheMediciones = {
+    "GI": [],
+    "CO2": [],
+    "SO2": [],
+    "O3": [],
+    "NO2": []
+};
+let horaActualizacion = new Date(1999 - 1 - 1);
 // ................................................................................................................................................
 // ................................................................................................................................................
 
 module.exports = class Logica {
-    
+
     // ................................................................................................................................................
     // nombreBD: Texto
     // -->
@@ -63,11 +69,11 @@ module.exports = class Logica {
     // insertarUsuario() -->
     // ...............................................................................
     insertarUsuario(datos) {
-        var textoSQL = "insert into usuarios (nombre_usuario, contrasenya, correo, telefono, id_nodo) values(?, ?, ?, ?, ?);";
+        var textoSQL = "insert into usuarios (nombre_usuario, nombre, contrasenya, correo, telefono) values(?, ?, ?, ?, ?);";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(
-                textoSQL, [datos.nombreUsuario, datos.contrasenya, datos.correo, datos.telefono, datos.idNodo],
+                textoSQL, [datos.nombreUsuario, datos.nombre, datos.contrasenya, datos.correo, datos.telefono],
                 function (err) {
                     err ? rechazar(err) : resolver();
                 }
@@ -232,60 +238,29 @@ module.exports = class Logica {
         return res
     }
 
-    estaEscribiendo=false;
-    setEstaEscribiendo(bool){
-        this.estaEscribiendo = bool;
-    }
-
-    // ................................................................................................................................................
-    // tipoLectura:Texto -->
-    // obtenerLecturas() <--
-    // <--
-    // Lista:{lat=R, lon= R, value=R}
-    // ................................................................................................................................................
-    obtenerLecturas(tipoLectura) {
-        
-        var fs = require('fs');
-        let horaActual = new Date();
-        console.log("actualizacion = "+horaActualizacion)
-
-
-        if(!this.estaEscribiendo){
-            return new Promise((resolver, rechazar) => {
-            fs.readFile('../Datos/medicionesInterpoladas.json', 'utf8', function (err, data) {
-
-                if (err) rechazar(err)
-
-                var mediciones = JSON.parse(data)
-                console.log(mediciones)
-                var res;
-
-                for (var i = 0; i < mediciones.length; i++) {
-                    cacheMediciones[mediciones[i].TipoMedicion] = mediciones[i].mediciones;
-                    if (mediciones[i].TipoMedicion == tipoLectura) res = mediciones[i].mediciones
-                }
-                cacheMediciones[tipoLectura] = res;
-                resolver(res);
-            })
-        })
-        
-        }else{
-            return cacheMediciones[tipoLectura]
-        }
-        
-    }
-
-
     // ................................................................................................................................................
     // datos:{id=Z, nombreUsuario:Texto, contrasenya=Texto, correo=Texto, puntuacion=Texto, telefono=Texto, idNodo=Texto}
     // -->
     // editarUsuario() -->
     // ................................................................................................................................................
     editarUsuario(datos) {
-        var textoSQL = "update usuarios set nombre_usuario= ?, contrasenya= ?, correo= ?, puntuacion=?, telefono=?, id_nodo=?, puntos_canjeables=? where id=  ?;";
+        var textoSQL = "update usuarios set nombre_usuario= ?,nombre= ?, contrasenya= ?, correo= ?, puntuacion=?, telefono=?, puntos_canjeables=? where id=  ?;";
 
         return new Promise((resolver, rechazar) => {
-            this.laConexion.query(textoSQL, [datos.nombreUsuario, datos.contrasenya, datos.correo, datos.puntuacion, datos.telefono, datos.idNodo, datos.puntosCanjeables, datos.id],
+            this.laConexion.query(textoSQL, [datos.nombreUsuario, datos.nombre, datos.contrasenya, datos.correo, datos.puntuacion, datos.telefono, datos.puntosCanjeables, datos.id],
+                function (err) {
+                    err ? rechazar(err) : resolver();
+                }
+            );
+        });
+    }
+    
+    borrarUsuario(id) {
+        
+        var textoSQL = "delete from usuarios where id= ?;";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [id],
                 function (err) {
                     err ? rechazar(err) : resolver();
                 }
@@ -303,19 +278,6 @@ module.exports = class Logica {
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [datos.puntuacion, datos.puntuacion, datos.id],
-                function (err) {
-                    err ? rechazar(err) : resolver();
-                }
-            );
-        });
-    }
-
-
-    modificarErrorSensor(idnodo, error){
-        var textoSQL = "update sensores set error=? where id_nodo=?;";
-        console.log(idnodo + " - " + error)
-        return new Promise((resolver, rechazar) => {
-            this.laConexion.query(textoSQL, [error, idnodo],
                 function (err) {
                     err ? rechazar(err) : resolver();
                 }
@@ -387,6 +349,24 @@ module.exports = class Logica {
     }
 
     // ................................................................................................................................................
+    //id:Z
+    // -->
+    // buscarMedicionesDeUsuario() <--
+    // <--
+    // Lista {valor:Real, momento:Datetime, ubicacion:Texto, tipoMedicion:Texto}
+    // ................................................................................................................................................
+    async buscarMedicionesDeUsuarioDeHoy(idUsuario) {
+        var textoSQL =
+            "select m.* from medicionesdeusuarios mu, mediciones m where m.ubicacion = mu.ubicacion_medicion AND mu.momento_medicion = m.momento AND mu.id_usuario = ? AND DATE(m.momento)=CURRENT_DATE";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [idUsuario], (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        });
+    }
+
+    // ................................................................................................................................................
     //tipoMedicion: Texto
     // -->
     // buscarMedicionesDeTipoMedicion() <--
@@ -420,6 +400,33 @@ module.exports = class Logica {
     }
 
     // ................................................................................................................................................
+    // parsearMediciones()
+    // ................................................................................................................................................
+    async parsearMediciones() {
+        let tipoSensor = ["GI", "CO2", "NO2", "O3", "SO2"];
+        tipoSensor.forEach(async (val) => {
+            await utilidades.crearArchivo(val, utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion(val)))
+        })
+
+        const {
+            exec
+        } = require('child_process');
+        exec('runMatlab.bat', {
+            cwd: '../MatLab/'
+        }, (err, stdout, stderr) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            //console.log(stdout);
+            this.estaEscribiendo = false;
+            horaActualizacion = new Date();
+            console.log(horaActualizacion);
+
+        });
+    }
+
+    // ................................................................................................................................................
     //id:Z
     // -->
     // buscarTipoMedidicionConID() <--
@@ -436,7 +443,50 @@ module.exports = class Logica {
         });
     }
 
-    buscarSensorPertenecienteA(id){
+    estaEscribiendo = false;
+    setEstaEscribiendo(bool) {
+        this.estaEscribiendo = bool;
+    }
+
+    // ................................................................................................................................................
+    // tipoLectura:Texto -->
+    // obtenerLecturas() <--
+    // <--
+    // Lista:{lat=R, lon= R, value=R}
+    // ................................................................................................................................................
+    obtenerLecturas(tipoLectura) {
+
+        var fs = require('fs');
+        let horaActual = new Date();
+        console.log("actualizacion = " + horaActualizacion)
+
+
+        if (!this.estaEscribiendo) {
+            return new Promise((resolver, rechazar) => {
+                fs.readFile('../Datos/medicionesInterpoladas.json', 'utf8', function (err, data) {
+
+                    if (err) rechazar(err)
+
+                    var mediciones = JSON.parse(data)
+                    console.log(mediciones)
+                    var res;
+
+                    for (var i = 0; i < mediciones.length; i++) {
+                        cacheMediciones[mediciones[i].TipoMedicion] = mediciones[i].mediciones;
+                        if (mediciones[i].TipoMedicion == tipoLectura) res = mediciones[i].mediciones
+                    }
+                    cacheMediciones[tipoLectura] = res;
+                    resolver(res);
+                })
+            })
+
+        } else {
+            return cacheMediciones[tipoLectura]
+        }
+
+    }
+
+    buscarSensorPertenecienteA(id) {
         var textoSQL = "select * from sensores s, usuarios u where u.id_nodo=s.id_nodo and u.id= ?";
 
         return new Promise((resolver, rechazar) => {
@@ -445,7 +495,19 @@ module.exports = class Logica {
             });
         });
     }
-    
+
+    modificarErrorSensor(idnodo, error) {
+        var textoSQL = "update sensores set error=? where id_nodo=?;";
+        console.log(idnodo + " - " + error)
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQL, [error, idnodo],
+                function (err) {
+                    err ? rechazar(err) : resolver();
+                }
+            );
+        });
+    }
+
 
     // ................................................................................................................................................
     // id:Z 

@@ -89,15 +89,15 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         // llamo a la función adecuada de la lógica
         var res = await laLogica.obtenerLecturas(tipoGas)
         //Si el array esta vacío
-//        if (res.length == 0) {
-            // 404: not found
-//            respuesta.status(404).send("No encontré la lectura")
-//            return
-//        }
+        //        if (res.length == 0) {
+        // 404: not found
+        //            respuesta.status(404).send("No encontré la lectura")
+        //            return
+        //        }
         // todo ok
         respuesta.send(JSON.stringify(res))
     }) // get /mediciones/:idUsuario
-    
+
     // .......................................................
     // GET /calidadAire/:idUsuario
     // .......................................................
@@ -141,7 +141,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     }) // get /tipoMedicion/:idMedicion
 
     // .......................................................
-    // GET /usuario/
+    // GET /usuario/:idUsuario
     // .......................................................
     servidorExpress.get("/usuario/:idUsuario", async function (peticion, respuesta) {
         console.log(" * GET /usuario/:idUsuario ");
@@ -158,7 +158,25 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         }
         // todo ok
         respuesta.send(JSON.stringify(res));
-    }); // get /usuario
+    }); // get /usuario/:idUsuario
+
+    // .......................................................
+    // GET /usuarios
+    // .......................................................
+    servidorExpress.get("/usuarios", async function (peticion, respuesta) {
+        console.log(" * GET /usuarios");
+
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.buscarUsuarios();
+
+        if (res.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré usuarios");
+            return;
+        }
+        // todo ok
+        respuesta.send(JSON.stringify(res));
+    }); // get /usuarios
 
     // .......................................................
     // GET /distanciaYTiempoUsario/
@@ -457,7 +475,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     servidorExpress.put('/puntuacionUsuario', async function (peticion, respuesta) {
 
-        console.log(" * POST /puntuacionUsuario ")
+        console.log(" * PUT /puntuacionUsuario ")
 
         var datos = JSON.parse(peticion.body)
         // averiguo el id
@@ -473,4 +491,25 @@ module.exports.cargar = function (servidorExpress, laLogica) {
 
         respuesta.send(JSON.stringify("Se han actualizado los datos de puntuacion"));
     }) // put /puntuacionUsuario
+
+    // .......................................................
+    // DELETE /borrarUsuario
+    // .......................................................
+    servidorExpress.delete('/borrarUsuario', async function (peticion, respuesta) {
+
+        console.log(" * DELETE /borrarUsuario ")
+
+        var datos = JSON.parse(peticion.body)
+        // averiguo el id
+        var id = datos.id
+
+        await laLogica.borrarUsuario(id).catch(function () {
+
+            respuesta.status(404).send("Error:no se ha podido borrar el usuario: " + JSON.stringify(datos.id));
+        });
+
+        var res = await laLogica.buscarUsuarioConId(datos.id);
+
+        if (res.length == 0) respuesta.send("Se ha borrado satisfactoriamente");
+    }) // delete /borrarUsuario
 }; // cargar()
