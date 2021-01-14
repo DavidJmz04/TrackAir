@@ -39,6 +39,7 @@ dependencies {
     def lottieVersion = "3.4.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
     // Maps
     implementation 'com.google.maps.android:android-maps-utils:1.0.2'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'

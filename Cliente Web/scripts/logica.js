@@ -215,4 +215,23 @@ class Logica {
         //window.open(`${servidor}${puerto}/${recurso}`);
     }
 
+    async obtenerPDFNodos() {
+        let recurso = "informe/nodos";
+        /*
+        let res = await axios.get(`${servidor}:3000/${recurso}`, {
+                method: 'GET',
+                
+            })
+            .then(response => { 
+                 //response.data.pipe(fs.createWriteStream("data.pdf"));
+            })
+            .catch(error => {
+                console.log(error)
+            });
+            */
+
+        window.location.href = `${servidor}${puerto}/${recurso}`;
+        //window.open(`${servidor}${puerto}/${recurso}`);
+    }
+
 }

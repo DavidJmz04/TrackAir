@@ -2,6 +2,27 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+   text-decoration: none!important;
+   outline: none !important;
+  
+   
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  color:cyan;
+}
+
+a:active {
+ text-decoration: none;
 }
 
 html,
@@ -97,7 +118,126 @@ button {
   ---------------------------------------------------
   */
 
-.modal {
+.modal{
+    font-family: "Comfortaa";
+    z-index: 400000000;
+   line-height: 40px;
+ 
+  }
+
+.modal-header{
+    background: #17c090;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color:#1b1b1b;
+    
+}
+
+.modal-body{
+    width: 80%;
+    margin: 30px auto;
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modal-content{
+    margin: 0 auto;
+}
+
+.modal-body p{
+    padding-right: 10px;
+}
+
+.modal-body input{
+    
+    font-size: 15px;
+    height: 30px;
+    margin-bottom: 20px;
+    border-color: #17c090;
+    outline: 0;
+    border-width: 0 0 2px;
+    width: 100%;
+}
+
+.modal-body label{
+ 
+  margin-bottom: -5px;
+}
+
+.modal-body input:focus{
+
+    border-width: 0 0 4px;
+}
+
+.modal-body button{
+   
+    margin:0 auto;
+    padding-top: 20px;
+    font-size: 18px;
+    margin-bottom: 20px;
+    margin-top:20px;
+}
+
+.modal-body form span{
+  margin:0 auto;
+}
+
+.button-nav {
+    
+    font-family: "Comfortaa";
+    font-size: 8px;
+    color: #138d6a;
+    display: inline-block;
+    text-align: center;
+    background: #eee;
+    font-weight: bold;
+    padding: 1.18em 1.32em 1.03em;
+    line-height: 1;
+    border-radius: 1em;
+    position: relative;
+    min-width: 10.3em;
+    text-decoration: none;
+    font-size: 1.25rem;
+    padding: 12px 0;
+    animation: arriba 1s ease-in;
+    cursor: pointer;
+    outline:none !important;
+    border:none;
+   
+}
+
+.button-nav:before,
+.button-nav:after {
+    width: 4.4em;
+    height: 2.95em;
+    position: absolute;
+    content: "";
+    display: inline-block;
+    background: #eee;
+    border-radius: 50%;
+    transition: transform 0.75s ease;
+    transform: scale(0);
+    z-index: -1;
+}
+
+.button-nav:before {
+    top: -25%;
+    left: 20%;
+}
+
+.button-nav:after {
+    bottom: -25%;
+    right: 20%;
+}
+
+.button-nav:hover:before,
+.button-nav:hover:after {
+    transform: none;
+}
+
+/*.modal {
   display: none;
   min-height: 100vh;
   width: 100%;
@@ -106,9 +246,9 @@ button {
   position: absolute;
   top: 0;
   transition: 4s ease-in;
-}
+}*/
 
-.tarjeta-login {
+/*.tarjeta-login {
   background-color: white;
   border-radius: 10px;
   width: 70%;
@@ -171,11 +311,11 @@ button {
   border: none;
   outline: none;
   /*background-image: linear-gradient(to right, red, yellow);*/
-  background-color: #00f0cc;
+  /*background-color: #00f0cc;
   background-image: linear-gradient(#00f0cc, #07c5a9);
   box-shadow: 0px 1px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-}
+}*/
 
 .olvide-contrasenya {
   text-align: end;
@@ -197,7 +337,7 @@ button {
   color: #dd2121;
   text-align: center;
   font-size: 0.8em;
-
+  
   font-weight: bold;
 }
 
@@ -222,14 +362,195 @@ button {
   font-size: 0.7em;
 }
 
+.contactenos:hover{
+  font-size: 20px;
+  color: #138d6a;
+}
+
 i{
   color: rgb(226, 226, 226);
 }
+
+/*
+---------------------------------------------
+      menu lateral
+---------------------------------------------
+*/
+
+.menu-btn{
+  position: absolute;
+  top:15px;
+  left: 45px;
+  height: 45px;
+  width: 45px;
+  text-align: center;
+  background: #1b1b1b;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: left 0.4s ease;
+  z-index: 2;
+  
+
+}
+
+.menu-btn.click{
+  left: 280px;
+}
+
+.menu-btn span{
+  color: white;
+  font-size:28px;
+  line-height: 45px;
+}
+
+.menu-btn.click span:before{
+  content: '\f00d'; /*se convierte en x para cerrarse*/
+}
+
+.menu_lateral{
+  position:fixed;
+  width:270px;
+  left:-270px;
+  background: #1b1b1b;
+  height:100%;
+  z-index: 3;
+  font-family: "Comfortaa";
+  transition:left 0.4s ease;
+ 
+}
+
+.menu_lateral.show{
+  left:0px;
+}
+
+.menu_lateral .text{
+  color:white;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 100px;
+  text-align:center;
+  background: #1e1e1e;
+  letter-spacing: 1px;
+  
+
+}
+
+nav ul{
+  background:#1b1b1b;
+  height: 100%;
+  width: 100%;
+  list-style: none;
+
+}
+
+nav ul li:last-child{
+ 
+  border-bottom:1px solid rgba(255,255,255,0.1);
+
+}
+
+nav ul li{
+  line-height:60px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+
+}
+
+nav ul li a {
+  position: relative;
+  color: white;
+  text-decoration: none !important;
+  font-size: 18px;
+  padding-left: 40px;
+  font-weight: 500;
+  display: block;
+  width: 100%;
+  border-left: 3px solid transparent;
+
+}
+
+nav ul li.active a{
+  color:cyan !important;
+  background: #1e1e1e;
+  border-left-color: cyan !important;
+
+}
+
+nav ul ul {
+  position: static;
+  display: none;
+
+}
+
+nav ul .gases-show.show{
+  display: block;
+}
+
+nav ul ul li{
+  
+  line-height: 40px;
+  border-bottom: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 0px;
+  cursor: pointer;
+ 
+
+}
+
+
+
+.input2{
+  margin-right: 10px;
+  margin-top: -12px;
+  color: #138d6a;
+  margin-left: 60px;
+
+}
+
+nav ul ul li label{
+  font-size: 17px;
+  color: white;
+  cursor: pointer;
+ 
+}
+nav ul ul li .input{
+  font-size: 17px;
+  max-width: 25px !important;
+  height: 25px;
+  width: 100%;
+  color: #e6e6e6;
+  margin-left: 70px;
+  border: 2px solid #ffffff;
+  display: block;
+  position: relative;
+  cursor: pointer;
+
+}
+
+
+
+nav ul li.active ul li a{
+  color:#e6e6e6;
+  background: #1b1b1b;
+  border-left-color:transparent;
+
+}
+
+
+
+nav ul li ul li .wrap-li:hover{
+  color:cyan;
+  background: #1e1e1e !important;
+   text-decoration: none!important;
+}
+
+
 /*
 ---------------------------------------------
       sidebar
 ---------------------------------------------
-*/
+
 .sidebar{
   z-index: 1;
   position: relative;
@@ -271,6 +592,7 @@ i{
   padding: 30px 0;
   display: none;
 }
+*/
 /* ------------------------------------------
                 Media queries
    ------------------------------------------ */

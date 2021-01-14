@@ -23,12 +23,14 @@ module.exports = class Utilidades {
     var calidad, total;
     csv.forEach(element => {
       total = element['SO2 (µg/m³)'] + element['NO2 (µg/m³)'] + element['O3 (µg/m³)'];
+      console.log(total)
       calidad = this.procesarCalidadAire(element, total)
-      text += '{"contaminacion":' + total + ',"hora":' + element['Hora Solar'] + ',"calidad":"' + calidadAire[calidad] + '",'
+      text += '{"contaminacion":' + total + ',"hora":"' + element['Hora Solar'] + '","calidad":"' + calidadAire[calidad] + '",'
         + '"contaminantes":{"SO2 (µg/m³)":' + element['SO2 (µg/m³)'] + ',"NO2 (µg/m³)":' + element['NO2 (µg/m³)'] + ',"O3 (µg/m³)":' + element['O3 (µg/m³)'] + '}}';
       if (element['Hora Solar'] != '23') text += ','
       else text += ']}'
     });
+    console.log(text)
     return JSON.parse(text)
   }
 
@@ -67,21 +69,42 @@ module.exports = class Utilidades {
     text = '{"fecha":"' + this.fechaActual() + '", "calidadMedia":"'+ calidadAire[this.procesarCalidadAire({"tipoMedicion":"O3"},total)] +'", "mediciones":[' + lecturas + "]}"
     return JSON.parse(text)
   }
+   // .................................................................
+  // JSON(mediciones oficiales en tiempo real) -> convertirTiempoRealAJSONpropio() --> JSON
+  // .................................................................
+  neoConvertirTiempoRealAJSONpropio(csv) {
+    var text;
+    var calidad, total, i = 0;
+    var horaAnterior = 0
+    var sumas = []
+    sumas.push(0)
+    var total = 0
+    var lecturas = ""
+    console.log("HOLA")
+    csv.forEach(element => {
+      lecturas += '{"contaminacion":' + element.valor + ',"calidad":"'+ calidadAire[this.procesarCalidadAire({"tipoMedicion":element.abreviatura},element.valor)] +
+       '", "hora":"'+ element.hora +'", "contaminante" : "' + element.abreviatura + '"},'
+      //lecturas += "{'"+ abreviatura+"':"+ element.valor +"}"
+    });
+    text = '{"fecha":"' + this.fechaActual() +'", "mediciones":[' + lecturas.substr(0,lecturas.length-1) + "]}"
+    console.log(text)
+    return JSON.parse(text)
+  }
 
   // .................................................................
   // String -> convertirAJSONpropio() --> JSON
   // .................................................................
   procesarCalidadAireAJSON(json) {
-    var text = '{"mediciones":['
+    var text = '[{"mediciones":['
     var i = 0, media = 0;
     var calidadNum
     json.forEach(element => {
       calidadNum = this.procesarCalidadAire(element, element['valor'])
       media += calidadNum;
       //Construcción del JSON
-      text += '{"valor":' + element['valor'] + ',"momento":"' + element['momento']
+      text += '{"valor":' + element['valor'] + ',"momento":"' + (element['momento']+"").split(" ")[4]
         + '","ubicacion":"' + element['ubicacion'] + '","tipoMedicion":"' + element['tipoMedicion']
-        + '","calidad":"' + calidadAire[calidadNum] + '"}' + (i++ < json.length - 1 ? ',' : '],"calidadMedia":"' + calidadAire[Math.round(media / json.length)] + '"}')
+        + '","calidad":"' + calidadAire[calidadNum] + '"}' + (i++ < json.length - 1 ? ',' : '],"calidadMedia":"' + calidadAire[Math.round(media / json.length)] + '"}]')
     })
     console.log(text + " - " + media + " : " + json.length)
     return JSON.parse(text);
@@ -98,7 +121,7 @@ module.exports = class Utilidades {
       else if (calidadNum >= 4 && calidadNum < 8) calidadNum = 3
       else if (calidadNum >= 2 && calidadNum < 4) calidadNum = 2
     }
-    return calidadNum;s
+    return calidadNum;
     }
 
   getUltimaMedicionOficial(json) {

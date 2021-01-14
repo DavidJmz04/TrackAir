@@ -6,14 +6,17 @@ filtro.addEventListener("change", async () => {
 const noLecturas = document.querySelector(".no-medidas");
 const sidebar = document.querySelector(".sidebar");
 const iconoFiltros = document.querySelector(".menu");
-iconoFiltros.addEventListener("click", () => {
+/*iconoFiltros.addEventListener("click", () => {
     //alert();
     toggleSidebar();
 })
 
 function toggleSidebar() {
     sidebar.classList.toggle("hidden-sidebar");
-}
+}*/
+
+
+
 
 var mapa;
 var tSizeBueno = 0;
