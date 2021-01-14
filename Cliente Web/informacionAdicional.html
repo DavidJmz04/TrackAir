@@ -6,22 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Información Adicional</title>
     <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles/mediciones.css" />
+    <link rel="stylesheet" href="./styles/infoAdicional.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 
 <body>
-    <div class="mediciones-container">
-        <h3>Información Adicional</h3>
-    </div>
+    <header>
+        <h2>Información adicional - Gases Irritantes</h2>
+    </header>
     <br>
     <div class="container">
-        <div class="mediciones-container">
-            <h3>Gases Irritantes</h3>
-        </div>
         <div class="row w-90 d-flex justify-content-center">
-            <div class="col-xl-5">
+            <div class="col-6">
                 <section>
                     <h4>¿Qué son?</h4>
                     <cite>Los gases irritantes son aquellos que provocan una respuesta inflamatoria. Las exposiciones a los gases irritantes causan traqueítis, bronquitis y bronquiolitis.</cite>
@@ -35,17 +32,28 @@
                     </section>
                 </section>
             </div>
-            <div class="col-xl-5">
+            <div class="col-6">
                 <h4>Consejos</h4>
                 <p>Para tener una buena calidad del aire respirado, te recomendamos utilizar la aplicación para estar al día de los trayectos más limpios de tus alrededores.</p>
                 <p>Realiza trayectos limpios evitando los puntos de contaminación (mucho trafico...) y te informaremos de la calidad del aire diariamente.</p>
                 <section class="mediciones-container" id="medicionesTiempoReal-container">
-                    <img src="./images/gas.jpg" alt="gases">
+                    <img src="./images/gas.jpg" alt="gases" class="img-cont" >
                 </section>
             </div>
         </div>
         <div class=" d-flex justify-content-end pr-5">
-            <a class="btn btn-primary " href="/datos.html" role="button">Volver</a>
+            <a class="button" href="/map.html">Volver</a>
+            <svg style="visibility: hidden; position: absolute;" width="0" height="0" xmlns="http://www.w3.org/2000/svg"
+                version="1.1">
+                <defs>
+                    <filter id="goo">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+                    </filter>
+                </defs>
+            </svg>
+
         </div>
     </div>
 

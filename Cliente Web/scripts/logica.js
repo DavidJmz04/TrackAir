@@ -1,15 +1,76 @@
-// -------------------------------------
-// ------ Autor: Ignasi Marí Giner
-// ------ 21-10-2020
-// -------------------------------------
-
 //const servidor = "https://igmagi.upv.edu.es";
 const servidor = "http://localhost";
 const puerto = ":8080";
 class Logica {
+
     constructor() {}
 
     contadorTest = 0;
+
+    async get(recurso) {
+
+        let res = await axios.get(`${servidor}${puerto}/${recurso}`);
+
+        let data = res.data;
+        return data;
+    }
+
+    async post(recurso, datos) {
+
+        let res = await axios.post(`${servidor}${puerto}/${recurso}`, datos);
+        let data = res.data;
+        return data;
+    }
+
+    async put(recurso, datos) {
+
+        let res = await axios.put(`${servidor}${puerto}/${recurso}`, datos);
+        let data = res.data;
+        return data;
+    }
+
+    async delete(recurso, datos) {
+
+        let res = await axios.delete(`${servidor}${puerto}/${recurso}`, datos);
+        let data = res.data;
+        return data;
+    }
+
+    // texto -> getCookie() -> texto
+    getCookie( cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == " ") {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    //Destruye la cookie que se había creado para el inicio de sesión
+    logout() {
+        document.cookie = "id= ; expires= Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = "name= ; expires= Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     async recuperarMedicionesTiempoReal() {
         let recurso = "medicionesOficiales";
@@ -153,9 +214,5 @@ class Logica {
         window.location.href = `${servidor}${puerto}/${recurso}`;
         //window.open(`${servidor}${puerto}/${recurso}`);
     }
-    //Destruye la cookie que se había creado para el inicio de sesión
-    logout() {
-        document.cookie = "id= ; expires= Thu, 01 Jan 1970 00:00:00 GMT";
-        document.cookie = "name= ; expires= Thu, 01 Jan 1970 00:00:00 GMT";
-    }
+
 }
