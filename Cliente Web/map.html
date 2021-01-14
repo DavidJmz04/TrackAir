@@ -7,39 +7,47 @@
     <title>Mapa de calidad</title>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Montserrat:wght@300;400;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <link rel="stylesheet" href="./styles/map.css" />
     <link rel="stylesheet" href="./styles/loader.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCixKcEtrvAKye7pgNfrVYBEQmUCeXEjkA&libraries=visualization,geometry&callback=initMap">
-    </script>
+    <script defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCixKcEtrvAKye7pgNfrVYBEQmUCeXEjkA&libraries=visualization,geometry&callback=initMap">
+        </script>
 </head>
 
 <body>
-<div class="menu-btn">
-    <span class="fas fa-bars"></span>
-</div>
-<nav class="menu_lateral">
-    <div class="text">Menú</div>
-    <ul>
-        <li><a href="#" data-toggle="modal" data-target="#login" onclick="chequearCookies()"> Perfil</a></li>
-        <li><a href="#" class="gases-btn">Gases <span class="fas fa-caret-down first"></span></a>
-            <ul class="gases-show" name="filtrogas" id="filtrogas">
-                <li><input type="radio" name="gases" class="input2" value="CO2" id="CO2" checked="checked"><label for="CO2" class="label-menu">CO2</label></li>
-                <li><input type="radio" name="gases" class="input2" value="NO2" id="NO2"><label for="NO2" class="label-menu">NO2</label></li>
-                <li><input type="radio" name="gases" class="input2" value="SO2" id="SO2"><label for="SO2" class="label-menu">SO2</label></li>
-                <li><input type="radio" name="gases" class="input2" value="O3" id="O3"><label for="O3" class="label-menu">O3</label></li>
-                <li><input type="radio" name="gases" class="input2" value="GI" id="GI"><label for="GI" class="label-menu">Gases Irritantes</label></li>
-            </ul>
-        </li>
-        <li><a href="informacionAdicional.html">Informacion adicional</a></li>
-        <li><a href="index.html">Volver a inicio</a></li>
-    </ul>
-    
-</nav>
+    <div class="menu-btn">
+        <span class="fas fa-bars"></span>
+    </div>
+    <nav class="menu_lateral">
+        <div class="text">Menú</div>
+        <ul>
+            <li><a href="#" data-toggle="modal" data-target="#login" onclick="chequearCookies()"> Perfil</a></li>
+            <li><a href="#" class="gases-btn">Gases <span class="fas fa-caret-down first"></span></a>
+                <ul class="gases-show" name="filtrogas" id="filtrogas">
+                    <li><input type="radio" name="gases" class="input2" value="CO2" id="CO2" checked="checked"><label
+                            for="CO2" class="label-menu">CO2</label></li>
+                    <li><input type="radio" name="gases" class="input2" value="NO2" id="NO2"><label for="NO2"
+                            class="label-menu">NO2</label></li>
+                    <li><input type="radio" name="gases" class="input2" value="SO2" id="SO2"><label for="SO2"
+                            class="label-menu">SO2</label></li>
+                    <li><input type="radio" name="gases" class="input2" value="O3" id="O3"><label for="O3"
+                            class="label-menu">O3</label></li>
+                    <li><input type="radio" name="gases" class="input2" value="GI" id="GI"><label for="GI"
+                            class="label-menu">Gases Irritantes</label></li>
+                </ul>
+            </li>
+            <li><a href="informacionAdicional.html">Informacion adicional</a></li>
+            <li><a href="index.html">Volver a inicio</a></li>
+        </ul>
+
+    </nav>
 
     <div id="loader-wrapper">
         <div id="loader"></div>
@@ -70,23 +78,27 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="titulo">Iniciar sesión:</h5>
-                        <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <button class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
                     </div>
                     <div class="modal-body">
                         <form action="" autocomplete="off" class="col">
                             <div class="row"><label for="uname"><b>Nombre de usuario: </b></label>
-                            <input id="inputUsuario" type="" placeholder="Introduzca su nombre de usuario" name="uname"
-                                required /></div>
+                                <input id="inputUsuario" type="" placeholder="Introduzca su nombre de usuario"
+                                    name="uname" required />
+                            </div>
 
                             <div class="row"><label for="psw"><b>Contraseña: </b></label>
-                            <input id="inputContrasenya" type="password" placeholder="Introduzca su contraseña" name="psw"
-                                required size="80"/>
-                                </div>
-                            <div class="row"><button id="btnSubmit" class="button-nav" type="submit">INICIAR SESIÓN</button></div>
+                                <input id="inputContrasenya" type="password" placeholder="Introduzca su contraseña"
+                                    name="psw" required size="80" />
+                            </div>
+                            <div class="row"><button id="btnSubmit" class="button-nav" type="submit">INICIAR
+                                    SESIÓN</button></div>
 
                             <div class="row"><span class="msg-error">Usuario y/o contraseña no válidos.</span></div>
-                            <div class="row"><span class="frase-registro">¿Aún no es miembro de TrackAir?<br><a class="contactenos" href="./index.html#info">
-                                    ¡Contáctenos!</a></span></div>
+                            <div class="row"><span class="frase-registro">¿Aún no es miembro de TrackAir?<br><a
+                                        class="contactenos" href="./index.html#info">
+                                        ¡Contáctenos!</a></span></div>
                         </form>
 
                     </div>
@@ -124,10 +136,12 @@
         </div>-->
 
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A==" crossorigin="anonymous"></script>
-    <!-- Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"
+        integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A=="
         crossorigin="anonymous"></script>
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
@@ -139,17 +153,19 @@
     <script src="./scripts/loader.js"></script>
     <script src="./scripts/mapa.js"></script>
     <script>
-        
-function chequearCookies(){
-    let id = laLogica.getCookie("id");
-    console.log("id" + id)
-  let logout = false;
-  if (id != "") {
-    window.location.href = "./perfil.html";
-  } else {
-    document.getElementById("login").style.display = "block";
-  }
-}
+
+        function chequearCookies() {
+            let id = laLogica.getCookie("id");
+            console.log("id" + id)
+            let logout = false;
+            if (id == "1") {
+                window.location.href = "./admin.html";
+            } else if (id != "") {
+                window.location.href = "./perfil.html";
+            } else {
+                document.getElementById("login").style.display = "block";
+            }
+        }
         $('.menu-btn').click(function () {
             $(this).toggleClass("click");
             $('.menu_lateral').toggleClass("show");

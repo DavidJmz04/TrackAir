@@ -6,6 +6,11 @@ window.onload = function () {
     buscarUsuarios();
 };
 
+function obtenerPDFNodos() {
+    console.log("gordo")
+        laLogica.obtenerPDFNodos();
+}
+
 function obtenerPDFUso() {
 
     var slc = document.getElementById("select-uso");

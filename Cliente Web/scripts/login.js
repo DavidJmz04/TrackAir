@@ -14,15 +14,17 @@ inputUsuario.addEventListener("focus", () => {
 
 const laLogica = new Logica();
 
-function chequearCookies(){
+function chequearCookies() {
     let id = laLogica.getCookie("id");
     console.log("id" + id)
-  let logout = false;
-  if (id != "") {
-    window.location.href = "./perfil.html";
-  } else {
-    document.getElementById("login").style.display = "block";
-  }
+    let logout = false;
+    if (id == "1") {
+        window.location.href = "./admin.html";
+    } else if (id != "") {
+        window.location.href = "./perfil.html";
+    } else {
+        document.getElementById("login").style.display = "block";
+    }
 }
 
 //Añadimos el comportamiento al formulario cuando se envíe
@@ -37,13 +39,13 @@ form.addEventListener("submit", (e) => {
         nombreUsuario: correo,
         contrasenya: CryptoJS.SHA256(contrasenya).toString()
     }).then((res) => {
-        
+
         //Si está logueado creamos una cookie que expira en 1 día
         if (res.existe && res.id) {
             chequearCookies();
             document.cookie = `id=${res.id}`;
             document.cookie = `name=${correo}`
-            
+
             //Dentro de un día
             let date = new Date(Date.now() + 86400e3);
             date = date.toUTCString();
