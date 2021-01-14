@@ -519,6 +519,28 @@ module.exports = class Logica {
         });
     }
 
+    //
+    async buscarNodosInactivos(){
+        var textoSQLLastMed = "SELECT * FROM medicionesdeusuarios WHERE momento_medicion < NOW() - INTERVAL 1 DAY GROUP BY id_usuario HAVING id_usuario NOT IN (SELECT id_usuario FROM medicionesdeusuarios WHERE momento_medicion >= NOW() - INTERVAL 1 DAY)";
+   
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQLLastMed, null, (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        });
+    }
+
+    //
+    async buscarNodosConFallos(){
+        var textoSQLFailMed = "SELECT * FROM nodos n, usuarios u WHERE n.error!=1 AND u.id_nodo=n.id_nodo";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQLFailMed, null, (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        });
+    }
+
     // ................................................................................................................................................
     // parsearMediciones()
     // ................................................................................................................................................

@@ -72,16 +72,16 @@ module.exports = class Utilidades {
   // String -> convertirAJSONpropio() --> JSON
   // .................................................................
   procesarCalidadAireAJSON(json) {
-    var text = '{"mediciones":['
+    var text = '[{"mediciones":['
     var i = 0, media = 0;
     var calidadNum
     json.forEach(element => {
       calidadNum = this.procesarCalidadAire(element, element['valor'])
       media += calidadNum;
       //Construcción del JSON
-      text += '{"valor":' + element['valor'] + ',"momento":"' + element['momento']
+      text += '{"valor":' + element['valor'] + ',"momento":"' + (element['momento']+"").split(" ")[4]
         + '","ubicacion":"' + element['ubicacion'] + '","tipoMedicion":"' + element['tipoMedicion']
-        + '","calidad":"' + calidadAire[calidadNum] + '"}' + (i++ < json.length - 1 ? ',' : '],"calidadMedia":"' + calidadAire[Math.round(media / json.length)] + '"}')
+        + '","calidad":"' + calidadAire[calidadNum] + '"}' + (i++ < json.length - 1 ? ',' : '],"calidadMedia":"' + calidadAire[Math.round(media / json.length)] + '"}]')
     })
     console.log(text + " - " + media + " : " + json.length)
     return JSON.parse(text);

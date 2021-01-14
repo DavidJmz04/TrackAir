@@ -7,114 +7,136 @@
     android:layout_weight="1"
     tools:context=".Activities.Main.Fragments.PerfilFragment">
 
-    <ScrollView
-        android:id="@+id/scroll"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/Perfil"
+        <ScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/linearLayout4"
-                android:layout_width="411dp"
+                android:id="@+id/Perfil"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/nombre_perfil"
-                    android:layout_width="309dp"
-                    android:layout_height="59dp"
-                    android:fontFamily="@font/comfortaabold"
-                    android:gravity="center"
-                    android:text="Cargando..."
-                    android:textAlignment="center"
-                    android:textSize="36sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/usuario_perfil"
-                    android:layout_width="311dp"
-                    android:layout_height="36dp"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:text="@"
-                    android:textAlignment="center"
-                    android:textSize="18sp" />
-
-                <Button
-                    android:id="@+id/calidadBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button"
-                    android:padding="12dp"
-                    android:text="Tu calidad del aire" />
-
                 <LinearLayout
-                    android:id="@+id/item_calidad"
-                    android:layout_width="match_parent"
-                    android:layout_height="120px"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:id="@+id/linearLayout4"
+                    android:layout_width="411dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/calidad_aire"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/nombre_perfil"
+                        android:layout_width="309dp"
+                        android:layout_height="59dp"
+                        android:fontFamily="@font/comfortaabold"
+                        android:gravity="center"
+                        android:text="Cargando..."
+                        android:textAlignment="center"
+                        android:textSize="36sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/usuario_perfil"
+                        android:layout_width="311dp"
+                        android:layout_height="36dp"
                         android:fontFamily="@font/comfortaasemibold"
                         android:gravity="center"
-                        android:text="Tu calidad del aire"
+                        android:text="@"
                         android:textAlignment="center"
                         android:textSize="18sp" />
 
+                    <LinearLayout
+                        android:id="@+id/item_calidad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal|center_vertical"
+                        android:foregroundGravity="center_vertical|center|center_horizontal"
+                        android:gravity="clip_vertical|center_horizontal|center_vertical"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/calidad_aire"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/comfortaasemibold"
+                                android:text="No hay datos de la calidad del aire"
+                                android:textSize="18sp" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/calidad_aire_arrow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/comfortaasemibold"
+                                android:gravity="center"
+                                android:text="v"
+                                android:textAlignment="center"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:visibility="gone" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+                        </LinearLayout>
+
+                        <include
+                            android:id="@+id/chartCalidad"
+                            layout="@layout/chart_common"
+                            android:layout_width="match_parent"
+                            android:layout_height="400dp"
+                            android:layout_weight="1"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
-                <include
-                    android:id="@+id/chartParent"
-                    layout="@layout/chart_common"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="50px">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/comfortaabold"
-                    android:text="Cuenta"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/puntuacion_perfil"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:textAlignment="viewStart"
-                    android:textSize="18sp" />
-
                 <LinearLayout
-                    android:id="@+id/item_mail"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="50px">
 
                     <TextView
-                        android:id="@+id/correo_perfil"
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/comfortaabold"
+                        android:text="Cuenta"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/puntuacion_perfil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/comfortaasemibold"
@@ -122,130 +144,146 @@
                         android:textAlignment="viewStart"
                         android:textSize="18sp" />
 
+                    <LinearLayout
+                        android:id="@+id/item_mail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/correo_perfil"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/comfortaasemibold"
+                            android:gravity="center"
+                            android:textAlignment="viewStart"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/item_telefono"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/telefono_perfil"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/comfortaasemibold"
+                            android:gravity="center"
+                            android:textAlignment="viewStart"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/item_telefono"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="50px">
 
                     <TextView
-                        android:id="@+id/telefono_perfil"
-                        android:layout_width="match_parent"
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/comfortaabold"
+                        android:text="Ajustes"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:id="@+id/item_dispositivo"
+                        android:layout_width="307dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/dispositivo_perfil"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/comfortaasemibold"
+                            android:gravity="center"
+                            android:text="Encontrar dispositivo"
+                            android:textAlignment="viewStart"
+                            android:textSize="18sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/notificaciones_y_sonido"
+                        android:layout_width="307dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/comfortaasemibold"
                         android:gravity="center"
+                        android:text="Notificaciones y sonido"
                         android:textAlignment="viewStart"
                         android:textSize="18sp" />
 
+                    <TextView
+                        android:id="@+id/Idioma"
+                        android:layout_width="307dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/comfortaasemibold"
+                        android:gravity="center"
+                        android:text="Idioma"
+                        android:textAlignment="viewStart"
+                        android:textSize="18sp" />
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="50px">
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/comfortaabold"
-                    android:text="Ajustes"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp" />
 
                 <LinearLayout
-                    android:id="@+id/item_dispositivo"
-                    android:layout_width="307dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="50px">
 
                     <TextView
-                        android:id="@+id/dispositivo_perfil"
-                        android:layout_width="match_parent"
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/comfortaabold"
+                        android:text="Ayuda"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/politica_de_privacidad"
+                        android:layout_width="307dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/comfortaasemibold"
                         android:gravity="center"
-                        android:text="Encontrar dispositivo"
+                        android:text="Política de privacidad"
                         android:textAlignment="viewStart"
                         android:textSize="18sp" />
 
+                    <TextView
+                        android:id="@+id/preguntas_frecuentes"
+                        android:layout_width="307dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/comfortaasemibold"
+                        android:gravity="center"
+                        android:text="Preguntas frecuentes"
+                        android:textAlignment="viewStart"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/notificaciones_y_sonido"
-                    android:layout_width="307dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:text="Notificaciones y sonido"
-                    android:textAlignment="viewStart"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/Idioma"
-                    android:layout_width="307dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:text="Idioma"
-                    android:textAlignment="viewStart"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="50px">
-
-                <TextView
-                    android:id="@+id/textView6"
+                <Button
+                    android:id="@+id/boton_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/comfortaabold"
-                    android:text="Ayuda"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/politica_de_privacidad"
-                    android:layout_width="307dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:text="Política de privacidad"
-                    android:textAlignment="viewStart"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/preguntas_frecuentes"
-                    android:layout_width="307dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/comfortaasemibold"
-                    android:gravity="center"
-                    android:text="Preguntas frecuentes"
-                    android:textAlignment="viewStart"
-                    android:textSize="18sp" />
+                    android:background="@drawable/button"
+                    android:padding="12px"
+                    android:text="Cerrar sesión"
+                    android:textAlignment="center"
+                    android:textColor="#eee"
+                    android:textStyle="bold" />
             </LinearLayout>
-
-            <Button
-                android:id="@+id/boton_logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button"
-                android:padding="12px"
-                android:text="Cerrar sesión"
-                android:textAlignment="center"
-                android:textColor="#eee"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/IniciarSesion"

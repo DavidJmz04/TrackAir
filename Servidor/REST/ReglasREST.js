@@ -235,6 +235,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             respuesta.status(404).send("No encontré usuarios");
             return;
         }
+        console.log(process.cwd());
         // todo ok
         // Read HTML Template
         var html = fs.readFileSync("plantillaRanking.html", "utf8");
@@ -347,6 +348,81 @@ module.exports.cargar = function (servidorExpress, laLogica) {
                 res.statusCode = 404;
             });
     }); // get /informe/uso
+    
+    // .......................................................
+    // GET /informe/nodos
+    // .......................................................
+    servidorExpress.get("/informe/nodos", async function (peticion, respuesta) {
+
+        console.log(" * GET /informe/nodos ");
+
+
+        // llamo a la función adecuada de la lógica
+        var resUltimasMediciones = await laLogica.buscarNodosInactivos();
+
+        // llamo a la función adecuada de la lógica
+        var resErrorMediciones = await laLogica.buscarNodosConFallos();
+        console.log(resUltimasMediciones);
+/*
+        if (resUltimasMediciones.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré ultimas mediciones");
+            return;
+        }
+
+        if (resErrorMediciones.length == 0) {
+            // 404: not found
+            respuesta.status(404).send("No encontré mediciones con errores");
+            return;
+        }
+        */
+        // todo ok
+        // Read HTML Template
+        var html = fs.readFileSync("plantillaInformeNodos.html", "utf8");
+
+        var options = {
+            format: "A4",
+            orientation: "portrait",
+            border: "10mm",
+            header: {
+                height: "10mm",
+                contents: '<div style="text-align: center; color:#03E2A2;"><h2>TrackAir</h2></div>',
+            },
+            footer: {
+                height: "10mm",
+                contents: {
+                    default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
+                },
+            },
+        };
+        var document = {
+            html: html,
+            data: {
+                inactivos: resUltimasMediciones,
+                fallos: resErrorMediciones
+            },
+            path: `./nodos.pdf`,
+        };
+
+        pdf
+            .create(document, options)
+            .then((res) => {
+                console.log(res);
+                return res.filename;
+            })
+            .then((filename) => {
+                respuesta.contentType("application/pdf");
+                let date = new Date();
+                respuesta.download(
+                    path.join(__dirname, "/nodos.pdf"),
+                    `Nodo-${date.toString()}.pdf`
+                );
+            })
+            .catch((error) => {
+                console.error(error);
+                res.statusCode = 404;
+            });
+    }); // get /informe/nodos
 
     // .......................................................
     // POST /medicion
