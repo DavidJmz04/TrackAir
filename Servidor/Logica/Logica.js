@@ -501,11 +501,13 @@ module.exports = class Logica {
         var textoSQL = "update nodos set error=? where id_nodo=?;";
         console.log(idnodo + " - " + error)
         return new Promise((resolver, rechazar) => {
-            this.laConexion.query(textoSQL, [error, idnodo],
+            try{this.laConexion.query(textoSQL, [error, idnodo],
                 function (err) {
                     err ? rechazar(err) : resolver();
                 }
-            );
+            );}catch(e){
+                rechazar(e.msg)
+            }
         });
     }
 

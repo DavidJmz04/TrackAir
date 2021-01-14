@@ -382,6 +382,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             var error = sensor[0].error;
             var medicion = datos.valor;
             var medicionConError = medicion * (1 / error);
+            if (medicionConError==0) medicionConError = 1;
             var ultimaMedicionOficial = utilidad.getUltimaMedicionOficial(online);
             console.log(ultimaMedicionOficial + " - " + medicionConError + " _-_ " + (ultimaMedicionOficial + ultimaMedicionOficial * 0.2))
             if (medicionConError > (ultimaMedicionOficial + ultimaMedicionOficial * 0.2) | medicionConError < (ultimaMedicionOficial - ultimaMedicionOficial * 0.2)) {
