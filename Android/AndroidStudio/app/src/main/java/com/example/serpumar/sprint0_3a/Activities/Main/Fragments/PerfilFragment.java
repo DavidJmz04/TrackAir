@@ -1,42 +1,35 @@
     package com.example.serpumar.sprint0_3a.Activities.Main.Fragments;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.Intent;
-import android.os.Bundle;
+    import android.accounts.Account;
+    import android.accounts.AccountManager;
+    import android.content.Intent;
+    import android.os.Bundle;
+    import android.view.LayoutInflater;
+    import android.view.View;
+    import android.view.ViewGroup;
+    import android.widget.Button;
+    import android.widget.LinearLayout;
+    import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.NotificationCompat;
-import androidx.fragment.app.Fragment;
+    import androidx.constraintlayout.widget.ConstraintLayout;
+    import androidx.fragment.app.Fragment;
 
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+    import com.anychart.AnyChartView;
+    import com.anychart.core.Chart;
+    import com.example.serpumar.sprint0_3a.Activities.Login.LoginActivity;
+    import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
+    import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
+    import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
+    import com.example.serpumar.sprint0_3a.Models.Usuario;
+    import com.example.serpumar.sprint0_3a.R;
 
-import com.example.serpumar.sprint0_3a.Models.Usuario;
-import com.example.serpumar.sprint0_3a.Activities.Login.LoginActivity;
-import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
-import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
-import com.example.serpumar.sprint0_3a.R;
-import com.example.serpumar.sprint0_3a.Models.ReceptorBluetooth;
+    import org.json.JSONArray;
+    import org.json.JSONException;
+    import org.json.JSONObject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Random;
-
-import static java.lang.Integer.parseInt;
+    import com.example.serpumar.sprint0_3a.Helpers.ChartUtils;
 
     public class PerfilFragment extends Fragment {
-
-        //FIXME: ACCOUNT[] accounts no me pinta be, solucionar i posar guapet; Els callbacks de la vista també junt als components del XML en Java. AccountManager controla tot lo referent a les cuentes de usuari. Ara esta implementat en FAKE, pero s'ha de realitzar com deu mana.
 
     public PerfilFragment() { }
 
@@ -45,15 +38,17 @@ import static java.lang.Integer.parseInt;
     String CLASS_NAME = "PerfilFragment";
     View v;
     ReceptorBluetooth rb;
+        ConstraintLayout chartCalidad;
+        boolean flag = false;
+        AnyChartView anyChartView;
 
-    @Override
+
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        //TODO si esta logeado, se cargan los datos, pero si no Boton login
 
         v = inflater.inflate(R.layout.fragment_perfil, container, false);
 
-        ConstraintLayout perfilLayout = v.findViewById(R.id.Perfil);
+        LinearLayout perfilLayout = v.findViewById(R.id.Perfil);
         ConstraintLayout iniciarSesionLayout = v.findViewById(R.id.IniciarSesion);
         Button iniciarSesionBtn = v.findViewById(R.id.boton_login);
         Button cerrarSesionBtn = v.findViewById(R.id.boton_logout);
@@ -62,10 +57,15 @@ import static java.lang.Integer.parseInt;
         final TextView nombre = v.findViewById(R.id.nombre_perfil);
         final TextView nombreUsuario = v.findViewById(R.id.usuario_perfil);
         final TextView reputacion = v.findViewById(R.id.puntuacion_perfil);
+        final LinearLayout calidadField = v.findViewById(R.id.item_calidad);
+        final TextView calidadAire = v.findViewById(R.id.calidad_aire);
+        final TextView calidadAireFlecha = v.findViewById(R.id.calidad_aire_arrow);
+
+        anyChartView = v.findViewById(R.id.any_chart_view);
+        chartCalidad = v.findViewById(R.id.chartCalidad);
 
         final TextView email = v.findViewById(R.id.correo_perfil);
         final TextView telefono = v.findViewById(R.id.telefono_perfil);
-
 
         final Intent mainIntent = new Intent(getContext(), MainActivity.class);
         final Intent loginIntent = new Intent(getContext(), LoginActivity.class);
@@ -89,6 +89,8 @@ import static java.lang.Integer.parseInt;
 
             rb = ((MainActivity)getActivity()).getReceptorBluetooth();
 
+            NetworkManager networkManager = NetworkManager.getInstance();
+
             encontrarDispositivo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -111,14 +113,44 @@ import static java.lang.Integer.parseInt;
                 nombreUsuario.setText("@" + usuario.getNombreUsuario());
                 nombre.setText(usuario.getNombreCompleto());
                 telefono.setText(String.valueOf(usuario.getTelefono()));
-            }catch (Exception e){
-                email.setText("Cargando correo...");
-                reputacion.setText("Puntos: " + String.valueOf(usuario.getPuntosCanjeables()));
-                nombreUsuario.setText("@" + usuario.getNombreUsuario());
-                nombre.setText(usuario.getNombreCompleto());
-                telefono.setText(String.valueOf(usuario.getTelefono()));
-            }
+                networkManager.getRequest("/calidadAire/" + usuario.getId(), new NetworkManager.ControladorRespuestas<String>() {
+                    @Override
+                    public void getResult(String object) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(object);
+                            final JSONObject calidad = jsonArray.getJSONObject(0);
+                            calidadAire.setText("Tu calidad del aire: " +  calidad.get("calidadMedia"));
+                            calidadAireFlecha.setVisibility(View.VISIBLE);
+                            try{
+                                anyChartView.setProgressBar(v.findViewById(R.id.progress_bar));
+                                anyChartView = ChartUtils.cargarGrafico(anyChartView, calidad.getJSONArray("mediciones"));
+                            } catch (Exception e){
 
+                            }
+                            calidadField.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if(flag){
+                                        chartCalidad.setVisibility(View.GONE);
+                                        calidadAireFlecha.setText("v");
+                                        flag = false;
+                                    } else {
+                                        chartCalidad.setVisibility(View.VISIBLE);
+                                        calidadAireFlecha.setText("^");
+                                        flag = true;
+                                    }
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }catch (Exception e){
+                accounts = accountManager.getAccounts();
+                accountManager.removeAccountExplicitly(accounts[0]);
+                startActivity(mainIntent);
+            }
         } else {
             iniciarSesionLayout.setVisibility(View.VISIBLE);
             perfilLayout.setVisibility(View.INVISIBLE);
@@ -133,5 +165,7 @@ import static java.lang.Integer.parseInt;
 
         return v;
     }
+
+
 
 }

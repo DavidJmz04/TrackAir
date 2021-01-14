@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -73,6 +74,7 @@ public class LoginActivity extends Activity {
     private void login() {
         nombreUser = nombre.getText().toString();
         final String contrasenyaUser = Utilities.sha256(contrasenya.getText().toString());
+        Log.wtf("TAG","login");
         try {
             JSONObject userPOST = new JSONObject("{\"nombreUsuario\":"+nombreUser+",\"contrasenya\":"+contrasenyaUser+"}");
             NetworkManager networkManager = NetworkManager.getInstance(this);

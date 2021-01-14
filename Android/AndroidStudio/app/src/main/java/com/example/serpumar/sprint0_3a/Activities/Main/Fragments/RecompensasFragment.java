@@ -71,9 +71,6 @@ public class RecompensasFragment extends Fragment implements RecompensasAdapter.
         return view;
     }
 
-    /*Usuario usuario = new Usuario(usuarioJSON.getInt("id"), usuarioJSON.getString("nombre"), usuarioJSON.getString("nombre_usuario"), usuarioJSON.getString("contrasenya"), usuarioJSON.getString("correo"), usuarioJSON.getInt("puntuacion"), usuarioJSON.getInt("puntos_canjeables"), usuarioJSON.getString("telefono"), usuarioJSON.getString("id_nodo"));
-    reputacion.setText("Puntos: " + String.valueOf(usuario.getPuntosCanjeables()));*/
-
     private void llenarLista() {
         final RecompensasAdapter.OnRecompensaListener onRecompensaListener = this;
 

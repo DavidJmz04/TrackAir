@@ -7,52 +7,74 @@
     <title>Graficos</title>
     <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/admin.css" />
-    <link rel="stylesheet" href="./styles/landing.css" />
+   
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
 
-    <div>
-        <label for="uso">Informe gas del último:</label>
-        <select name="uso" id="select-uso">
-            <option value="dia">Dia</option>
-            <option value="semana">Semana</option>
-            <option value="mes">Mes</option>
-        </select>
-    </div>
-
-    <input type="text" placeholder="Buscar cliente..." id="buscar" oninput="buscar()">
-
-    <!-- Button trigger modal -->
-    <button class="btn btn-primary" data-toggle="modal" data-target="#crearUsuario">
-        Launch demo modal
-    </button>
+    <nav class="nav-cosas">
+        <div class="row">
+            <div class="col-3 selector">
+                <label for="uso">Informe de usuarios:</label>
+                <select name="uso" id="select-uso">
+                    <option value="dia">Dia</option>
+                    <option value="semana">Semana</option>
+                    <option value="mes">Mes</option>
+                </select>
+            </div>
+            <div class="botones-nav col-9">
+                <button class="button-nav"> Ranking</button>
+                <button class="button-nav"> Informe de nodos</button>
+                <button class="button-nav"> Manual de Usuario</button>
+                <button class="button-nav" data-toggle="modal" data-target="#crearUsuario">
+                    Añadir usuario
+                </button>
+                
+            
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+            <input type="text" placeholder=" Buscar cliente..." id="buscar" oninput="buscar()" class="buscar">
+            </div>
+            
+        </div>
+        <svg style="visibility: hidden; position: absolute;" width="0" height="0" xmlns="http://www.w3.org/2000/svg"
+            version="1.1">
+            <defs>
+                <filter id="goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
+                    <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+                </filter>
+            </defs>
+        </svg>
+    </nav>
 
     <!-- Modal -->
     <div class="modal" id="crearUsuario" tabindex="-1" role="dialog" aria-labelledby="titulo" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="titulo">Crear cliente</h5>
                     <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
-
-                    <form action="" autocomplete="off" class="row">
-                        <div class="col-4">
-                            <p>Nombre: </p><input type="text" id="Nombre" required>
-                            <p>Telefono: </p><input type="text" id="Telefono" required>
+                    <form action="" autocomplete="off"  class="row">
+                        <div class="col-6">
+                            <div class="row"><p>Nombre: </p><input type="text" id="Nombre" required></div>
+                            <div class="row"><p>Nombre Usuario: </p><input type="text" id="NombreUsuario" required size="11"></div>
+                            <div class="row"><p>Telefono: </p><input type="text" id="Telefono" required></div>
                         </div>
-                        <div class="col-4">
-                            <p>Nombre Usuario: </p><input type="text" id="NombreUsuario" required>
-                            <p>Correo: </p><input type="text" id="Correo" required>
+                        <div class="col-6">
+                            <div class="row"><p>Correo: </p><input type="text" id="Correo" required></div>
+                            <div class="row"><p>Contraseña: </p><input type="text" id="Contrasenya" required size="15"></div>
+                            <button class="button-form" type="submit" onclick="crearUsuario()">GUARDAR</button>
                         </div>
-                        <div class="col-4">
-                            <p>Contraseña: </p><input type="text" id="Contrasenya" required>
-                        </div>
-                        <button type="submit" onclick="crearUsuario()">Guardar</button>
+                    
+                        
                     </form>
 
                 </div>
@@ -61,9 +83,7 @@
     </div>
 
 
-    <div id="contenedor"></div>
-
-    <button>Obtener Manual de Usuario</button>
+    <div id="contenedor" class="usuarios"></div>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./scripts/logica.js"></script>
