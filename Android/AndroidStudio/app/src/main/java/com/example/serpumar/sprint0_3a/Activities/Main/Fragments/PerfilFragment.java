@@ -105,13 +105,19 @@ import static java.lang.Integer.parseInt;
             });
 
             Usuario usuario = ((MainActivity)getActivity()).getUsuario();
-
-            email.setText(usuario.getCorreo());
-            reputacion.setText("Puntos: " + String.valueOf(usuario.getPuntosCanjeables()));
-            nombreUsuario.setText("@"+usuario.getNombreUsuario());
-            nombre.setText(usuario.getNombreCompleto());
-            telefono.setText(String.valueOf(usuario.getTelefono()));
-
+            try {
+                email.setText(usuario.getCorreo());
+                reputacion.setText("Puntos: " + String.valueOf(usuario.getPuntosCanjeables()));
+                nombreUsuario.setText("@" + usuario.getNombreUsuario());
+                nombre.setText(usuario.getNombreCompleto());
+                telefono.setText(String.valueOf(usuario.getTelefono()));
+            }catch (Exception e){
+                email.setText("Cargando correo...");
+                reputacion.setText("Puntos: " + String.valueOf(usuario.getPuntosCanjeables()));
+                nombreUsuario.setText("@" + usuario.getNombreUsuario());
+                nombre.setText(usuario.getNombreCompleto());
+                telefono.setText(String.valueOf(usuario.getTelefono()));
+            }
 
         } else {
             iniciarSesionLayout.setVisibility(View.VISIBLE);

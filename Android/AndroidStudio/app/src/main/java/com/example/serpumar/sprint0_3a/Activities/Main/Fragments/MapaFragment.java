@@ -135,10 +135,10 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
 
         mMap = googleMap;
 
-        mMap.setMinZoomPreference(15.0f);
+        mMap.setMinZoomPreference(10.0f);
         mMap.setMaxZoomPreference(15.0f);
 
-        Ubicacion ub = new Ubicacion(gpsService.obtenerUbicacion(getContext()).getLatitud(), gpsService.obtenerUbicacion(getContext()).getLongitud());
+        Ubicacion ub = new Ubicacion(38.993115, -0.166975);
         LatLng ubActual = new LatLng(ub.getLatitud(), ub.getLongitud());
         //mMap.addMarker(new MarkerOptions().position(ubActual));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubActual, 15.0f));
@@ -157,7 +157,6 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
         transaction.commit();
     }
 
-
     private void addHeatMap(JSONArray jarray) {
         List<WeightedLatLng> WlatLngs = null;
         // Get the data: latitude/longitude positions of police stations.
@@ -167,18 +166,10 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
             Toast.makeText(myContext, "Problem reading list of locations.", Toast.LENGTH_LONG).show();
         }
         */
-        JSONArray listaJSON = jarray;
-        Log.d("Cre", "addHeatMap: " + listaJSON.length());
-        if(listaJSON != null && listaJSON.length()>0) {
+        Log.d("Cre", "addHeatMap: " + jarray.length());
+        if (jarray != null && jarray.length() > 0) {
             try {
                 WlatLngs = readItems(jarray);
-                // Create a heat map tile provider, passing it the latlngs of the police stations.
-                HeatmapTileProvider provider = new HeatmapTileProvider.Builder().weightedData(WlatLngs)./*gradient(establecerGradiente(WlatLngs.get(i).getIntensity())).*/build();
-                //provider.setOpacity(0.7);
-                provider.setRadius(30);
-                provider.setMaxIntensity(110);
-
-
                 int[] colors = { //Rojo encima limite amarillo verde
                         Color.rgb(0, 255, 0), // Verde
                         Color.rgb(255, 255, 0), // Amarrillo
@@ -187,10 +178,15 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
                 float[] startPoints = {
                         0.33f, 0.67f, 1f
                 };
-                Gradient grd = new Gradient(colors, startPoints, 150);
-                provider.setGradient(grd);
+                Gradient grd = new Gradient(colors, startPoints, 200);
+                // Create a heat map tile provider, passing it the latlngs of the police stations.
+                HeatmapTileProvider provider = new HeatmapTileProvider.Builder().weightedData(WlatLngs).gradient(grd)/*gradient(establecerGradiente(WlatLngs.get(i).getIntensity())).*/.build();
+                //provider.setOpacity(0.7);
+                provider.setRadius(30);
+                provider.setMaxIntensity(500);
 
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(jarray.getJSONObject(0).getDouble("lat"),jarray.getJSONObject(0).getDouble("lon")), 15.0f));
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(jarray.getJSONObject(0).getDouble("lat"), jarray.getJSONObject(0).getDouble("lon")), 15.0f));
 
                 //provider.setMaxDrawing
                 // Add a tile overlay to the map, using the heat map tile provider.
@@ -200,6 +196,12 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
             } catch (JSONException e) {
                 Log.e("Error JSON", e.toString());
             }
+        } else if (jarray == null){
+            Toast.makeText(getContext(), "No hay valores del Gas seleccionado", Toast.LENGTH_SHORT).show();
+            Log.d("+++", "addHeatMap: Null");
+        } else if (jarray.length() == 0) {
+            Toast.makeText(getContext(), "No hay valores del Gas seleccionado", Toast.LENGTH_SHORT).show();
+            Log.d("+++", "addHeatMap: Tamanyo 0");
         }
 
 
@@ -213,6 +215,7 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
             double lat = object.getDouble("lat");
             double lng = object.getDouble("lon");
             result.add(new WeightedLatLng(new LatLng(lat, lng), weigth));
+            Log.wtf("TAG", weigth + " w");
         }
         return result;
     }
