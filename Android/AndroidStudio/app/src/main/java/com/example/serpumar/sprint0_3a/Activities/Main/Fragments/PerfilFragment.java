@@ -57,6 +57,7 @@
         final TextView nombre = v.findViewById(R.id.nombre_perfil);
         final TextView nombreUsuario = v.findViewById(R.id.usuario_perfil);
         final TextView reputacion = v.findViewById(R.id.puntuacion_perfil);
+        final LinearLayout calidadField = v.findViewById(R.id.item_calidad);
         final TextView calidadAire = v.findViewById(R.id.calidad_aire);
         final TextView calidadAireFlecha = v.findViewById(R.id.calidad_aire_arrow);
 
@@ -126,7 +127,7 @@
                             } catch (Exception e){
 
                             }
-                            calidadAire.setOnClickListener(new View.OnClickListener() {
+                            calidadField.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     if(flag){
