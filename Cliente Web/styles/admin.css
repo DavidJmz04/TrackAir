@@ -1,0 +1,290 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  
+  font-family: "Comfortaa";
+  color: #707070;
+}
+
+body h1,
+h2,
+h3,
+h4 {
+  font-family: "Comfortaa", sans-serif;
+  font-weight: bold;
+}
+
+input,
+select,
+textarea
+ {
+  font-family: inherit;
+  color: inherit;
+}
+
+.nav-cosas{
+    width: 85%;
+    margin: 0 auto;
+    padding-top: 20px;
+    font-family: "Comfortaa";
+
+}
+
+.selector{
+   padding:32px 0;
+   font-size: 22px;
+   
+}
+
+.buscar{
+    width: 100%;
+    font-size: 20px;
+    height: 40px;
+    margin-bottom: 1rem;
+    border-color: #138d6a;
+    outline: 0;
+    border-width: 0 0 2px;
+
+
+}
+.buscar:focus {
+  border-width: 0 0 4px;
+  
+}
+
+.usuarios{
+    width: 85%;
+    margin: 0 auto;
+}
+
+.botones-nav{
+    display: flex;
+    flex-direction: row;
+    filter: url('#goo');
+    justify-content: space-evenly;
+    padding: 20px 0;;
+}
+
+.button-nav {
+    
+    font-family: "Comfortaa";
+    font-size: 10px;
+    color: #138d6a;
+    display: inline-block;
+    text-align: center;
+    background: #eee;
+    font-weight: bold;
+    padding: 1.18em 1.32em 1.03em;
+    line-height: 1;
+    border-radius: 1em;
+    position: relative;
+    min-width: 12.3em;
+    text-decoration: none;
+    font-size: 1.25rem;
+    padding: 12px 0;
+    animation: arriba 1s ease-in;
+    cursor: pointer;
+    outline:none !important;
+    border:none;
+}
+
+.button-nav:before,
+.button-nav:after {
+    width: 4.4em;
+    height: 2.95em;
+    position: absolute;
+    content: "";
+    display: inline-block;
+    background: #eee;
+    border-radius: 50%;
+    transition: transform 0.75s ease;
+    transform: scale(0);
+    z-index: -1;
+}
+
+.button-nav:before {
+    top: -25%;
+    left: 20%;
+}
+
+.button-nav:after {
+    bottom: -25%;
+    right: 20%;
+}
+
+.button-nav:hover:before,
+.button-nav:hover:after {
+    transform: none;
+}
+
+.item {
+    background-color: #138d6a;
+    color: #fff;
+    cursor: pointer;
+    padding: 18px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border: none;
+    text-align: left;
+    outline: none !important;
+    font-size: 20px;
+    transition: 0.4s;
+    font-family: "Comfortaa" !important;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.item:hover {
+    background-color: #414141;
+}
+
+.active {
+    background-color: #414141;
+}
+
+.item:after {
+    content: '\002B';
+    color: #fff;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+    outline: none;
+}
+
+.active:after {
+    content: "\2212";
+}
+
+.caja-parrafo {
+    background-color: #17c090;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    font-family: "Comfortaa";
+}
+
+.caja-parrafo form {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+}
+
+.caja-parrafo form input {
+    font-size: 15px;
+    height: 25px;
+    color: #ffffff !important;
+    outline: 0  ;
+    border-width: 0 0 2px;
+    background: transparent;
+    border-color: white;
+   
+}
+
+.caja-parrafo form input:focus{
+
+    border-width: 0 0 4px;
+}
+
+.caja-parrafo form .input-no{
+    color: #414141;
+    background:#4141414f;
+    border-color: #414141;
+}
+
+.texto-parrafo {
+    text-align: justify;
+    padding: 0px 18px;
+    color: #ffffff;
+    font-weight: 500;
+  
+}
+
+.button-form-usuario{
+    margin-left: 150px;
+    margin-top: 10px;
+}
+
+.button-form-usuario button{
+    margin-left: 10px;
+}
+
+.button-form-usuario .borrar{
+    color: rgb(175, 13, 13);
+}
+
+/*form*/
+
+.button-form{
+    
+    font-family: "Comfortaa";
+    font-size: 15px;
+    color: #138d6a;
+    display: inline-block;
+    text-align: center;
+    background: #eee;
+    font-weight: bold;
+    padding: 1.18em 1.32em 1.03em;
+    line-height: 1;
+    border-radius: 1em;
+    position: relative;
+    min-width: 7.3em;
+    text-decoration: none;
+    
+    animation: arriba 1s ease-in;
+    cursor: pointer;
+    outline:none !important;
+    border:none;
+}
+
+.nuevo{
+    display: flex;
+    flex-direction: row;
+}
+
+.modal{
+    font-family: "Comfortaa";
+}
+
+.modal-header{
+    background: #17c090;
+}
+
+.modal-body{
+    width: 90%;
+    margin: 30px auto;
+}
+
+.modal-body p{
+    padding-right: 10px;
+}
+
+.modal-body input{
+    
+    font-size: 15px;
+    height: 25px;
+    margin-bottom: 1rem;
+    border-color: #17c090;
+    outline: 0;
+    border-width: 0 0 2px;
+}
+
+.modal-body input:focus{
+
+    border-width: 0 0 4px;
+}
+
+.modal-body button{
+    margin-top: 30px;
+    margin-left: 200px;
+}
+
+/*modal usuario*/
+

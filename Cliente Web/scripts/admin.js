@@ -38,11 +38,25 @@ function buscarUsuarios() {
 
         //Llenamos el contenedor con la información que nos interesa 
         for (var i = 0; i < usuarios.length; i++)
-            contenedor.innerHTML += '<button class="item" data-value="' + usuarios[i].nombre + '" data-nombre="' + usuarios[i].nombre_usuario + '">' + usuarios[i].nombre + '(@' + usuarios[i].nombre_usuario + ')</button><div class="caja-parrafo"><form action="" autocomplete="off" class="row" id="' + usuarios[i].id + '"><div class="col-4"><p class="texto-parrafo">Nombre: </p><input type="text" value="' + usuarios[i].nombre + '" required><p class="texto-parrafo">Telefono: </p><input type="text" value="' + usuarios[i].telefono + '" required><p class="texto-parrafo">Puntuacion: </p><input type="text" value="' + usuarios[i].puntuacion + '" required></div><div class="col-4"><p class="texto-parrafo">Nombre Usuario: </p><input type="text" value="' + usuarios[i].nombre_usuario + '" required><p class="texto-parrafo">Correo: </p><input type="text" value="' + usuarios[i].correo + '" required><p class="texto-parrafo">Puntos canjeables: </p><input type="text" value="' + usuarios[i].puntos_canjeables + '" required></div><div class="col-4"><p class="texto-parrafo">Contraseña: </p><input type="text" value="' + usuarios[i].contrasenya + '" disabled><p class="texto-parrafo">ID Nodo: </p><input type="text" value="' + usuarios[i].id_nodo + '" disabled></div><div><button type="submit" onclick="editarUsuario(' + usuarios[i].id + ')">Guardar</button><button type="button" onclick="borrarUsuario(' + usuarios[i].id + ')">Borrar</button></form></div>'
+            contenedor.innerHTML += '<button class="item" data-value="' + usuarios[i].nombre + '" data-nombre="' + usuarios[i].nombre_usuario + '">' + usuarios[i].nombre + ' (@' + usuarios[i].nombre_usuario + ')</button><div class="caja-parrafo"><form action="" autocomplete="off" class="row" id="' + usuarios[i].id + '"><div class="col-4"><div class="row"><p class="texto-parrafo">Nombre: </p><input type="text" value="' + usuarios[i].nombre + '" required size="23"></div><div class="row"><p class="texto-parrafo">Telefono: </p><input type="text" value="' + usuarios[i].telefono + '" required size="23"></div><div class="row"><p class="texto-parrafo">Puntuacion: </p><input type="text" value="' + usuarios[i].puntuacion + '" required></div></div><div class="col-4"><div class="row"><p class="texto-parrafo">Nombre Usuario: </p><input type="text" value="' + usuarios[i].nombre_usuario + '" required size="20"></div><div class="row"><p class="texto-parrafo">Correo: </p><input type="text" value="' + usuarios[i].correo + '" required size="30"></div><div class="row"><p class="texto-parrafo">Puntos canjeables: </p><input type="text" value="' + usuarios[i].puntos_canjeables + '" required size="18"></div></div><div class="col-4"><div class="row"><p class="texto-parrafo">Contraseña: </p><input class="input-no" type="text" value="' + usuarios[i].contrasenya + '" disabled size="23"></div><div class="row"><p class="texto-parrafo">ID Nodo: </p><input class="input-no" type="text" value="' + usuarios[i].id_nodo + '" disabled size="27"></div><div class="button-form-usuario"><button type="submit" class="button-form" onclick="editarUsuario(' + usuarios[i].id + ')">GUARDAR</button><button type="button" class="button-form borrar" onclick="borrarUsuario(' + usuarios[i].id + ')">BORRAR</button></div></div></form></div>'
             
         acordeon()
     })
 }
+
+/*<form action="" autocomplete="off" class="row" id="' + usuarios[i].id + '">
+                <div class="col-4">
+                <p class="texto-parrafo">Nombre: </p><input type="text" value="' + usuarios[i].nombre + '" required>
+                    <p class="texto-parrafo">Telefono: </p><input type="text" value="' + usuarios[i].telefono + '" required>
+                        <p class="texto-parrafo">Puntuacion: </p><input type="text" value="' + usuarios[i].puntuacion + '" required></div>
+                        <div class="col-4">
+                        <p class="texto-parrafo">Nombre Usuario: </p><input type="text" value="' + usuarios[i].nombre_usuario + '" required>
+                            <p class="texto-parrafo">Correo: </p><input type="text" value="' + usuarios[i].correo + '" required>
+                                <p class="texto-parrafo">Puntos canjeables: </p><input type="text" value="' + usuarios[i].puntos_canjeables + '" required></div>
+                                <div class="col-4">
+                                <p class="texto-parrafo">Contraseña: </p><input type="text" value="' + usuarios[i].contrasenya + '" disabled>
+                                    <p class="texto-parrafo">ID Nodo: </p><input type="text" value="' + usuarios[i].id_nodo + '" disabled>
+                                    <div><button type="submit" onclick="editarUsuario(' + usuarios[i].id + ')">Guardar</button><button type="button" onclick="borrarUsuario(' + usuarios[i].id + ')">Borrar</button></div></div></form></div>'*/
 
 
 function acordeon() {
