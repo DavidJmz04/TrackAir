@@ -482,6 +482,49 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     }); // get /informe/nodos
 
     // .......................................................
+    // GET /historico/:fechaYhora/:tipoGas/
+    // .......................................................
+    servidorExpress.get('/historico/:fechaYHora/:tipoGas', async function (peticion, respuesta) {
+
+        console.log(" * GET /historico/:fechaYHora/:tipoGas ")
+
+        // averiguo el id
+        var fechaYHora = peticion.params.fechaYHora
+        var tipoGas = peticion.params.tipoGas
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.obtenerHistorico(fechaYHora,tipoGas)
+        //Si el array esta vacío
+        //        if (res.length == 0) {
+        // 404: not found
+        //            respuesta.status(404).send("No encontré la lectura")
+        //            return
+        //        }
+        // todo ok
+        respuesta.send(JSON.stringify(res))
+    }) // get /mediciones/:idUsuario
+
+    // .......................................................
+    // GET /historico/
+    // .......................................................
+    servidorExpress.get('/historico', async function (peticion, respuesta) {
+
+        console.log(" * GET /historico")
+
+        
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.obtenerDatosHistorico()
+        //Si el array esta vacío
+        //        if (res.length == 0) {
+        // 404: not found
+        //            respuesta.status(404).send("No encontré la lectura")
+        //            return
+        //        }
+        // todo ok
+        respuesta.send(JSON.stringify(res))
+    }) // get /mediciones/:idUsuario
+
+
+    // .......................................................
     // POST /medicion
     // .......................................................
     servidorExpress.post('/medicion', async function (peticion, respuesta) {
@@ -497,6 +540,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             var error = sensor[0].error;
             var medicion = datos.valor;
             var medicionConError = medicion * (1 / error);
+            if (medicionConError==0) medicionConError = 1;
             var ultimaMedicionOficial = utilidad.getUltimaMedicionOficial(online);
             console.log(ultimaMedicionOficial + " - " + medicionConError + " _-_ " + (ultimaMedicionOficial + ultimaMedicionOficial * 0.2))
             if (medicionConError > (ultimaMedicionOficial + ultimaMedicionOficial * 0.2) | medicionConError < (ultimaMedicionOficial - ultimaMedicionOficial * 0.2)) {
