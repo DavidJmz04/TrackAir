@@ -80,14 +80,16 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     // GET /mediciones oficiales en línea
     // .......................................................
-    servidorExpress.get('/medicionesOficialesUltimaO3', async function (peticion, respuesta) {
+    servidorExpress.get('/medicionesOficialesUltima/:tipo', async function (peticion, respuesta) {
 
         console.log(" * GET /mediciones oficiales")
+        var tipo = peticion.params.tipo
+        
         var file = require("../Datos/MedicionesOficialesOnline.json");
         var result = "";
         console.log(file)
         file.mediciones.forEach(element => {
-            if(element.contaminante=="O3") 
+            if(element.contaminante==tipo) 
                 result = '["' + element.contaminacion + '", "' + element.hora + '"'
         });
         result +="]"

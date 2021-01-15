@@ -1,5 +1,6 @@
 var mapa;
 var gradiente
+var infowindow
 
 async function initMap() {
 
@@ -11,14 +12,14 @@ async function initMap() {
         zoom: 14,
     });
 
-    var infowindow = new google.maps.InfoWindow({
-        content: await crearContenido()
-    });
-
-    var marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
         position: new google.maps.LatLng(38.965289, -0.182671),
         title: "Drag me!",
         map: mapa
+    });
+    
+    infowindow = new google.maps.InfoWindow({
+        //content: await crearContenido("CO2")
     });
     
     var abierto= false
@@ -38,17 +39,17 @@ async function initMap() {
     await ponerGradiente("CO2")
 }
 
-async function crearContenido() {
+async function crearContenido(tipo) {
 
-    var res = await laLogica.get("medicionesOficialesUltimaO3");
+    var res = await laLogica.get("medicionesOficialesUltima/" + tipo);
     
     var contentString =
         '<div id="content">' +
         '<div id="siteNotice">' +
         "</div>" +
-        '<h1 id="firstHeading" class="firstHeading">Estacion de medida oficial de Gandía</h1>' +
+        '<h6 id="firstHeading" class="firstHeading">Estacion de medida oficial de Gandía</h6>' +
         '<div id="bodyContent">' +
-        "<p><b>Cohtaminacion:</b> " + res + " </p>" +
+        "<p><b>Contaminacion a las " + res[1] + ":</b> " + res[0] + " </p>" +
         "</div>" +
         "</div>";
     return contentString
@@ -57,10 +58,13 @@ async function crearContenido() {
 async function ponerGradiente(tipoMedicion) {
 
     vaciarGradiente()
+    infowindow = new google.maps.InfoWindow({
+        content: await crearContenido(tipoMedicion)
+    });
 
     var noLecturas = document.getElementById("no-medidas");
 
-    var mediciones = await laLogica.gecat("lecturas/" + tipoMedicion)
+    var mediciones = await laLogica.get("lecturas/" + tipoMedicion)
 
     if (mediciones.length > 0) {
         gradiente = new google.maps.visualization.HeatmapLayer({
