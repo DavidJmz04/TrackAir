@@ -10,6 +10,7 @@ const laLogica = new Logica();
 let user;
 window.addEventListener("load", () => {
     
+    acordeon()
     crearGrafica("Calidad Aire")
     
     /*
@@ -38,12 +39,33 @@ window.addEventListener("load", () => {
   */
 });
 
+function acordeon() {
+
+    var acc = document.getElementsByClassName("calidad");
+    
+    console.log(acc)
+
+    for (var i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) panel.style.maxHeight = null;
+            else panel.style.maxHeight = panel.scrollHeight + "px";
+        });
+    }
+}
+
 async function crearGrafica(titulo) {
     
-    idUsuario= 1
+    /*idUsuario= 1
     var calidad = await laLogica.get("calidadAire/" + idUsuario)
 
     console.log(calidad)
+    
+    var data= []
+    
+    for(var i=0; i< calidad.mediciones.length; i++)data.push(calidad.mediciones[i].calidad, calidad.mediciones[i].momento)
+    */
     // create data
     var data = [
       ["January", 10000],
