@@ -7,6 +7,11 @@ class Logica {
 
     contadorTest = 0;
 
+    tipoGasSeleccionado = "CO2";
+    diaSeleccionado = "Hoy";
+    horaSeleccionada = "Ahora";
+
+
     async get(recurso) {
 
         let res = await axios.get(`${servidor}${puerto}/${recurso}`);
@@ -66,10 +71,30 @@ class Logica {
 
 
 
+    setTipoGasSeleccionado(tipogas){
+        this.tipoGasSeleccionado = tipogas;
+    }
+
+    setDiaSeleccionado(dia){
+        this.diaSeleccionado = dia;
+    }
+
+    setHoraSeleccionada(hora){
+        this.horaSeleccionada = hora;
+    }
 
 
+    getTipoGasSeleccionado(){
+        return this.tipoGasSeleccionado;
+    }
 
+    getDiaSeleccionado(){
+        return this.diaSeleccionado;
+    }
 
+    getHoraSeleccionada(){
+        return this.horaSeleccionada;
+    }
 
 
     async recuperarMedicionesTiempoReal() {

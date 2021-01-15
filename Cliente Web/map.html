@@ -35,6 +35,12 @@
                     <li onchange="rSeleccionado('GI')"><input type="radio" name="gases" class="input2" value="GI" id="GI"><label for="GI" class="label-menu">Gases Irritantes</label></li>
                 </ul>
             </li>
+            <li><a href="#" class="historico-btn">Seleccionar fecha <span class="fas fa-caret-down first"></span></a>
+                <ul class="historico-show" name="filtrotiempo" id="filtrotiempo">
+                    <li onchange="diaSeleccionado()"><select class="input2" id="selectDia"></select></li>
+                    <li onchange="diaSeleccionado()"><select class="input2" id="selectHora"></select></li>
+                </ul>
+            </li>            
             <li><a href="informacionAdicional.html">Informacion adicional</a></li>
             <li><a href="index.html">Volver a inicio</a></li>
         </ul>
@@ -157,10 +163,21 @@
             $('nav ul .gases-show').toggleClass("show");
             $('nav ul .first').toggleClass("rotate");
         });
+
+        $('.historico-btn').click(function() {
+            $('nav ul .historico-show').toggleClass("show");
+            $('nav ul .first').toggleClass("rotate");
+        });
+
         $('nav ul li').click(function() {
             $(this).addClass("active").siblings().removeClass("active");
         });
 
+        (function() {
+        // your page initialization code here
+        // the DOM will be available here
+            rellenarOpcionesSelectsDiasYHoras()
+        })();
     </script>
 </body>
 

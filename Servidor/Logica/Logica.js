@@ -487,6 +487,141 @@ module.exports = class Logica {
 
     }
 
+    // ................................................................................................................................................
+    // tipoLectura:Texto -->
+    // obtenerHistorico() <--
+    // <--
+    // Lista:{lat=R, lon= R, value=R}
+    // ................................................................................................................................................
+    obtenerHistorico(fechaYHora,tipoLectura) {
+
+        var fs = require('fs');
+        //let horaActual = new Date();
+        //console.log("actualizacion = " + horaActualizacion)
+
+        
+            return new Promise((resolver, rechazar) => {
+                fs.readFile('../Datos/Historico/'+fechaYHora+'.json', 'utf8', function (err, data) {
+
+                    if (err) rechazar(err)
+
+                    var mediciones = JSON.parse(data)
+                    console.log(mediciones)
+                    var res;
+
+                    for (var i = 0; i < mediciones.length; i++) {
+                        if (mediciones[i].TipoMedicion == tipoLectura) res = mediciones[i].mediciones
+                    }
+                    //cacheMediciones[tipoLectura] = res;
+                    resolver(res);
+                })
+            })
+    }
+
+    // ................................................................................................................................................
+    // tipoLectura:Texto -->
+    // obtenerHistorico() <--
+    // <--
+    // Lista:{lat=R, lon= R, value=R}
+    // ................................................................................................................................................
+    obtenerDatosHistorico() {
+
+        var fs = require('fs');
+        const testFolder = '../Datos/Historico';
+        let diasIncluidos = [];
+        let dias = {};
+        let lastfile;
+        return new Promise((resolver, rechazar) => {
+            fs.readdir(testFolder, (err, files) => {
+                if(files.length > 0){
+                    let horas = [];
+                    files.forEach((file, indx, arr) => {
+                        var stats = fs.statSync(testFolder+"/"+file)
+                        var fileSizeInBytes = stats.size;
+                        // Convert the file size to megabytes (optional)
+                        //var fileSizeInMegabytes = fileSizeInBytes / (1024*1024);
+                        if(fileSizeInBytes > 2000){
+                            if(diasIncluidos.length <= 0){
+                                
+                                diasIncluidos.push(file.split("-")[0])
+                                horas.push(file.split("-")[1].split(".")[0]);
+                            }
+                            else if(diasIncluidos.includes(file.split("-")[0])){
+                                
+                                horas.push(file.split("-")[1].split(".")[0])
+                                
+                                //ultima iteración
+                                if(indx === arr.length -1){
+                                    dias[lastfile] = horas;
+                                }
+                            }else{
+                                
+                                diasIncluidos.push(file.split("-")[0])
+                                dias[lastfile] = horas;
+                                if(indx === arr.length -1){
+                                    dias[file.split("-")[0]] = [file.split("-")[1].split(".")[0]];
+                                }
+                                horas = [];
+                                horas.push(file.split("-")[1].split(".")[0])
+                            }
+                        
+                        }
+                        lastfile = file.split("-")[0];
+                    });
+                }
+
+                resolver(dias)
+            });
+        });
+        // var fs = require('fs');
+        // const testFolder = '../Datos/Historico';
+        // let diasIncluidos = [];
+        // let dias = {};
+        // let lastfile;
+        // return new Promise((resolver, rechazar) => {
+        //     fs.readdir(testFolder, (err, files) => {
+        //         if(files.length > 0){
+        //             let horas = [];
+        //             files.forEach((file, indx, arr) => {
+        //                 var stats = fs.statSync(testFolder+"/"+file)
+        //                 var fileSizeInBytes = stats.size;
+        //                 // Convert the file size to megabytes (optional)
+        //                 //var fileSizeInMegabytes = fileSizeInBytes / (1024*1024);
+        //                 if(fileSizeInBytes > 2000){
+        //                     if(diasIncluidos.length <= 0){
+                                
+        //                         diasIncluidos.push(file.split("-")[0])
+        //                         horas.push(file.split("-")[1].split(".")[0]);
+        //                     }
+        //                     else if(diasIncluidos.includes(file.split("-")[0])){
+                                
+        //                         horas.push(file.split("-")[1].split(".")[0])
+                                
+        //                         //ultima iteración
+        //                         if(indx === arr.length -1){
+        //                             dias[lastfile] = horas;
+        //                         }
+        //                     }else{
+                                
+        //                         diasIncluidos.push(file.split("-")[0])
+        //                         dias[lastfile] = horas;
+        //                         if(indx === arr.length -1){
+        //                             dias[file.split("-")[0]] = [file.split("-")[1].split(".")[0]];
+        //                         }
+        //                         horas = [];
+        //                         horas.push(file.split("-")[1].split(".")[0])
+        //                     }
+                        
+        //                 }
+        //                 lastfile = file.split("-")[0];
+        //             });
+        //         }
+
+        //         resolver(dias)
+        //     });
+        // });
+    }
+
     buscarSensorPertenecienteA(id) {
         var textoSQL = "select * from nodos s, usuarios u where u.id_nodo=s.id_nodo and u.id= ?";
 
