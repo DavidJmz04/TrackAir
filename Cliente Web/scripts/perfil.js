@@ -43,8 +43,6 @@ function acordeon() {
 
     var acc = document.getElementsByClassName("calidad");
     
-    console.log(acc)
-
     for (var i = 0; i < acc.length; i++) {
         acc[i].addEventListener("click", function () {
             this.classList.toggle("active");
@@ -57,24 +55,14 @@ function acordeon() {
 
 async function crearGrafica(titulo) {
     
-    /*idUsuario= 1
+    idUsuario= 1
     var calidad = await laLogica.get("calidadAire/" + idUsuario)
-
-    console.log(calidad)
+    var calidad= calidad[0]
     
     var data= []
     
-    for(var i=0; i< calidad.mediciones.length; i++)data.push(calidad.mediciones[i].calidad, calidad.mediciones[i].momento)
-    */
-    // create data
-    var data = [
-      ["January", 10000],
-      ["February", 12000],
-      ["March", 18000],
-      ["April", 11000],
-      ["May", 9000]
-    ];
-
+    for(var i=0; i< calidad.mediciones.length; i++)data.push([calidad.mediciones[i].momento, calidad.mediciones[i].valor])
+    
     // create a chart
     var chart = anychart.line();
 
@@ -89,6 +77,7 @@ async function crearGrafica(titulo) {
     xAxis.title("Hora");
     var yAxis = chart.yAxis();
     yAxis.title("Valor");
+    yAxis.
 
     // set the container id
     chart.container("myChart");
@@ -97,6 +86,39 @@ async function crearGrafica(titulo) {
 
     // initiate drawing the chart
     chart.draw();
+    
+    
+    
+       column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d)
+                .fontColor("white")
+                .format("{%Name}{groupsSeparator: } ({%Value})");
+
+        column.color("#1ddba6");
+
+        cartesian.animation(true);
+        cartesian.background().fill("#1DDBA6");
+
+        cartesian.yScale().minimum(0d);
+        RangeColors palette = RangeColors.instantiate();
+        String[] colors = {"#f1ffe8", "#e8fcff", "#ffe8e8"};
+        palette.items(colors, "#00ff00");
+        palette.count(3);
+        cartesian.yGrid(0).palette(palette);
+
+        // set series labels text template
+        (cartesian.getSeries(0).labels().enabled(true)).format("{%Name}");
+        cartesian.getSeries(0).labels().fontColor("white");
+
+        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+        cartesian.interactivity().hoverMode(HoverMode.BY_X);
+
+        cartesian.xAxis(0).title().fontColor("white");
+        cartesian.yAxis(0).title().fontColor("white");
 
 }
 
