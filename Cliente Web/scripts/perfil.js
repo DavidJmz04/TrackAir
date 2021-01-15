@@ -9,6 +9,11 @@ let ranking = document.querySelector(".item-ranking");
 const laLogica = new Logica();
 let user;
 window.addEventListener("load", () => {
+    
+    acordeon()
+    crearGrafica("Calidad Aire")
+    
+    /*
   let id = laLogica.getCookie("id");
   if (id != "") {
     let info = laLogica.get("usuario/" + id).then((inf) => {
@@ -31,7 +36,69 @@ window.addEventListener("load", () => {
     );
     window.location.href = "./../";
   }
+  */
 });
+
+function acordeon() {
+
+    var acc = document.getElementsByClassName("calidad");
+    
+    console.log(acc)
+
+    for (var i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) panel.style.maxHeight = null;
+            else panel.style.maxHeight = panel.scrollHeight + "px";
+        });
+    }
+}
+
+async function crearGrafica(titulo) {
+    
+    /*idUsuario= 1
+    var calidad = await laLogica.get("calidadAire/" + idUsuario)
+
+    console.log(calidad)
+    
+    var data= []
+    
+    for(var i=0; i< calidad.mediciones.length; i++)data.push(calidad.mediciones[i].calidad, calidad.mediciones[i].momento)
+    */
+    // create data
+    var data = [
+      ["January", 10000],
+      ["February", 12000],
+      ["March", 18000],
+      ["April", 11000],
+      ["May", 9000]
+    ];
+
+    // create a chart
+    var chart = anychart.line();
+
+    // create a line series and set the data
+    var series = chart.line(data);
+    
+    // set the chart title
+    chart.title(titulo);
+
+    // set the titles of the axes
+    var xAxis = chart.xAxis();
+    xAxis.title("Hora");
+    var yAxis = chart.yAxis();
+    yAxis.title("Valor");
+
+    // set the container id
+    chart.container("myChart");
+    
+    chart.xScale().mode('continuous');
+
+    // initiate drawing the chart
+    chart.draw();
+
+}
 
 cerrarSesion.addEventListener("click", () => {
   logout = confirm(`¿Está seguro de querer cerrar sesión?`);

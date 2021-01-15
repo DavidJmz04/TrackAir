@@ -104,10 +104,11 @@ function editarUsuario(id) {
 }
 
 function borrarUsuario(id) {
-
+    
+    console.log(id)
 
     if (confirm('¿Quieres borrar definitivamente el usuario?')) {
-        laLogica.delete("borrarUsuario", {
+        laLogica.post("borrarUsuario", {
             id: id
         })
         location.reload();

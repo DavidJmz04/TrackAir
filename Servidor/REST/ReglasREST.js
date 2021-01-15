@@ -610,11 +610,13 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     // .......................................................
     // DELETE /borrarUsuario
     // .......................................................
-    servidorExpress.delete('/borrarUsuario', async function (peticion, respuesta) {
+    servidorExpress.post('/borrarUsuario', async function (peticion, respuesta) {
 
         console.log(" * DELETE /borrarUsuario ")
 
         var datos = JSON.parse(peticion.body)
+        console.log(datos)
+
         // averiguo el id
         var id = datos.id
 

@@ -25,6 +25,83 @@ button {
   font-family: inherit;
   color: inherit;
 }
+
+
+.calidad {
+    background-color: #138d6a;
+    color: #fff;
+    cursor: pointer;
+    padding: 18px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border: none;
+    text-align: left;
+    outline: none !important;
+    font-size: 20px;
+    transition: 0.4s;
+    font-family: "Comfortaa" !important;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.calidad:hover {
+    background-color: #414141;
+}
+
+.calidad {
+    background-color: #414141;
+}
+
+.calidad:after {
+    content: '\002B';
+    color: #fff;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+    outline: none;
+}
+
+
+.caja-parrafo {
+    background-color: #17c090;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    font-family: "Comfortaa";
+}
+
+.caja-parrafo form {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+}
+
+.caja-parrafo form input {
+    font-size: 15px;
+    height: 25px;
+    color: #ffffff !important;
+    outline: 0  ;
+    border-width: 0 0 2px;
+    background: transparent;
+    border-color: white;
+   
+}
+
+.caja-parrafo form input:focus{
+
+    border-width: 0 0 4px;
+}
+
+.caja-parrafo form .input-no{
+    color: #414141;
+    background:#4141414f;
+    border-color: #414141;
+}
+
+
 .contenedor-total {
   background-image: linear-gradient(#00f0cc, #b0fff3a4);
 }

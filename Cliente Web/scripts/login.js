@@ -5,22 +5,13 @@ let inputUsuario = document.querySelector("#inputUsuario");
 let inputContrasenya = document.querySelector("#inputContrasenya");
 let msgError = document.querySelector(".msg-error");
 
-inputContrasenya.addEventListener("focus", () => {
-    msgError.style.display = "none";
-});
-inputUsuario.addEventListener("focus", () => {
-    msgError.style.display = "none";
-});
-
 const laLogica = new Logica();
 
 function chequearCookies() {
     let id = laLogica.getCookie("id");
     console.log("id" + id)
     let logout = false;
-    if (id == "1") {
-        window.location.href = "./admin.html";
-    } else if (id != "") {
+    if (id != "") {
         window.location.href = "./perfil.html";
     } else {
         document.getElementById("login").style.display = "block";
@@ -44,7 +35,8 @@ form.addEventListener("submit", (e) => {
         if (res.existe && res.id) {
             chequearCookies();
             document.cookie = `id=${res.id}`;
-            document.cookie = `name=${correo}`
+            console.log(res.id);
+
 
             //Dentro de un día
             let date = new Date(Date.now() + 86400e3);
