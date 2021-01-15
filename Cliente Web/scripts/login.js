@@ -11,7 +11,9 @@ function chequearCookies() {
     let id = laLogica.getCookie("id");
     console.log("id" + id)
     let logout = false;
-    if (id != "") {
+    if (id == "1") {
+        window.location.href = "./admin.html";
+    } else if (id != "") {
         window.location.href = "./perfil.html";
     } else {
         document.getElementById("login").style.display = "block";
@@ -35,9 +37,8 @@ form.addEventListener("submit", (e) => {
         if (res.existe && res.id) {
             chequearCookies();
             document.cookie = `id=${res.id}`;
-            console.log(res.id);
-
-
+            document.cookie = `name=${correo}`
+            
             //Dentro de un día
             let date = new Date(Date.now() + 86400e3);
             date = date.toUTCString();

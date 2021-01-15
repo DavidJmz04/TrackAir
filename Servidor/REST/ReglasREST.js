@@ -78,6 +78,23 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     }); // get /mediciones
 
     // .......................................................
+    // GET /mediciones oficiales en línea
+    // .......................................................
+    servidorExpress.get('/medicionesOficialesUltimaO3', async function (peticion, respuesta) {
+
+        console.log(" * GET /mediciones oficiales")
+        var file = require("../Datos/MedicionesOficialesOnline.json");
+        var result = "";
+        console.log(file)
+        file.mediciones.forEach(element => {
+            if(element.contaminante=="O3") 
+                result = '["' + element.contaminacion + '", "' + element.hora + '"'
+        });
+        result +="]"
+        respuesta.send(result); // your json file path)
+    }); // get /mediciones
+
+    // .......................................................
     // GET /lecturas/:tipoGas
     // .......................................................
     servidorExpress.get('/lecturas/:tipoGas', async function (peticion, respuesta) {

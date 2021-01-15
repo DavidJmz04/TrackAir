@@ -19,8 +19,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.anychart.AnyChartView;
 import com.example.serpumar.sprint0_3a.Activities.Main.Adapters.FiltrosMapaAdapter;
 import com.example.serpumar.sprint0_3a.Activities.Main.MainActivity;
+import com.example.serpumar.sprint0_3a.Helpers.ChartUtils;
 import com.example.serpumar.sprint0_3a.Helpers.GPSService;
 import com.example.serpumar.sprint0_3a.Helpers.LogicaFake;
 import com.example.serpumar.sprint0_3a.Helpers.NetworkManager;
@@ -33,6 +35,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -73,9 +76,12 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
 
     private HashMap hashGases;
+    private Marker gandiaMarker;
 
     SharedPreferences pref; // 0 - for private mode
     SharedPreferences.Editor editor;
+    AnyChartView charts;
+    private String lastMesure = "";
 
 
     /*Cargar de primeras en el mapa aquello que este marcado en los filtros --> Primeras opciones de cada uno*/
@@ -94,6 +100,19 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
             Log.d("Recargar", "Recargar");
             mMap.clear();
         }
+
+        NetworkManager.getInstance().getRequest("/medicionesOficialesUltimaO3", new NetworkManager.ControladorRespuestas<String>() {
+            @Override
+            public void getResult(String object) {
+                try {
+                    lastMesure = "Contaminación: " + new JSONArray(object).getString(0) + " (" + new JSONArray(object).getString(1) + ")";
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                addSnipet(gandiaMarker,lastMesure);
+                // gandiaMarker.setSnippet("Contaminación: " + json.getString(0) + " - Ultima hora de medición: " + json.getString(1));
+            }
+        });
 
         /*FloatingActionButton abrirInformacionAdicional = (FloatingActionButton) view.findViewById(R.id.informacionFAB);
         abrirInformacionAdicional.setOnClickListener(new View.OnClickListener() {
@@ -144,8 +163,17 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubActual, 15.0f));
         //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ubActual, 12.0f));
 
+        LatLng gandia = new LatLng(38.965289, -0.182671);
+        gandiaMarker = mMap.addMarker(new MarkerOptions().position(gandia)
+                .title("Estación de medida oficial - Gandía"));
+
         cargarMapaDeCalor();
+
         //addHeatMap();
+    }
+
+    private void addSnipet(Marker marker, String text){
+        marker.setSnippet(text);
     }
 
     private void showFragment() {

@@ -78,6 +78,7 @@ async function main() {
     var laLogica = await cargarLogica("proyecto3a");
 
     cargarMedicionesOficiales();
+    
     // creo el servidor
     var servidorExpress = express();
     servidorExpress.use(cors());
