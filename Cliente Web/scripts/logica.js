@@ -30,8 +30,10 @@ class Logica {
     }
 
     async delete(recurso, datos) {
+        
+        console.log(datos)
 
-        let res = await axios.delete(`${servidor}${puerto}/${recurso}`, datos);
+        let res = await axios.delete(`${servidor}${puerto}/${recurso}`, {data: datos});
         let data = res.data;
         return data;
     }

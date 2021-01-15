@@ -1,1 +1,1 @@
-{"fecha":"15/01/2021","mediciones":[]}
+{"fecha":"15/01/2021","mediciones":[{"contaminacion":3,"calidad":"Muy buena","hora":"00:00","contaminante":"SO2"},{"contaminacion":0.1,"calidad":"undefined","hora":"00:00","contaminante":"CO"},{"contaminacion":1,"calidad":"undefined","hora":"00:00","contaminante":"NO"},{"contaminacion":4,"calidad":"Muy buena","hora":"00:00","contaminante":"NO2"},{"contaminacion":5,"calidad":"undefined","hora":"00:00","contaminante":"NOx"},{"contaminacion":70,"calidad":"Buena","hora":"00:00","contaminante":"O3"}]}
