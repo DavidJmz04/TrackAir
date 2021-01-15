@@ -64,7 +64,7 @@ public class ChartUtils {
 
         // set series labels text template
         (cartesian.getSeries(0).labels().enabled(true)).format("{%Name}");
-        cartesian.getSeries(0).labels().fontColor("white");
+        cartesian.getSeries(0).labels().fontColor("black");
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
         cartesian.interactivity().hoverMode(HoverMode.BY_X);

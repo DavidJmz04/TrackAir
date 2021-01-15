@@ -60,18 +60,14 @@ class Logica {
         document.cookie = "name= ; expires= Thu, 01 Jan 1970 00:00:00 GMT";
     }
 
+    async recuperarCalidadAire(idUsuario) {
+        let recurso = "calidadAire/" + idUsuario;
+        let res = await axios.get(`${servidor}${puerto}/${recurso}`);
 
-
-
-
-
-
-
-
-
-
-
-
+        let data = res.data;
+        console.log(data);
+        return data;
+    }
 
 
     async recuperarMedicionesTiempoReal() {
