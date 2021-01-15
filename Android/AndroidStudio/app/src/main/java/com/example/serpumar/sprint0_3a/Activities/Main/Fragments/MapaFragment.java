@@ -167,13 +167,16 @@ public class MapaFragment extends Fragment implements OnMapReadyCallback {
         gandiaMarker = mMap.addMarker(new MarkerOptions().position(gandia)
                 .title("Estación de medida oficial - Gandía"));
 
+        addSnipet(gandiaMarker,lastMesure);
+
         cargarMapaDeCalor();
 
         //addHeatMap();
     }
 
     private void addSnipet(Marker marker, String text){
-        marker.setSnippet(text);
+        try{
+        marker.setSnippet(text);}catch(Exception e){}
     }
 
     private void showFragment() {
