@@ -36,6 +36,14 @@ function obtenerPDFUso() {
     })
 }
 
+let selectTipoRanking = document.querySelector("#select-ranking");
+selectTipoRanking.addEventListener("change", ()=>{
+    laLogica.obtenerPDFRanking(selectTipoRanking.value)
+})
+function obtenerPDFRanking(){
+
+}
+
 function buscarUsuarios() {
 
     var usuarios = laLogica.get("usuarios").then((usuarios) => {

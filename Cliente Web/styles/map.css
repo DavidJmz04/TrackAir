@@ -586,18 +586,43 @@ nav ul li ul li .wrap-li:hover{
   display: none;
 }
 */
+@keyframes myAnimation{
+  0%{
+    opacity: 0.5;
+    transform: rotateX(20deg);
+  }
+  25%{
+    opacity: 1;
+    transform: rotateX(0deg);
+  }
+  
+  100%{
+    opacity: 0;
+    transform: rotateX(20deg);
+  }
+}
+
+
 #no-medidas{
   position: absolute;
   left: 25%;
   top: 600px;
   width: 50%;
-  color: #dd2121;
+  color: #16cc9f;
   text-align: center;
   z-index: 50;
   border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.75);
-  padding: 30px 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 10px 0;
   display: none;
+
+  animation-name: myAnimation;
+    animation-duration: 4000ms;
+    animation-fill-mode: none;
+}
+
+#no-medidas h2{
+  font-size: 1.3rem;
 }
 
 /* ------------------------------------------

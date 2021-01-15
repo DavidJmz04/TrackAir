@@ -203,8 +203,8 @@ class Logica {
     }
 
     //TEST PARA PDF
-    async obtenerPDFRanking() {
-        let recurso = "informe/ranking";
+    async obtenerPDFRanking(tipo) {
+        let recurso = "informe/ranking/"+tipo;
         /*
         let res = await axios.get(`${servidor}:3000/${recurso}`, {
                 method: 'GET',

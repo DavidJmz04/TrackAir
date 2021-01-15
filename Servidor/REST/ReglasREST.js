@@ -239,13 +239,22 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     }) // get /codigoRecompensa
 
     // .......................................................
-    // GET /informe/ranking
+    // GET /informe/ranking/:tipo
     // .......................................................
-    servidorExpress.get("/informe/ranking", async function (peticion, respuesta) {
-        console.log(" * GET /informe/ranking ");
-
+    servidorExpress.get("/informe/ranking/:tipo", async function (peticion, respuesta) {
+        console.log(" * GET /informe/ranking/:tipo ");
+        let tipo = peticion.params.tipo
+        if(tipo == "r_diario"){
+            plantilla = "plantillaRankingDiario.html";
+        }else if(tipo == "r_semanal"){
+            plantilla = "plantillaRankingSemanal.html";
+        }else if( tipo == "r_mensual"){
+            plantilla = "plantillaRankingMensual.html";
+        }else{
+            plantilla = "plantillaRanking.html";
+        }
         // llamo a la función adecuada de la lógica
-        var res = await laLogica.buscarUsuariosOrdenadosPorPuntuación();
+        var res = await laLogica.buscarUsuariosOrdenadosPorPuntuación(tipo);
         //console.log(res);
 
         if (res.length == 0) {
@@ -256,7 +265,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
         console.log(process.cwd());
         // todo ok
         // Read HTML Template
-        var html = fs.readFileSync("plantillaRanking.html", "utf8");
+        var html = fs.readFileSync(plantilla, "utf8");
 
         var options = {
             format: "A4",

@@ -104,8 +104,9 @@ module.exports = class Logica {
     // <--
     // {id:Z, nombreUsuario:Texto, contrasenya:Texto, correo:Texto, puntuacion:Z, telefono=Texto, idNodo=Texto}
     // ................................................................................................................................................
-    buscarUsuariosOrdenadosPorPuntuación() {
-        var textoSQL = "select * from usuarios order by puntuacion desc";
+    buscarUsuariosOrdenadosPorPuntuación(tipo) {
+
+        var textoSQL = "select * from usuarios order by "+tipo+" desc";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL,

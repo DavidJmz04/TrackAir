@@ -109,8 +109,6 @@ async function ponerGradienteInit(tipoMedicion) {
     vaciarGradiente()
 
     var mediciones = await laLogica.get("lecturas/" + tipoMedicion)
-    console.log(mediciones);
-
 
     gradiente = new google.maps.visualization.HeatmapLayer({
         data: obtenerData(mediciones),
@@ -122,18 +120,13 @@ async function ponerGradienteInit(tipoMedicion) {
     
 }
 function crearOptionsDias(diasyhoras){
-    //console.log(diasyhoras)
-    //selectDia
     let arrayOptions = []
     removeAllOptions(selectDia);
     for (var [key, value] of Object.entries(diasyhoras)) {
         let anyo = key.substring(0, 4);
         let mes = key.substring(4,6);
         let dia = key.substring(6,8);
-        //console.log( dia+"/"+mes+"/"+anyo)
         arrayOptions.push(new Option(dia+"/"+mes+"/"+anyo, key));
-        //selectDia.options[selectDia.options.length] = ;
-        //console.log(selectDia.value)
     }
     arrayOptions.reverse();
     arrayOptions.forEach(x=>{
@@ -144,13 +137,11 @@ function crearOptionsDias(diasyhoras){
 }
 
 function dibujarOptionsHoras(){
-    console.log("PERROO")
     let arrayOptions = [];
     removeAllOptions(selectHora)
     for (var [key, value] of Object.entries(diasyhoras)) {
         if(key === selectDia.value){
             value.forEach(x=>{
-                console.log(x)
                 arrayOptions.push(new Option(x+":00h", x));
             })
         }

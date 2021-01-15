@@ -16,7 +16,7 @@
 
     <nav class="nav-cosas">
         <div class="row">
-            <div class="col-3 selector">
+            <div class="col-2 selector">
                 <label for="uso">Informe de usuarios:</label>
                 <select name="uso" id="select-uso">
                     <option value="dia">Dia</option>
@@ -24,8 +24,17 @@
                     <option value="mes">Mes</option>
                 </select>
             </div>
-            <div class="botones-nav col-9">
-                <button class="button-nav" id="ranking"> Ranking</button>
+            <div class="col-2 selector">
+                <label for="ranking">Ranking de usuarios:</label>
+                <select name="ranking" id="select-ranking">
+                    <option value="r_diario">Dia</option>
+                    <option value="r_semanal">Semana</option>
+                    <option value="r_mensual">Mes</option>
+                    <option value="puntuacion">Histórico</option>
+                </select>
+            </div>
+            <div class="botones-nav col-8">
+                <!--<button class="button-nav" id="ranking"> Ranking</button> -->
                 <button class="button-nav" id="nodos" onclick="obtenerPDFNodos()"> Informe de nodos</button>
                 <button class="button-nav" id="manual" onclick="window.open('/images/manual.pdf')"></a> Manual de Usuario</button>
                 <button class="button-nav" data-toggle="modal" data-target="#crearUsuario">
