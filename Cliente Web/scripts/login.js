@@ -11,11 +11,13 @@ function chequearCookies() {
     let id = laLogica.getCookie("id");
     console.log("id" + id)
     let logout = false;
+    
     if (id != "") {
         window.location.href = "./perfil.html";
     } else {
         document.getElementById("login").style.display = "block";
     }
+    if (id == "1") window.location.href = "./admin.html";
 }
 
 //Añadimos el comportamiento al formulario cuando se envíe

@@ -13,7 +13,7 @@ window.addEventListener("load", () => {
     acordeon()
     crearGrafica("Calidad Aire")
     
-    /*
+    
   let id = laLogica.getCookie("id");
   if (id != "") {
     let info = laLogica.get("usuario/" + id).then((inf) => {
@@ -36,7 +36,7 @@ window.addEventListener("load", () => {
     );
     window.location.href = "./../";
   }
-  */
+  
 });
 
 function acordeon() {

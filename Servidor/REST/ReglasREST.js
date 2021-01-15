@@ -673,4 +673,26 @@ module.exports.cargar = function (servidorExpress, laLogica) {
 
         if (res.length == 0) respuesta.send("Se ha borrado satisfactoriamente");
     }) // delete /borrarUsuario
+
+    // .......................................................
+    // GET /mediciones oficiales en línea
+    // .......................................................
+    servidorExpress.get('/medicionesOficialesUltima/:tipo', async function (peticion, respuesta) {
+
+        console.log(" * GET /mediciones oficiales")
+        var tipo = peticion.params.tipo
+
+        var file = require("../Datos/MedicionesOficialesOnline.json");
+        var result = "";
+        console.log(file)
+        file.mediciones.forEach(element => {
+            if (element.contaminante == tipo)
+                result = '["' + element.contaminacion + '", "' + element.hora + '"'
+        });
+        result += "]"
+        respuesta.send(result); // your json file path)
+    }); // get /mediciones
+
+
 }; // cargar()
+
