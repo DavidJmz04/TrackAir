@@ -1,7 +1,12 @@
 const filtro = document.querySelector("#filtrogas");
+//let radios = document.querySelectorAll("input[name=gases]");
+
+
 filtro.addEventListener("change", async () => {
-    console.log(filtro.value);
-    await ponerGradiente(filtro.value)
+    let radio = document.querySelector("input[name=gases]:checked").value;
+    console.log(radio);
+    //console.log(filtro.value);
+    await ponerGradiente(radio)
 })
 const noLecturas = document.querySelector(".no-medidas");
 const sidebar = document.querySelector(".sidebar");
@@ -14,7 +19,6 @@ const iconoFiltros = document.querySelector(".menu");
 function toggleSidebar() {
     sidebar.classList.toggle("hidden-sidebar");
 }*/
-
 
 
 
