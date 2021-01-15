@@ -18,14 +18,14 @@
         <div class="row">
             <div class="col-3 selector">
                 <label for="uso">Informe de usuarios:</label>
-                <select name="uso" id="select-uso">
+                <select name="uso" id="select-uso" onchange="obtenerPDFUso()">
                     <option value="dia">Dia</option>
                     <option value="semana">Semana</option>
                     <option value="mes">Mes</option>
                 </select>
             </div>
             <div class="botones-nav col-9">
-                <button class="button-nav" id="ranking"> Ranking</button>
+                <button class="button-nav" id="ranking" > Ranking</button>
                 <button class="button-nav" id="nodos" onclick="obtenerPDFNodos()"> Informe de nodos</button>
                 <button class="button-nav" id="manual" onclick="window.open('/images/manual.pdf')"></a> Manual de Usuario</button>
                 <button class="button-nav" data-toggle="modal" data-target="#crearUsuario">

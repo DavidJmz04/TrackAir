@@ -77,8 +77,30 @@ class Logica {
         let data = res.data;
         console.log(data);
         return data;
+    }  setTipoGasSeleccionado(tipogas){
+        this.tipoGasSeleccionado = tipogas;
     }
 
+    setDiaSeleccionado(dia){
+        this.diaSeleccionado = dia;
+    }
+
+    setHoraSeleccionada(hora){
+        this.horaSeleccionada = hora;
+    }
+
+
+    getTipoGasSeleccionado(){
+        return this.tipoGasSeleccionado;
+    }
+
+    getDiaSeleccionado(){
+        return this.diaSeleccionado;
+    }
+
+    getHoraSeleccionada(){
+        return this.horaSeleccionada;
+    }
     async insertarMedicionesPlaceholder() {
         let recurso = "medicionesOficialesCSV";
         let res = await axios.get(`${servidor}${puerto}/${recurso}`);

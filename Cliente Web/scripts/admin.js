@@ -4,6 +4,7 @@ var expanded = false
 //Cuando se carga la página
 window.onload = function () {
     buscarUsuarios();
+    obtenerPDFUso();
 };
 
 function obtenerPDFNodos() {

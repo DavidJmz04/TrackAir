@@ -5,6 +5,7 @@ let correo = document.querySelector(".correo");
 let telefono = document.querySelector(".telefono");
 let cerrarSesion = document.querySelector(".item-cerrar");
 let ranking = document.querySelector(".item-ranking");
+let id;
 
 const laLogica = new Logica();
 let user;
@@ -13,7 +14,7 @@ window.addEventListener("load", () => {
   acordeon()
   crearGrafica("Calidad Aire")
 
-  let id = laLogica.getCookie("id");
+  id = laLogica.getCookie("id");
   if (id != "") {
     let info = laLogica.get("usuario/" + id).then((inf) => {
       //console.log(inf);
@@ -53,10 +54,9 @@ function acordeon() {
 
 async function crearGrafica(titulo) {
 
-  idUsuario = 1
-  var calidad = await laLogica.recuperarCalidadAire(idUsuario)
+  var calidad = await laLogica.recuperarCalidadAire(laLogica.getCookie("id"))
   
-  document.getElementById("text-calidad").innerText += " " + calidad[0].calidadMedia
+  document.getElementById("grafica").innerText += " " + calidad[0].calidadMedia
   console.log(calidad)
   var calidad = calidad[0]
 
