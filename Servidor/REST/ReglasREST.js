@@ -239,6 +239,57 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     }) // get /codigoRecompensa
 
     // .......................................................
+    // GET /manual
+    // .......................................................
+    servidorExpress.get("/manual", async function (peticion, respuesta) {
+        console.log(" * GET /manual ");
+
+        var html = fs.readFileSync("plantillaRanking.html", "utf8");
+
+        var options = {
+            format: "A4",
+            orientation: "portrait",
+            border: "10mm",
+            header: {
+                height: "10mm",
+                contents: '<div style="text-align: center; color:#03E2A2;"><h2>TrackAir</h2></div>',
+            },
+            footer: {
+                height: "10mm",
+                contents: {
+                    default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
+                },
+            },
+        };
+        var document = {
+            html: html,
+            data: {
+                users: res,
+            },
+            path: `./ranking.pdf`,
+        };
+
+        pdf
+            .create(document, options)
+            .then((res) => {
+                //console.log(res);
+                return res.filename;
+            })
+            .then((filename) => {
+                respuesta.contentType("application/pdf");
+                let date = new Date();
+                respuesta.download(
+                    path.join(__dirname, "/ranking.pdf"),
+                    `Ranking-${date.toString()}.pdf`
+                );
+            })
+            .catch((error) => {
+                console.error(error);
+                res.statusCode = 404;
+            });
+    }); // get /informe/ranking
+
+    // .......................................................
     // GET /informe/ranking
     // .......................................................
     servidorExpress.get("/informe/ranking", async function (peticion, respuesta) {
