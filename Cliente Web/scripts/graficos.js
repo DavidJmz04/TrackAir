@@ -30,11 +30,7 @@ function main() {
     mostrarMediciones();
 
 
-    })
-    var btn = document.getElementById("btn-ranking");
-    btn.onclick = () => {
-        laLogica.obtenerPDFRanking();
-    };
+    
 }
 // ()
 

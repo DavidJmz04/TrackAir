@@ -5,13 +5,6 @@ let inputUsuario = document.querySelector("#inputUsuario");
 let inputContrasenya = document.querySelector("#inputContrasenya");
 let msgError = document.querySelector(".msg-error");
 
-inputContrasenya.addEventListener("focus", () => {
-    msgError.style.display = "none";
-});
-inputUsuario.addEventListener("focus", () => {
-    msgError.style.display = "none";
-});
-
 const laLogica = new Logica();
 
 function chequearCookies() {
@@ -45,7 +38,7 @@ form.addEventListener("submit", (e) => {
             chequearCookies();
             document.cookie = `id=${res.id}`;
             document.cookie = `name=${correo}`
-
+            
             //Dentro de un día
             let date = new Date(Date.now() + 86400e3);
             date = date.toUTCString();
