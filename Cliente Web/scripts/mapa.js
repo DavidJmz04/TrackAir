@@ -1,5 +1,11 @@
+let selectDia = document.querySelector('#selectDia')
+let selectHora = document.querySelector('#selectHora')
+let diasyhoras;
+selectDia.addEventListener("change", dibujarOptionsHoras);
+
 var mapa;
-var gradiente
+var gradiente;
+var infowindow
 
 async function initMap() {
 
@@ -11,7 +17,7 @@ async function initMap() {
         zoom: 14,
     });
 
-    var infowindow = new google.maps.InfoWindow({
+    infowindow = new google.maps.InfoWindow({
         content: await crearContenido()
     });
 
@@ -35,10 +41,13 @@ async function initMap() {
         }
     });
 
-    await ponerGradiente("CO2")
+
+    await ponerGradienteInit("CO2")
 }
 
-async function crearContenido() {
+async function crearContenido(tipo) {
+
+    var res = await laLogica.get("medicionesOficialesUltima/" + tipo);
 
     var res = await laLogica.get("medicionesOficialesUltimaO3");
     
@@ -46,22 +55,32 @@ async function crearContenido() {
         '<div id="content">' +
         '<div id="siteNotice">' +
         "</div>" +
-        '<h1 id="firstHeading" class="firstHeading">Estacion de medida oficial de Gandía</h1>' +
+        '<h6 id="firstHeading" class="firstHeading">Estacion de medida oficial de Gandía</h6>' +
         '<div id="bodyContent">' +
-        "<p><b>Cohtaminacion:</b> " + res + " </p>" +
+        "<p><b>Contaminacion a las " + res[1] + ":</b> " + res[0] + " </p>" +
         "</div>" +
         "</div>";
     return contentString
 }
 
+
 async function ponerGradiente(tipoMedicion) {
 
+    abierto=false;
+    infowindow.close();
     vaciarGradiente()
-
+    infowindow = new google.maps.InfoWindow({
+        content: await crearContenido(tipoMedicion)
+    });
+    // console.log("Dia: "+selectDia.value)
+    // console.log("Hora: "+selectHora.value)
     var noLecturas = document.getElementById("no-medidas");
-
-    var mediciones = await laLogica.gecat("lecturas/" + tipoMedicion)
-
+    let dia = selectDia.value;
+    let hora = selectHora.value
+    // Hoy y ahora => recoger datos como hacíamos
+    
+    var mediciones = await laLogica.get("historico/" + dia+"-"+hora + "/" + tipoMedicion)
+    
     if (mediciones.length > 0) {
         gradiente = new google.maps.visualization.HeatmapLayer({
             data: obtenerData(mediciones),
@@ -72,6 +91,79 @@ async function ponerGradiente(tipoMedicion) {
         gradiente.setMap(mapa);
         noLecturas.style.display = "none";
     } else noLecturas.style.display = "block";
+}
+
+async function rellenarOpcionesSelectsDiasYHoras(){
+    diasyhoras = await laLogica.get("historico");
+    if(diasyhoras){
+        crearOptionsDias(diasyhoras);
+    }else{
+        selectHora.style.enabled=false;
+        selectDia.style.enabled=false;
+    }
+}
+async function ponerGradienteInit(tipoMedicion) {
+
+    vaciarGradiente()
+
+    var mediciones = await laLogica.get("lecturas/" + tipoMedicion)
+    console.log(mediciones);
+
+
+    gradiente = new google.maps.visualization.HeatmapLayer({
+        data: obtenerData(mediciones),
+        radius: 0.001,
+        dissipating: false,
+    });
+
+    gradiente.setMap(mapa);
+    
+}
+function crearOptionsDias(diasyhoras){
+    //console.log(diasyhoras)
+    //selectDia
+    let arrayOptions = []
+    removeAllOptions(selectDia);
+    for (var [key, value] of Object.entries(diasyhoras)) {
+        let anyo = key.substring(0, 4);
+        let mes = key.substring(4,6);
+        let dia = key.substring(6,8);
+        //console.log( dia+"/"+mes+"/"+anyo)
+        arrayOptions.push(new Option(dia+"/"+mes+"/"+anyo, key));
+        //selectDia.options[selectDia.options.length] = ;
+        //console.log(selectDia.value)
+    }
+    arrayOptions.reverse();
+    arrayOptions.forEach(x=>{
+        selectDia.appendChild(x);
+    })
+
+    dibujarOptionsHoras();
+}
+
+function dibujarOptionsHoras(){
+    console.log("PERROO")
+    let arrayOptions = [];
+    removeAllOptions(selectHora)
+    for (var [key, value] of Object.entries(diasyhoras)) {
+        if(key === selectDia.value){
+            value.forEach(x=>{
+                console.log(x)
+                arrayOptions.push(new Option(x+":00h", x));
+            })
+        }
+        
+        arrayOptions.reverse();
+        arrayOptions.forEach(x=>{
+            selectHora.appendChild(x);
+        })
+    }
+}
+
+function removeAllOptions(selectBox) {
+    while (selectBox.options.length > 0) {
+        selectBox.remove(0);
+    }
 }
 
 function obtenerData(mediciones) {
@@ -100,6 +192,14 @@ function vaciarGradiente() {
 }
 
 async function rSeleccionado(valor) {
-
+    console.log("rSeleccionado")
+    laLogica.setTipoGasSeleccionado(valor)
     await ponerGradiente(valor)
+}
+
+async function diaSeleccionado() {
+    console.log("Dia seleccionado")
+    console.log(selectHora.value)
+    setTimeout(async ()=>{await ponerGradiente(laLogica.getTipoGasSeleccionado())}, 500)
+    
 }

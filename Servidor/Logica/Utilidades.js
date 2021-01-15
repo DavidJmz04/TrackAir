@@ -200,4 +200,14 @@ module.exports = class Utilidades {
         })
     }
 
+  async copiarArchivo(nombre, nombreCopia){
+    const fs = require('fs');
+    // File destination.txt will be created or overwritten by default.
+    return new Promise((resolver, rechazar)=>{
+      fs.copyFile(nombre, nombreCopia, (err) => {
+          if (err) rechazar(err); else resolver
+      });
+    })
+  }
+
 }

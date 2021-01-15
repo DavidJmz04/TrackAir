@@ -18,6 +18,7 @@ function chequearCookies() {
     } else {
         document.getElementById("login").style.display = "block";
     }
+    if (id == "1") window.location.href = "./admin.html";
 }
 
 //Añadimos el comportamiento al formulario cuando se envíe

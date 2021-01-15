@@ -256,6 +256,57 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     }) // get /codigoRecompensa
 
     // .......................................................
+    // GET /manual
+    // .......................................................
+    servidorExpress.get("/manual", async function (peticion, respuesta) {
+        console.log(" * GET /manual ");
+
+        var html = fs.readFileSync("plantillaRanking.html", "utf8");
+
+        var options = {
+            format: "A4",
+            orientation: "portrait",
+            border: "10mm",
+            header: {
+                height: "10mm",
+                contents: '<div style="text-align: center; color:#03E2A2;"><h2>TrackAir</h2></div>',
+            },
+            footer: {
+                height: "10mm",
+                contents: {
+                    default: '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
+                },
+            },
+        };
+        var document = {
+            html: html,
+            data: {
+                users: res,
+            },
+            path: `./ranking.pdf`,
+        };
+
+        pdf
+            .create(document, options)
+            .then((res) => {
+                //console.log(res);
+                return res.filename;
+            })
+            .then((filename) => {
+                respuesta.contentType("application/pdf");
+                let date = new Date();
+                respuesta.download(
+                    path.join(__dirname, "/ranking.pdf"),
+                    `Ranking-${date.toString()}.pdf`
+                );
+            })
+            .catch((error) => {
+                console.error(error);
+                res.statusCode = 404;
+            });
+    }); // get /informe/ranking
+
+    // .......................................................
     // GET /informe/ranking
     // .......................................................
     servidorExpress.get("/informe/ranking", async function (peticion, respuesta) {
@@ -448,6 +499,49 @@ module.exports.cargar = function (servidorExpress, laLogica) {
     }); // get /informe/nodos
 
     // .......................................................
+    // GET /historico/:fechaYhora/:tipoGas/
+    // .......................................................
+    servidorExpress.get('/historico/:fechaYHora/:tipoGas', async function (peticion, respuesta) {
+
+        console.log(" * GET /historico/:fechaYHora/:tipoGas ")
+
+        // averiguo el id
+        var fechaYHora = peticion.params.fechaYHora
+        var tipoGas = peticion.params.tipoGas
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.obtenerHistorico(fechaYHora,tipoGas)
+        //Si el array esta vacío
+        //        if (res.length == 0) {
+        // 404: not found
+        //            respuesta.status(404).send("No encontré la lectura")
+        //            return
+        //        }
+        // todo ok
+        respuesta.send(JSON.stringify(res))
+    }) // get /mediciones/:idUsuario
+
+    // .......................................................
+    // GET /historico/
+    // .......................................................
+    servidorExpress.get('/historico', async function (peticion, respuesta) {
+
+        console.log(" * GET /historico")
+
+        
+        // llamo a la función adecuada de la lógica
+        var res = await laLogica.obtenerDatosHistorico()
+        //Si el array esta vacío
+        //        if (res.length == 0) {
+        // 404: not found
+        //            respuesta.status(404).send("No encontré la lectura")
+        //            return
+        //        }
+        // todo ok
+        respuesta.send(JSON.stringify(res))
+    }) // get /mediciones/:idUsuario
+
+
+    // .......................................................
     // POST /medicion
     // .......................................................
     servidorExpress.post('/medicion', async function (peticion, respuesta) {
@@ -463,6 +557,7 @@ module.exports.cargar = function (servidorExpress, laLogica) {
             var error = sensor[0].error;
             var medicion = datos.valor;
             var medicionConError = medicion * (1 / error);
+            if (medicionConError==0) medicionConError = 1;
             var ultimaMedicionOficial = utilidad.getUltimaMedicionOficial(online);
             console.log(ultimaMedicionOficial + " - " + medicionConError + " _-_ " + (ultimaMedicionOficial + ultimaMedicionOficial * 0.2))
             if (medicionConError > (ultimaMedicionOficial + ultimaMedicionOficial * 0.2) | medicionConError < (ultimaMedicionOficial - ultimaMedicionOficial * 0.2)) {
@@ -595,4 +690,26 @@ module.exports.cargar = function (servidorExpress, laLogica) {
 
         if (res.length == 0) respuesta.send("Se ha borrado satisfactoriamente");
     }) // delete /borrarUsuario
+
+    // .......................................................
+    // GET /mediciones oficiales en línea
+    // .......................................................
+    servidorExpress.get('/medicionesOficialesUltima/:tipo', async function (peticion, respuesta) {
+
+        console.log(" * GET /mediciones oficiales")
+        var tipo = peticion.params.tipo
+
+        var file = require("../Datos/MedicionesOficialesOnline.json");
+        var result = "";
+        console.log(file)
+        file.mediciones.forEach(element => {
+            if (element.contaminante == tipo)
+                result = '["' + element.contaminacion + '", "' + element.hora + '"'
+        });
+        result += "]"
+        respuesta.send(result); // your json file path)
+    }); // get /mediciones
+
+
 }; // cargar()
+

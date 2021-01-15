@@ -5,7 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles/perfil.css" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <title>Mi perfil</title>
 </head>
 
@@ -20,71 +23,76 @@
                 <span class="nombre-usuario">@nnatxo</span>
                 <span class="reputacion">Reputación: 635232</span>
                 <div>
-                    <span class="item item-calidad" id="item-calidad"> 
-                        <p id="text-calidad"> Su calidad de aire respirada es: </p>
+                    <button class="calidad" class="item-grafica">Su calidad de aire respirada es: </button>
                     <div class="caja-parrafo">
                         <div id="myChart" style="height:60vh"></div>
                     </div>
+
+                </div>
+
+
+            </div>
+
+            <!-- CUENTA -->
+            <div class="seccion">
+                <span class="titulo-seccion">
+                    <h4>Cuenta</h4>
                 </span>
+                <div class="item item-correo">
+                    <span class="correo">nnatxo@gmail.com</span>
+                    <span class="info-extra">Haz clic aquí para cambiar tu dirección de correo</span>
+                </div>
+
+                <div class="item item-telefono">
+                    <span class="telefono">+34 634 948 332</span>
+                    <span class="info-extra">Haz clic aquí para cambiar el teléfono de contacto</span>
+                </div>
+
+                <div class="item item-ranking">
+                    <span class="ranking">Ranking</span>
+                    <span class="info-extra">Observa tu posición en el ranking</span>
+                </div>
+
+                <div class="item item-cerrar item-ancho">
+                    <span class="cerrar-sesion">Cerrar sesión</span>
                 </div>
             </div>
-        <!-- CUENTA -->
-        <div class="seccion">
-            <span class="titulo-seccion">
-                <h4>Cuenta</h4>
-            </span>
-            <div class="item item-correo">
-                <span class="correo">nnatxo@gmail.com</span>
-                <span class="info-extra">Haz clic aquí para cambiar tu dirección de correo</span>
+            <!-- AJUSTES -->
+            <div class="seccion">
+                <span class="titulo-seccion">
+                    <h4>Ajustes</h4>
+                </span>
+                <div class="item item-notificaciones item-ancho">
+                    <span class="notificaciones">Notificaciones y sonidos</span>
+                </div>
+                <div class="item item-privacidad item-ancho">
+                    <span class="privacidad">Privacidad y seguridad</span>
+                </div>
+                <div class="item item-idioma item-ancho">
+                    <span class="idioma">Idioma</span>
+                </div>
             </div>
-
-            <div class="item item-telefono">
-                <span class="telefono">+34 634 948 332</span>
-                <span class="info-extra">Haz clic aquí para cambiar el teléfono de contacto</span>
-            </div>
-
-            <div class="item item-ranking">
-                <span class="ranking">Ranking</span>
-                <span class="info-extra">Observa tu posición en el ranking</span>
-            </div>
-
-            <div class="item item-cerrar item-ancho">
-                <span class="cerrar-sesion">Cerrar sesión</span>
-            </div>
-        </div>
-        <!-- AJUSTES -->
-        <div class="seccion">
-            <span class="titulo-seccion">
-                <h4>Ajustes</h4>
-            </span>
-            <div class="item item-notificaciones item-ancho">
-                <span class="notificaciones">Notificaciones y sonidos</span>
-            </div>
-            <div class="item item-privacidad item-ancho">
-                <span class="privacidad">Privacidad y seguridad</span>
-            </div>
-            <div class="item item-idioma item-ancho">
-                <span class="idioma">Idioma</span>
+            <!-- AYUDA -->
+            <div class="seccion">
+                <span class="titulo-seccion">
+                    <h4>Ayuda</h4>
+                </span>
+                <div class="item item-faq item-ancho">
+                    <span class="faq">Preguntas frecuentes</span>
+                </div>
+                <div class="item item-privacidad item-ancho">
+                    <span class="privacidad">Política de privacidad</span>
+                </div>
             </div>
         </div>
-        <!-- AYUDA -->
-        <div class="seccion">
-            <span class="titulo-seccion">
-                <h4>Ayuda</h4>
-            </span>
-            <div class="item item-faq item-ancho">
-                <span class="faq">Preguntas frecuentes</span>
-            </div>
-            <div class="item item-privacidad item-ancho">
-                <span class="privacidad">Política de privacidad</span>
-            </div>
-        </div>
+    
     </div>
-    </div>
-
     <!-- SCRIPTS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./scripts/logica.js"></script>
     <script src="./scripts/perfil.js"></script>

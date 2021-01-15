@@ -468,7 +468,7 @@ nav ul li a {
 
 }
 
-nav ul li.active a{
+nav .active a{
   color:cyan !important;
   background: #1e1e1e;
   border-left-color: cyan !important;
@@ -483,6 +483,13 @@ nav ul ul {
 
 nav ul .gases-show.show{
   display: block;
+}
+
+nav ul .historico-show.show{
+  display: block;
+}
+.historico-show li{
+  height: 40px;
 }
 
 nav ul ul li{

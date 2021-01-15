@@ -12,6 +12,7 @@ let cacheMediciones = {
     "O3": [],
     "NO2": []
 };
+let historicoMapasDisponibles=[];
 let horaActualizacion = new Date(1999 - 1 - 1);
 // ................................................................................................................................................
 // ................................................................................................................................................
@@ -457,7 +458,7 @@ module.exports = class Logica {
     obtenerLecturas(tipoLectura) {
 
         var fs = require('fs');
-        let horaActual = new Date();
+        //let horaActual = new Date();
         console.log("actualizacion = " + horaActualizacion)
 
 
@@ -486,8 +487,143 @@ module.exports = class Logica {
 
     }
 
+    // ................................................................................................................................................
+    // tipoLectura:Texto -->
+    // obtenerHistorico() <--
+    // <--
+    // Lista:{lat=R, lon= R, value=R}
+    // ................................................................................................................................................
+    obtenerHistorico(fechaYHora,tipoLectura) {
+
+        var fs = require('fs');
+        //let horaActual = new Date();
+        //console.log("actualizacion = " + horaActualizacion)
+
+        
+            return new Promise((resolver, rechazar) => {
+                fs.readFile('../Datos/Historico/'+fechaYHora+'.json', 'utf8', function (err, data) {
+
+                    if (err) rechazar(err)
+
+                    var mediciones = JSON.parse(data)
+                    console.log(mediciones)
+                    var res;
+
+                    for (var i = 0; i < mediciones.length; i++) {
+                        if (mediciones[i].TipoMedicion == tipoLectura) res = mediciones[i].mediciones
+                    }
+                    //cacheMediciones[tipoLectura] = res;
+                    resolver(res);
+                })
+            })
+    }
+
+    // ................................................................................................................................................
+    // tipoLectura:Texto -->
+    // obtenerHistorico() <--
+    // <--
+    // Lista:{lat=R, lon= R, value=R}
+    // ................................................................................................................................................
+    obtenerDatosHistorico() {
+
+        var fs = require('fs');
+        const testFolder = '../Datos/Historico';
+        let diasIncluidos = [];
+        let dias = {};
+        let lastfile;
+        return new Promise((resolver, rechazar) => {
+            fs.readdir(testFolder, (err, files) => {
+                if(files.length > 0){
+                    let horas = [];
+                    files.forEach((file, indx, arr) => {
+                        var stats = fs.statSync(testFolder+"/"+file)
+                        var fileSizeInBytes = stats.size;
+                        // Convert the file size to megabytes (optional)
+                        //var fileSizeInMegabytes = fileSizeInBytes / (1024*1024);
+                        if(fileSizeInBytes > 2000){
+                            if(diasIncluidos.length <= 0){
+                                
+                                diasIncluidos.push(file.split("-")[0])
+                                horas.push(file.split("-")[1].split(".")[0]);
+                            }
+                            else if(diasIncluidos.includes(file.split("-")[0])){
+                                
+                                horas.push(file.split("-")[1].split(".")[0])
+                                
+                                //ultima iteración
+                                if(indx === arr.length -1){
+                                    dias[lastfile] = horas;
+                                }
+                            }else{
+                                
+                                diasIncluidos.push(file.split("-")[0])
+                                dias[lastfile] = horas;
+                                if(indx === arr.length -1){
+                                    dias[file.split("-")[0]] = [file.split("-")[1].split(".")[0]];
+                                }
+                                horas = [];
+                                horas.push(file.split("-")[1].split(".")[0])
+                            }
+                        
+                        }
+                        lastfile = file.split("-")[0];
+                    });
+                }
+
+                resolver(dias)
+            });
+        });
+        // var fs = require('fs');
+        // const testFolder = '../Datos/Historico';
+        // let diasIncluidos = [];
+        // let dias = {};
+        // let lastfile;
+        // return new Promise((resolver, rechazar) => {
+        //     fs.readdir(testFolder, (err, files) => {
+        //         if(files.length > 0){
+        //             let horas = [];
+        //             files.forEach((file, indx, arr) => {
+        //                 var stats = fs.statSync(testFolder+"/"+file)
+        //                 var fileSizeInBytes = stats.size;
+        //                 // Convert the file size to megabytes (optional)
+        //                 //var fileSizeInMegabytes = fileSizeInBytes / (1024*1024);
+        //                 if(fileSizeInBytes > 2000){
+        //                     if(diasIncluidos.length <= 0){
+                                
+        //                         diasIncluidos.push(file.split("-")[0])
+        //                         horas.push(file.split("-")[1].split(".")[0]);
+        //                     }
+        //                     else if(diasIncluidos.includes(file.split("-")[0])){
+                                
+        //                         horas.push(file.split("-")[1].split(".")[0])
+                                
+        //                         //ultima iteración
+        //                         if(indx === arr.length -1){
+        //                             dias[lastfile] = horas;
+        //                         }
+        //                     }else{
+                                
+        //                         diasIncluidos.push(file.split("-")[0])
+        //                         dias[lastfile] = horas;
+        //                         if(indx === arr.length -1){
+        //                             dias[file.split("-")[0]] = [file.split("-")[1].split(".")[0]];
+        //                         }
+        //                         horas = [];
+        //                         horas.push(file.split("-")[1].split(".")[0])
+        //                     }
+                        
+        //                 }
+        //                 lastfile = file.split("-")[0];
+        //             });
+        //         }
+
+        //         resolver(dias)
+        //     });
+        // });
+    }
+
     buscarSensorPertenecienteA(id) {
-        var textoSQL = "select * from sensores s, usuarios u where u.id_nodo=s.id_nodo and u.id= ?";
+        var textoSQL = "select * from nodos s, usuarios u where u.id_nodo=s.id_nodo and u.id= ?";
 
         return new Promise((resolver, rechazar) => {
             this.laConexion.query(textoSQL, [id], (err, res) => {
@@ -497,14 +633,16 @@ module.exports = class Logica {
     }
 
     modificarErrorSensor(idnodo, error) {
-        var textoSQL = "update sensores set error=? where id_nodo=?;";
+        var textoSQL = "update nodos set error=? where id_nodo=?;";
         console.log(idnodo + " - " + error)
         return new Promise((resolver, rechazar) => {
-            this.laConexion.query(textoSQL, [error, idnodo],
+            try{this.laConexion.query(textoSQL, [error, idnodo],
                 function (err) {
                     err ? rechazar(err) : resolver();
                 }
-            );
+            );}catch(e){
+                rechazar(e.msg)
+            }
         });
     }
 
@@ -581,32 +719,21 @@ module.exports = class Logica {
         });
     }
 
-    //
-    async buscarNodosInactivos(){
-        var textoSQLLastMed = "SELECT n.*, u.*, mu.momento_medicion FROM medicionesdeusuarios mu, nodos n, usuarios u WHERE u.id=mu.id_usuario AND u.id_nodo=n.id_nodo AND mu.momento_medicion < NOW() - INTERVAL 1 DAY GROUP BY mu.id_usuario HAVING mu.id_usuario NOT IN (SELECT id_usuario FROM medicionesdeusuarios WHERE momento_medicion >= NOW() - INTERVAL 1 DAY)";
-   
-        return new Promise((resolver, rechazar) => {
-            this.laConexion.query(textoSQLLastMed, null, (err, res) => {
-                err ? rechazar(err) : resolver(res);
-            });
-        });
-    }
-
-    //
-    async buscarNodosConFallos(){
-        var textoSQLFailMed = "SELECT * FROM nodos n, usuarios u WHERE n.error!=1 AND u.id_nodo=n.id_nodo";
-
-        return new Promise((resolver, rechazar) => {
-            this.laConexion.query(textoSQLFailMed, null, (err, res) => {
-                err ? rechazar(err) : resolver(res);
-            });
-        });
-    }
-
     // ................................................................................................................................................
     // parsearMediciones()
     // ................................................................................................................................................
     async parsearMediciones() {
+        
+        horaActualizacion = new Date();
+        let anyoAct=horaActualizacion.getFullYear();
+        let mesAct=horaActualizacion.getMonth();
+        mesAct+=1;
+        if (mesAct < 10) mesAct="0"+mesAct;
+        let diaAct=horaActualizacion.getDate();
+        if (diaAct < 10) diaAct="0"+diaAct;
+        let horaAct=horaActualizacion.getHours();
+        let nombreArchivoNuevo=(anyoAct+""+mesAct+""+diaAct+"-"+horaAct);
+        
         let tipoSensor=["GI", "CO2", "NO2", "O3", "SO2"];
         tipoSensor.forEach(async(val)=>{
             await utilidades.crearArchivo(val, utilidades.parsearMedicion(await this.buscarMedicionesDeTipoMedicion(val)))
@@ -620,9 +747,32 @@ module.exports = class Logica {
         }
         //console.log(stdout);
         this.estaEscribiendo=false;
-        horaActualizacion = new Date();
+        utilidades.copiarArchivo("../Datos/MedicionesInterpoladas.json", "../Datos/Historico/"+nombreArchivoNuevo+".json");
         console.log(horaActualizacion);
 
+        });
+    }
+
+
+    //-------------------------------
+
+    async buscarNodosInactivos() {
+        var textoSQLLastMed = "SELECT n., u., mu.momento_medicion FROM medicionesdeusuarios mu, nodos n, usuarios u WHERE u.id=mu.id_usuario AND u.id_nodo=n.id_nodo AND mu.momento_medicion < NOW() - INTERVAL 1 DAY GROUP BY mu.id_usuario HAVING mu.id_usuario NOT IN (SELECT id_usuario FROM medicionesdeusuarios WHERE momento_medicion >= NOW() - INTERVAL 1 DAY)";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQLLastMed, null, (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
+        });
+    }
+
+    async buscarNodosConFallos() {
+        var textoSQLFailMed = "SELECT * FROM nodos n, usuarios u WHERE n.error!=1 AND u.id_nodo=n.id_nodo";
+
+        return new Promise((resolver, rechazar) => {
+            this.laConexion.query(textoSQLFailMed, null, (err, res) => {
+                err ? rechazar(err) : resolver(res);
+            });
         });
     }
 
